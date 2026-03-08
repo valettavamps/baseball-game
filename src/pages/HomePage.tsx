@@ -1,0 +1,160 @@
+import React from 'react';
+import './HomePage.css';
+import { Game, LeagueStanding } from '../types';
+
+// Mock data
+const upcomingGames: Game[] = [
+  {
+    id: '1',
+    homeTeam: { id: 't1', name: 'Solana Sluggers', record: { wins: 42, losses: 18 } },
+    awayTeam: { id: 't2', name: 'Phantom Pitchers', record: { wins: 38, losses: 22 } },
+    scheduledTime: '2026-03-08T22:00:00Z',
+    status: 'scheduled',
+    league: 'Diamond League',
+  },
+  {
+    id: '2',
+    homeTeam: { id: 't3', name: 'Anchor Arms', record: { wins: 35, losses: 25 } },
+    awayTeam: { id: 't4', name: 'Metaplex Maulers', record: { wins: 33, losses: 27 } },
+    scheduledTime: '2026-03-08T23:30:00Z',
+    status: 'live',
+    score: { home: 4, away: 2 },
+    league: 'Diamond League',
+  },
+  {
+    id: '3',
+    homeTeam: { id: 't5', name: 'Raydium Rockets', record: { wins: 30, losses: 30 } },
+    awayTeam: { id: 't6', name: 'Jupiter Giants', record: { wins: 28, losses: 32 } },
+    scheduledTime: '2026-03-09T01:00:00Z',
+    status: 'scheduled',
+    league: 'Silver League',
+  },
+];
+
+const standings: LeagueStanding[] = [
+  { rank: 1, team: { id: 't1', name: 'Solana Sluggers', record: { wins: 42, losses: 18 } }, gamesPlayed: 60, wins: 42, losses: 18, winPct: 0.700, streak: 'W5' },
+  { rank: 2, team: { id: 't2', name: 'Phantom Pitchers', record: { wins: 38, losses: 22 } }, gamesPlayed: 60, wins: 38, losses: 22, winPct: 0.633, streak: 'W2' },
+  { rank: 3, team: { id: 't3', name: 'Anchor Arms', record: { wins: 35, losses: 25 } }, gamesPlayed: 60, wins: 35, losses: 25, winPct: 0.583, streak: 'L1' },
+  { rank: 4, team: { id: 't4', name: 'Metaplex Maulers', record: { wins: 33, losses: 27 } }, gamesPlayed: 60, wins: 33, losses: 27, winPct: 0.550, streak: 'W3' },
+  { rank: 5, team: { id: 't5', name: 'Raydium Rockets', record: { wins: 30, losses: 30 } }, gamesPlayed: 60, wins: 30, losses: 30, winPct: 0.500, streak: 'L2' },
+];
+
+const HomePage: React.FC = () => {
+  return (
+    <div className="home-page">
+      {/* Hero / Overview */}
+      <section className="hero-section">
+        <div className="hero-content">
+          <h1 className="hero-title">
+            <span className="gradient-text">DIAMOND</span>CHAIN
+          </h1>
+          <p className="hero-subtitle">
+            Build your dynasty. Own your players. Dominate the league.
+          </p>
+          <div className="hero-stats">
+            <div className="hero-stat">
+              <span className="hero-stat-value">2,847</span>
+              <span className="hero-stat-label">Active Players</span>
+            </div>
+            <div className="hero-stat">
+              <span className="hero-stat-value">186</span>
+              <span className="hero-stat-label">Teams</span>
+            </div>
+            <div className="hero-stat">
+              <span className="hero-stat-value">24</span>
+              <span className="hero-stat-label">Leagues</span>
+            </div>
+            <div className="hero-stat">
+              <span className="hero-stat-value">$142K</span>
+              <span className="hero-stat-label">Total Staked</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="home-grid">
+        {/* Upcoming Games */}
+        <section className="card upcoming-games">
+          <div className="card-header">
+            <h2>Upcoming Games</h2>
+            <a href="#games" className="view-all">View All →</a>
+          </div>
+          <div className="games-list">
+            {upcomingGames.map((game) => (
+              <div key={game.id} className={`game-card ${game.status}`}>
+                {game.status === 'live' && (
+                  <div className="live-badge">
+                    <span className="live-dot-sm" />
+                    LIVE
+                  </div>
+                )}
+                <div className="game-teams">
+                  <div className="game-team">
+                    <span className="team-name">{game.awayTeam.name}</span>
+                    <span className="team-record">
+                      ({game.awayTeam.record.wins}-{game.awayTeam.record.losses})
+                    </span>
+                  </div>
+                  <div className="game-vs">
+                    {game.score ? (
+                      <span className="game-score">
+                        {game.score.away} - {game.score.home}
+                      </span>
+                    ) : (
+                      <span className="game-time">
+                        {new Date(game.scheduledTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    )}
+                  </div>
+                  <div className="game-team">
+                    <span className="team-name">{game.homeTeam.name}</span>
+                    <span className="team-record">
+                      ({game.homeTeam.record.wins}-{game.homeTeam.record.losses})
+                    </span>
+                  </div>
+                </div>
+                <div className="game-league">{game.league}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* League Standings */}
+        <section className="card standings">
+          <div className="card-header">
+            <h2>Top Standings</h2>
+            <a href="#standings" className="view-all">View All →</a>
+          </div>
+          <table className="standings-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Team</th>
+                <th>W</th>
+                <th>L</th>
+                <th>PCT</th>
+                <th>STR</th>
+              </tr>
+            </thead>
+            <tbody>
+              {standings.map((s) => (
+                <tr key={s.rank}>
+                  <td className="rank">{s.rank}</td>
+                  <td className="team-cell">{s.team.name}</td>
+                  <td>{s.wins}</td>
+                  <td>{s.losses}</td>
+                  <td className="pct">{s.winPct.toFixed(3)}</td>
+                  <td className={`streak ${s.streak.startsWith('W') ? 'win-streak' : 'loss-streak'}`}>
+                    {s.streak}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </div>
+  );
+};
+
+export default HomePage;

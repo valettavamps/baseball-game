@@ -1,0 +1,74 @@
+.crypto-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: var(--banner-height);
+  background: var(--bg-banner);
+  border-bottom: 1px solid var(--border-primary);
+  padding: 0 20px;
+  font-size: 12px;
+  z-index: 100;
+}
+
+.banner-left, .banner-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.banner-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.banner-icon {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.derby-icon {
+  color: var(--accent-gold);
+}
+
+.crown-icon {
+  color: var(--accent-secondary);
+}
+
+.banner-label {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.banner-value {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+.banner-usd {
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.banner-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--border-primary);
+}
+
+.staked-value {
+  color: var(--accent-secondary);
+}
+
+.usd-value {
+  color: var(--accent-green);
+}
+
+.banner-item.staked .banner-label {
+  color: var(--accent-secondary);
+  opacity: 0.7;
+}
