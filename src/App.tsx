@@ -7,25 +7,31 @@ import PlayersPage from './pages/PlayersPage';
 import MultiLeagueSeasonPage from './pages/MultiLeagueSeasonPage';
 import CreatePlayerPage from './pages/CreatePlayerPage';
 import MyOffersPage from './pages/MyOffersPage';
+import AuthPage from './pages/AuthPage';
 import './styles/globals.css';
 import './App.css';
 
 const App: React.FC = () => {
   const [activePage, setActivePage] = useState('create-player');
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [userData, setUserData] = useState<any>(null);
   const [walletAddress, setWalletAddress] = useState<string>('');
 
-  const handleSignIn = () => {
-    // TODO: Implement real wallet connection
-    // For now, mock sign in
+  const handleAuthSuccess = (user: any) => {
     setIsSignedIn(true);
-    setWalletAddress('7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU');
-    alert('Wallet connected! (Mock)');
+    setUserData(user);
   };
 
   const handleSignOut = () => {
     setIsSignedIn(false);
+    setUserData(null);
     setWalletAddress('');
+  };
+
+  const handleConnectWallet = () => {
+    // TODO: Implement real Solana wallet connection
+    setWalletAddress('7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU');
+    alert('Wallet connected! (Mock - for deposits/withdrawals only)');
   };
 
   const renderPage = () => {
@@ -55,11 +61,16 @@ const App: React.FC = () => {
     }
   };
 
+  // Show auth page if not signed in
+  if (!isSignedIn) {
+    return <AuthPage onSuccess={handleAuthSuccess} />;
+  }
+
   return (
     <div className="app">
       <AuthBanner
         isSignedIn={isSignedIn}
-        onSignIn={handleSignIn}
+        onSignIn={handleConnectWallet}
         onSignOut={handleSignOut}
         walletAddress={walletAddress}
         solBalance={12.45}

@@ -18,15 +18,17 @@
   background: var(--bg-primary);
 }
 
-/* Mobile: Stack sidebar on top or hide */
+/* Mobile: Bottom nav layout */
 @media (max-width: 768px) {
   .app-body {
-    flex-direction: column;
+    flex-direction: column-reverse; /* Sidebar at bottom */
   }
 
   .main-content {
+    flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
+    padding-bottom: 70px; /* Space for bottom nav */
   }
 }
 

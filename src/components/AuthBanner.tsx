@@ -30,42 +30,37 @@ const AuthBanner: React.FC<AuthBannerProps> = ({
     return `${address.slice(0, 4)}...${address.slice(-4)}`;
   };
 
-  if (!isSignedIn) {
-    return (
-      <div className="auth-banner not-signed-in">
-        <div className="auth-banner-content">
-          <div className="auth-message">
-            <span className="auth-icon">⚾</span>
-            <span>Sign in to start your baseball career</span>
-          </div>
-          <button className="sign-in-btn" onClick={onSignIn}>
-            <span className="btn-icon">🔐</span>
-            Connect Wallet
-          </button>
-        </div>
-      </div>
-    );
-  }
+  // This banner is only shown when signed in
+  // Auth page handles sign-in UI
 
   return (
     <div className="auth-banner signed-in">
       <div className="auth-banner-content">
         <div className="wallet-info">
-          <button 
-            className="wallet-address-btn"
-            onClick={() => setShowDropdown(!showDropdown)}
-          >
-            <span className="wallet-icon">👤</span>
-            <span className="wallet-address">{formatAddress(walletAddress || '')}</span>
-            <span className="dropdown-icon">{showDropdown ? '▲' : '▼'}</span>
-          </button>
-
-          {showDropdown && (
-            <div className="wallet-dropdown">
-              <button className="dropdown-item" onClick={onSignOut}>
-                <span>🚪</span> Sign Out
+          {!walletAddress ? (
+            <button className="connect-wallet-btn" onClick={onSignIn}>
+              <span className="wallet-icon">💰</span>
+              Connect Wallet (Optional)
+            </button>
+          ) : (
+            <>
+              <button 
+                className="wallet-address-btn"
+                onClick={() => setShowDropdown(!showDropdown)}
+              >
+                <span className="wallet-icon">👤</span>
+                <span className="wallet-address">{formatAddress(walletAddress)}</span>
+                <span className="dropdown-icon">{showDropdown ? '▲' : '▼'}</span>
               </button>
-            </div>
+
+              {showDropdown && (
+                <div className="wallet-dropdown">
+                  <button className="dropdown-item" onClick={onSignOut}>
+                    <span>🚪</span> Sign Out
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
 

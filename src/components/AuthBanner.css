@@ -65,6 +65,27 @@
   position: relative;
 }
 
+.connect-wallet-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-primary);
+}
+
+.connect-wallet-btn:hover {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
 .wallet-address-btn {
   display: flex;
   align-items: center;
