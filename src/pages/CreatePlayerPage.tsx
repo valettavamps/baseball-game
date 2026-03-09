@@ -75,7 +75,17 @@ const CreatePlayerPage: React.FC = () => {
     if (attributePoints - diff >= 0) {
       setPlayerData({
         ...playerData,
-        attributes: { ...playerData.attributes, [attr]: value }
+        attributes: { 
+          power: 50,
+          contact: 50,
+          speed: 50,
+          fielding: 50,
+          arm: 50,
+          discipline: 50,
+          stamina: 50,
+          ...playerData.attributes,
+          [attr]: value 
+        }
       });
       setAttributePoints(attributePoints - diff);
     }
