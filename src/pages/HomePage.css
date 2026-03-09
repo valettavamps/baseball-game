@@ -251,3 +251,44 @@
   color: var(--accent-red);
   font-weight: 600;
 }
+
+/* Hero CTA */
+.hero-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.cta-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 40px;
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--font-display);
+  box-shadow: 0 4px 20px rgba(0, 212, 170, 0.3);
+}
+
+.cta-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 212, 170, 0.5);
+}
+
+.cta-icon {
+  font-size: 24px;
+}
+
+.cta-subtext {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+}
