@@ -1,5 +1,5 @@
 .sidebar {
-  width: var(--sidebar-width);
+  width: 240px;
   height: 100%;
   background: var(--bg-sidebar);
   border-right: 1px solid var(--border-primary);
@@ -11,9 +11,7 @@
   flex-shrink: 0;
 }
 
-.sidebar-menu {
-  flex: 1;
-}
+.sidebar-menu { flex: 1; }
 
 .menu-section {
   padding: 0 12px;
@@ -66,9 +64,7 @@
   justify-content: center;
 }
 
-.menu-label {
-  font-family: var(--font-primary);
-}
+.menu-label { font-family: var(--font-primary); }
 
 .menu-badge {
   margin-left: auto;
@@ -98,20 +94,9 @@
   padding-top: 16px;
 }
 
-/* Mobile: Hide desktop sidebar */
+/* HIDE sidebar on mobile - hamburger menu replaces it */
 @media (max-width: 768px) {
   .sidebar {
-    display: none;
-  }
-}
-
-/* Tablet adjustments */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .sidebar {
-    width: 200px;
-  }
-
-  .menu-label {
-    font-size: 13px;
+    display: none !important;
   }
 }

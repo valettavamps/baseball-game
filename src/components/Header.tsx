@@ -19,10 +19,10 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <header className="app-header">
       <div className="header-left">
-        <button className="hamburger-btn" onClick={onMenuToggle}>
-          <span className="hamburger-line"></span>
-          <span className="hamburger-line"></span>
-          <span className="hamburger-line"></span>
+        <button className="hamburger-btn" onClick={onMenuToggle} aria-label="Menu">
+          <span className="hamburger-line" />
+          <span className="hamburger-line" />
+          <span className="hamburger-line" />
         </button>
         <div className="logo">
           <span className="logo-icon">⚾</span>
@@ -40,21 +40,20 @@ const Header: React.FC<HeaderProps> = ({
       <div className="header-right">
         {isSignedIn ? (
           <>
-            <button className="header-btn notifications-btn">
-              <span>🔔</span>
+            <span className="username-display">👤 {username || 'Player'}</span>
+            <button className="header-btn sign-out-btn" onClick={onSignOut}>
+              Sign Out
             </button>
-            <div className="user-menu">
-              <span className="username-display">{username || 'Player'}</span>
-              <button className="header-btn sign-out-btn" onClick={onSignOut}>
-                Sign Out
-              </button>
-            </div>
           </>
         ) : (
-          <button className="header-btn sign-in-header-btn" onClick={onSignIn}>
-            <span className="btn-icon">🔐</span>
-            Sign In
-          </button>
+          <>
+            <button className="header-btn sign-up-btn" onClick={onSignIn}>
+              Sign Up
+            </button>
+            <button className="header-btn sign-in-btn" onClick={onSignIn}>
+              Sign In
+            </button>
+          </>
         )}
       </div>
     </header>
