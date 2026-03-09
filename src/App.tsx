@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AuthBanner from './components/AuthBanner';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
+import MobileMenu from './components/MobileMenu';
 import HomePage from './pages/HomePage';
 import PlayersPage from './pages/PlayersPage';
 import MultiLeagueSeasonPage from './pages/MultiLeagueSeasonPage';
@@ -16,6 +17,7 @@ const App: React.FC = () => {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [userData, setUserData] = useState<any>(null);
   const [walletAddress, setWalletAddress] = useState<string>('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleAuthSuccess = (user: any) => {
     setIsSignedIn(true);
@@ -68,20 +70,26 @@ const App: React.FC = () => {
 
   return (
     <div className="app">
-      <AuthBanner
+      <Header 
+        onMenuToggle={() => setMobileMenuOpen(true)}
         isSignedIn={isSignedIn}
-        onSignIn={handleConnectWallet}
+        onSignIn={() => alert('Auth page (this shouldn\'t show when signed in)')}
         onSignOut={handleSignOut}
-        walletAddress={walletAddress}
-        solBalance={12.45}
-        derbyBalance={25000}
-        crownBalance={1500}
-        crownStaked={800}
-        localCurrencyValue={1842.50}
+        username={userData?.username}
       />
-      <Header />
       <div className="app-body">
+        {/* Desktop Sidebar */}
         <Sidebar activeItem={activePage} onNavigate={setActivePage} />
+        
+        {/* Mobile Slide-out Menu */}
+        <MobileMenu
+          isOpen={mobileMenuOpen}
+          onClose={() => setMobileMenuOpen(false)}
+          activeItem={activePage}
+          onNavigate={setActivePage}
+          pendingContracts={5}
+        />
+        
         <main className="main-content">
           {renderPage()}
         </main>

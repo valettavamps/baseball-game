@@ -1,19 +1,50 @@
 .app-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   height: var(--header-height);
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-primary);
-  padding: 0 24px;
-  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  flex-shrink: 0;
 }
 
 .header-left {
   display: flex;
   align-items: center;
+  gap: 16px;
 }
 
+/* Hamburger Menu Button */
+.hamburger-btn {
+  display: none; /* Hidden on desktop */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.hamburger-btn:hover {
+  background: var(--bg-tertiary);
+}
+
+.hamburger-line {
+  width: 24px;
+  height: 3px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Logo */
 .logo {
   display: flex;
   align-items: center;
@@ -27,51 +58,61 @@
 
 .logo-text {
   font-family: var(--font-display);
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--text-primary);
-  letter-spacing: 2px;
+  letter-spacing: -0.5px;
 }
 
 .logo-highlight {
   color: var(--accent-primary);
 }
 
+/* Center - Live Indicator */
 .header-center {
+  flex: 1;
   display: flex;
-  align-items: center;
+  justify-content: center;
 }
 
 .live-indicator {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
   padding: 6px 14px;
-  border-radius: 20px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 8px;
 }
 
 .live-dot {
   width: 8px;
   height: 8px;
+  background: var(--accent-green);
   border-radius: 50%;
-  background: var(--accent-red);
-  animation: pulse 2s infinite;
+  animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.2);
+  }
 }
 
 .live-text {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  color: var(--accent-red);
-  letter-spacing: 1px;
+  color: var(--accent-green);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
+/* Right Side */
 .header-right {
   display: flex;
   align-items: center;
@@ -82,34 +123,124 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  padding: 8px 16px;
   background: var(--bg-tertiary);
   border: 1px solid var(--border-primary);
-  color: var(--text-primary);
-  padding: 8px 16px;
   border-radius: 8px;
-  cursor: pointer;
-  font-size: 13px;
+  color: var(--text-primary);
+  font-size: 14px;
   font-weight: 600;
+  cursor: pointer;
   transition: all 0.2s ease;
+  font-family: var(--font-primary);
 }
 
 .header-btn:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--border-secondary);
-}
-
-.wallet-btn {
-  background: var(--gradient-primary);
-  border: none;
-  color: #0a0e17;
-  font-weight: 700;
-}
-
-.wallet-btn:hover {
-  opacity: 0.9;
-  background: var(--gradient-primary);
+  border-color: var(--accent-primary);
+  transform: translateY(-1px);
 }
 
 .notifications-btn {
-  padding: 8px 10px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.sign-in-header-btn {
+  background: var(--gradient-primary);
+  border: none;
+  color: white;
+}
+
+.sign-in-header-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 212, 170, 0.3);
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.username-display {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.sign-out-btn {
+  font-size: 13px;
+  padding: 8px 14px;
+}
+
+.btn-icon {
+  font-size: 16px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .app-header {
+    padding: 0 12px;
+  }
+
+  .hamburger-btn {
+    display: flex; /* Show on mobile */
+  }
+
+  .header-center {
+    flex: 0;
+  }
+
+  .live-indicator {
+    display: none; /* Hide on mobile for space */
+  }
+
+  .logo-text {
+    font-size: 18px;
+  }
+
+  .logo-icon {
+    font-size: 24px;
+  }
+
+  .header-right {
+    gap: 8px;
+  }
+
+  .username-display {
+    display: none; /* Hide on mobile */
+  }
+
+  .header-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .notifications-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-text {
+    display: none; /* Just show icon on very small screens */
+  }
+
+  .header-btn {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .sign-in-header-btn .btn-icon {
+    margin: 0;
+  }
+
+  .sign-in-header-btn span:not(.btn-icon) {
+    display: none; /* Just show icon */
+  }
 }
