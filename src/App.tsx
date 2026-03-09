@@ -5,16 +5,19 @@ import Sidebar from './components/Sidebar';
 import HomePage from './pages/HomePage';
 import PlayersPage from './pages/PlayersPage';
 import MultiLeagueSeasonPage from './pages/MultiLeagueSeasonPage';
+import CreatePlayerPage from './pages/CreatePlayerPage';
 import './styles/globals.css';
 import './App.css';
 
 const App: React.FC = () => {
-  const [activePage, setActivePage] = useState('season');
+  const [activePage, setActivePage] = useState('create-player');
 
   const renderPage = () => {
     switch (activePage) {
       case 'home':
         return <HomePage />;
+      case 'create-player':
+        return <CreatePlayerPage />;
       case 'season':
         return <MultiLeagueSeasonPage />;
       case 'players':
@@ -30,7 +33,7 @@ const App: React.FC = () => {
       case 'about':
         return <div className="placeholder-page"><h2>ℹ️ About</h2><p>About DiamondChain coming soon...</p></div>;
       default:
-        return <MultiLeagueSeasonPage />;
+        return <CreatePlayerPage />;
     }
   };
 
