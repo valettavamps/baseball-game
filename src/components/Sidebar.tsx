@@ -15,6 +15,7 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
   { id: 'home', label: 'Home', icon: '🏠' },
+  { id: 'season', label: 'Season', icon: '📅' },
   { id: 'players', label: 'Players', icon: '⚾' },
   { id: 'team', label: 'Team', icon: '🏟️' },
   { id: 'marketplace', label: 'Marketplace', icon: '🏪' },

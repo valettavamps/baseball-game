@@ -4,16 +4,19 @@ import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import HomePage from './pages/HomePage';
 import PlayersPage from './pages/PlayersPage';
+import SeasonPage from './pages/SeasonPage';
 import './styles/globals.css';
 import './App.css';
 
 const App: React.FC = () => {
-  const [activePage, setActivePage] = useState('home');
+  const [activePage, setActivePage] = useState('season');
 
   const renderPage = () => {
     switch (activePage) {
       case 'home':
         return <HomePage />;
+      case 'season':
+        return <SeasonPage />;
       case 'players':
         return <PlayersPage />;
       case 'team':
@@ -27,7 +30,7 @@ const App: React.FC = () => {
       case 'about':
         return <div className="placeholder-page"><h2>ℹ️ About</h2><p>About DiamondChain coming soon...</p></div>;
       default:
-        return <HomePage />;
+        return <SeasonPage />;
     }
   };
 

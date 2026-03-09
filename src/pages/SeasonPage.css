@@ -1,0 +1,283 @@
+.season-page {
+  padding: 24px;
+  max-width: 1600px;
+  margin: 0 auto;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  gap: 16px;
+}
+
+.loading-container .spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(0, 212, 170, 0.2);
+  border-top-color: var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-container p {
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+
+/* Page Header */
+.page-header {
+  margin-bottom: 32px;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.page-subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Season Content Layout */
+.season-content {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 24px;
+  align-items: start;
+}
+
+.games-section {
+  min-width: 0; /* Prevents grid blowout */
+}
+
+.standings-section {
+  position: sticky;
+  top: 24px;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+
+/* Standings Card */
+.standings-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.standings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-primary);
+  background: var(--bg-secondary);
+}
+
+.standings-header h2 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.standings-count {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.no-standings {
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* Standings Table */
+.standings-table-container {
+  overflow-x: auto;
+}
+
+.standings-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.standings-table thead {
+  background: var(--bg-tertiary);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.standings-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.standings-table td {
+  padding: 14px 16px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.standings-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.standings-table tbody tr:hover {
+  background: var(--bg-tertiary);
+}
+
+.standings-table tbody tr.top-team {
+  background: rgba(0, 212, 170, 0.05);
+}
+
+.standings-table tbody tr.top-team:hover {
+  background: rgba(0, 212, 170, 0.1);
+}
+
+/* Column Specific Styles */
+.rank-col {
+  width: 50px;
+  text-align: center;
+  font-weight: 700;
+  font-family: var(--font-display);
+}
+
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.team-col {
+  min-width: 180px;
+}
+
+.team-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.wins-col {
+  color: var(--accent-green);
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+.losses-col {
+  color: var(--accent-red);
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+.pct-col {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.streak-col {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.streak-col.win-streak {
+  color: var(--accent-green);
+}
+
+.streak-col.loss-streak {
+  color: var(--accent-red);
+}
+
+/* Responsive */
+@media (max-width: 1280px) {
+  .season-content {
+    grid-template-columns: 1fr;
+  }
+
+  .standings-section {
+    position: static;
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .season-page {
+    padding: 16px;
+  }
+
+  .page-title {
+    font-size: 28px;
+  }
+
+  .page-subtitle {
+    font-size: 14px;
+  }
+
+  .standings-table th,
+  .standings-table td {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .team-col {
+    min-width: 140px;
+  }
+
+  .team-name {
+    font-size: 13px;
+  }
+}
+
+/* Scrollbar for standings */
+.standings-section::-webkit-scrollbar {
+  width: 6px;
+}
+
+.standings-section::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 3px;
+}
+
+.standings-section::-webkit-scrollbar-thumb {
+  background: var(--border-secondary);
+  border-radius: 3px;
+}
+
+.standings-section::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
