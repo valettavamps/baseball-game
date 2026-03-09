@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage';
 import PlayersPage from './pages/PlayersPage';
 import MultiLeagueSeasonPage from './pages/MultiLeagueSeasonPage';
 import CreatePlayerPage from './pages/CreatePlayerPage';
+import MyOffersPage from './pages/MyOffersPage';
 import './styles/globals.css';
 import './App.css';
 
@@ -18,6 +19,8 @@ const App: React.FC = () => {
         return <HomePage />;
       case 'create-player':
         return <CreatePlayerPage />;
+      case 'my-offers':
+        return <MyOffersPage />;
       case 'season':
         return <MultiLeagueSeasonPage />;
       case 'players':

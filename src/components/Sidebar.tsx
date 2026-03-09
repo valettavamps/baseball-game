@@ -16,9 +16,10 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   { id: 'home', label: 'Home', icon: '🏠' },
   { id: 'create-player', label: 'Create Player', icon: '⭐' },
+  { id: 'my-offers', label: 'My Offers', icon: '📬', badge: 5 },
   { id: 'season', label: 'Season', icon: '📅' },
   { id: 'players', label: 'Players', icon: '⚾' },
-  { id: 'team', label: 'Team', icon: '🏟️' },
+  { id: 'team', label: 'My Team', icon: '🏟️' },
   { id: 'marketplace', label: 'Marketplace', icon: '🏪' },
 ];
 
