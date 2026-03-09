@@ -18,6 +18,25 @@
   background: var(--bg-primary);
 }
 
+/* Mobile: Stack sidebar on top or hide */
+@media (max-width: 768px) {
+  .app-body {
+    flex-direction: column;
+  }
+
+  .main-content {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .main-content {
+    padding: 16px;
+  }
+}
+
 .placeholder-page {
   display: flex;
   flex-direction: column;

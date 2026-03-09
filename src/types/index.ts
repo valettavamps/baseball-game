@@ -90,8 +90,20 @@ export interface Team {
   record: { wins: number; losses: number };
   roster: Player[];
   league: string;
+  currentTier: number; // 1-5
+  tierHistory: TierHistory[];
+  overallRating: number; // Team strength 45-95
   crownStaked: number;
   treasury: number;
+}
+
+export interface TierHistory {
+  season: number;
+  tier: number;
+  leagueName: string;
+  finalRank: number;
+  record: { wins: number; losses: number };
+  status?: 'promoted' | 'relegated' | 'stayed';
 }
 
 // Token types

@@ -237,29 +237,75 @@
 
 @media (max-width: 768px) {
   .season-page {
-    padding: 16px;
+    padding: 12px;
+    padding-bottom: 80px; /* Space for bottom nav */
+    height: calc(100vh - 64px); /* Account for header */
+  }
+
+  .page-header {
+    margin-bottom: 20px;
   }
 
   .page-title {
-    font-size: 28px;
+    font-size: 24px;
   }
 
   .page-subtitle {
-    font-size: 14px;
+    font-size: 13px;
+  }
+
+  .season-content {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .standings-section {
+    position: static;
+    max-height: none;
+    order: -1; /* Show standings first on mobile */
+  }
+
+  .standings-table {
+    font-size: 13px;
   }
 
   .standings-table th,
   .standings-table td {
-    padding: 10px 12px;
-    font-size: 13px;
+    padding: 8px 6px;
+    font-size: 12px;
   }
 
   .team-col {
-    min-width: 140px;
+    min-width: 120px;
   }
 
   .team-name {
-    font-size: 13px;
+    font-size: 12px;
+  }
+
+  .rank-col {
+    width: 40px;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 375px) {
+  .season-page {
+    padding: 8px;
+  }
+
+  .page-title {
+    font-size: 20px;
+  }
+
+  .standings-table th,
+  .standings-table td {
+    padding: 6px 4px;
+    font-size: 11px;
+  }
+
+  .team-name {
+    font-size: 11px;
   }
 }
 

@@ -374,17 +374,94 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+  .live-games-feed {
+    padding-bottom: 16px;
+  }
+
+  .feed-header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .feed-header h2 {
+    font-size: 20px;
+  }
+
+  .refresh-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .games-grid {
+    gap: 12px;
+  }
+
+  .game-card {
+    padding: 12px;
+  }
+
   .team-score {
-    font-size: 28px;
-    min-width: 50px;
+    font-size: 24px;
+    min-width: 48px;
   }
 
   .team-name {
-    font-size: 14px;
+    font-size: 13px;
+  }
+
+  .team-record {
+    font-size: 11px;
   }
 
   .stat-value {
     font-size: 16px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+  }
+
+  .highlight {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  .highlight-inning {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 640px) {
+  .game-card {
+    padding: 10px;
+  }
+
+  .team {
+    padding: 10px;
+  }
+
+  .team-score {
+    font-size: 20px;
+    min-width: 42px;
+  }
+
+  .team-name {
+    font-size: 12px;
+  }
+
+  .team-record {
+    font-size: 10px;
+  }
+
+  .game-stats {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .stat-item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 }

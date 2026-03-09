@@ -1,0 +1,196 @@
+/* Extends SeasonPage.css */
+
+/* Tier Tabs */
+.tier-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+  padding: 4px;
+}
+
+.tier-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 20px;
+  background: var(--bg-card);
+  border: 2px solid var(--border-primary);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+  flex-shrink: 0;
+}
+
+.tier-tab:hover {
+  border-color: var(--border-accent);
+  transform: translateY(-2px);
+}
+
+.tier-tab.active {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 20px rgba(0, 212, 170, 0.2);
+}
+
+.tier-emoji {
+  font-size: 24px;
+}
+
+.tier-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.tier-teams-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* League Header Enhancements */
+.standings-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.tier-emoji-large {
+  font-size: 32px;
+}
+
+.league-description {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 4px 0 0 0;
+}
+
+.league-info {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.info-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(100, 116, 139, 0.15);
+  border: 1px solid rgba(100, 116, 139, 0.3);
+  color: var(--text-secondary);
+}
+
+.info-badge.promotion {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: var(--accent-green);
+}
+
+.info-badge.relegation {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: var(--accent-red);
+}
+
+/* Promotion/Relegation Zones in Standings */
+.promotion-zone {
+  background: rgba(34, 197, 94, 0.05);
+  border-left: 3px solid var(--accent-green);
+}
+
+.relegation-zone {
+  background: rgba(239, 68, 68, 0.05);
+  border-left: 3px solid var(--accent-red);
+}
+
+.zone-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.zone-indicator.promotion {
+  background: rgba(34, 197, 94, 0.2);
+  color: var(--accent-green);
+}
+
+.zone-indicator.relegation {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--accent-red);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .tier-tabs {
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .tier-tab {
+    min-width: 90px;
+    padding: 10px 14px;
+    gap: 4px;
+  }
+
+  .tier-emoji {
+    font-size: 20px;
+  }
+
+  .tier-name {
+    font-size: 12px;
+  }
+
+  .tier-teams-count {
+    font-size: 10px;
+  }
+
+  .tier-emoji-large {
+    font-size: 28px;
+  }
+
+  .standings-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .league-description {
+    font-size: 12px;
+  }
+
+  .league-info {
+    gap: 6px;
+  }
+
+  .info-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tier-tab {
+    min-width: 70px;
+    padding: 8px 10px;
+  }
+
+  .tier-emoji {
+    font-size: 18px;
+  }
+
+  .tier-name {
+    font-size: 11px;
+  }
+}

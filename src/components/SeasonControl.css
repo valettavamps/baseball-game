@@ -320,16 +320,86 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .season-control {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .season-title h3 {
+    font-size: 20px;
+  }
+
+  .season-subtitle {
+    font-size: 13px;
+  }
+
+  .progress-container {
+    margin-bottom: 16px;
+  }
+
   .season-stats-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .stat-card {
+    padding: 12px;
+  }
+
+  .stat-icon {
+    font-size: 24px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+  }
+
+  .stat-value {
+    font-size: 18px;
   }
 
   .control-buttons {
     flex-direction: column;
+    gap: 8px;
   }
 
   .control-btn {
     width: 100%;
     justify-content: center;
+    padding: 12px 20px;
+    font-size: 13px;
+  }
+
+  .start-btn {
+    padding: 14px 24px;
+    font-size: 15px;
+  }
+
+  .season-complete {
+    flex-direction: column;
+    text-align: center;
+    padding: 16px;
+  }
+
+  .complete-icon {
+    font-size: 40px;
+  }
+
+  .complete-text h4 {
+    font-size: 16px;
+  }
+
+  .complete-text p {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .season-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    padding: 10px;
   }
 }

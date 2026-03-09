@@ -4,7 +4,7 @@ import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import HomePage from './pages/HomePage';
 import PlayersPage from './pages/PlayersPage';
-import SeasonPage from './pages/SeasonPage';
+import MultiLeagueSeasonPage from './pages/MultiLeagueSeasonPage';
 import './styles/globals.css';
 import './App.css';
 
@@ -16,7 +16,7 @@ const App: React.FC = () => {
       case 'home':
         return <HomePage />;
       case 'season':
-        return <SeasonPage />;
+        return <MultiLeagueSeasonPage />;
       case 'players':
         return <PlayersPage />;
       case 'team':
@@ -30,7 +30,7 @@ const App: React.FC = () => {
       case 'about':
         return <div className="placeholder-page"><h2>ℹ️ About</h2><p>About DiamondChain coming soon...</p></div>;
       default:
-        return <SeasonPage />;
+        return <MultiLeagueSeasonPage />;
     }
   };
 

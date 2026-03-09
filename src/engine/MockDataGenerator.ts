@@ -54,41 +54,102 @@ export class MockDataGenerator {
   ];
 
   /**
-   * Generate a full league of teams
+   * Generate a full league of teams (flat - deprecated, use generateTieredLeagues)
    */
   static generateLeague(numTeams: number = 30): Team[] {
     const teams: Team[] = [];
     const selectedNames = this.shuffleArray([...this.TEAM_NAMES]).slice(0, numTeams);
 
     for (let i = 0; i < numTeams; i++) {
-      teams.push(this.generateTeam(selectedNames[i], `team-${i + 1}`));
+      teams.push(this.generateTeam(selectedNames[i], `team-${i + 1}`, 5, 60)); // Default tier 5, mid rating
     }
 
     return teams;
   }
 
   /**
+   * Generate tiered leagues (100 teams across 5 tiers)
+   */
+  static generateTieredLeagues(): Map<number, Team[]> {
+    const tieredTeams = new Map<number, Team[]>();
+    const allNames = this.shuffleArray([...this.TEAM_NAMES]);
+    let nameIndex = 0;
+    let teamIdCounter = 1;
+
+    // Tier 1: Diamond - 10 teams (85-95 rating)
+    const diamondTeams: Team[] = [];
+    for (let i = 0; i < 10; i++) {
+      const name = allNames[nameIndex++] || `Team ${teamIdCounter}`;
+      diamondTeams.push(this.generateTeam(name, `team-${teamIdCounter++}`, 1, this.randomInRange(85, 95)));
+    }
+    tieredTeams.set(1, diamondTeams);
+
+    // Tier 2: Platinum - 16 teams (75-85 rating)
+    const platinumTeams: Team[] = [];
+    for (let i = 0; i < 16; i++) {
+      const name = allNames[nameIndex++] || `Team ${teamIdCounter}`;
+      platinumTeams.push(this.generateTeam(name, `team-${teamIdCounter++}`, 2, this.randomInRange(75, 85)));
+    }
+    tieredTeams.set(2, platinumTeams);
+
+    // Tier 3: Gold - 20 teams (65-75 rating)
+    const goldTeams: Team[] = [];
+    for (let i = 0; i < 20; i++) {
+      const name = allNames[nameIndex++] || `Team ${teamIdCounter}`;
+      goldTeams.push(this.generateTeam(name, `team-${teamIdCounter++}`, 3, this.randomInRange(65, 75)));
+    }
+    tieredTeams.set(3, goldTeams);
+
+    // Tier 4: Silver - 24 teams (55-65 rating)
+    const silverTeams: Team[] = [];
+    for (let i = 0; i < 24; i++) {
+      const name = allNames[nameIndex++] || `Team ${teamIdCounter}`;
+      silverTeams.push(this.generateTeam(name, `team-${teamIdCounter++}`, 4, this.randomInRange(55, 65)));
+    }
+    tieredTeams.set(4, silverTeams);
+
+    // Tier 5: Bronze - 30 teams (45-55 rating)
+    const bronzeTeams: Team[] = [];
+    for (let i = 0; i < 30; i++) {
+      const name = allNames[nameIndex++] || `Team ${teamIdCounter}`;
+      bronzeTeams.push(this.generateTeam(name, `team-${teamIdCounter++}`, 5, this.randomInRange(45, 55)));
+    }
+    tieredTeams.set(5, bronzeTeams);
+
+    return tieredTeams;
+  }
+
+  private static randomInRange(min: number, max: number): number {
+    return min + Math.floor(Math.random() * (max - min + 1));
+  }
+
+  /**
    * Generate a single team with full roster
    */
-  static generateTeam(name: string, id: string): Team {
+  static generateTeam(name: string, id: string, tier: number = 5, targetRating: number = 60): Team {
     const roster: Player[] = [];
     
     // Generate pitchers (10)
     for (let i = 0; i < 10; i++) {
-      roster.push(this.generatePlayer('P', id));
+      roster.push(this.generatePlayer('P', id, targetRating));
     }
 
     // Generate position players
     const positions: Position[] = ['C', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'];
     positions.forEach(pos => {
-      roster.push(this.generatePlayer(pos, id));
+      roster.push(this.generatePlayer(pos, id, targetRating));
     });
 
     // Generate bench players (6 more)
     for (let i = 0; i < 6; i++) {
       const benchPos: Position[] = ['1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF'];
-      roster.push(this.generatePlayer(benchPos[i % benchPos.length], id));
+      roster.push(this.generatePlayer(benchPos[i % benchPos.length], id, targetRating));
     }
+
+    // Calculate average team rating
+    const avgRating = roster.reduce((sum, p) => sum + p.overall, 0) / roster.length;
+
+    const leagueNames = ['Diamond League', 'Platinum League', 'Gold League', 'Silver League', 'Bronze League'];
 
     return {
       id,
@@ -96,7 +157,10 @@ export class MockDataGenerator {
       owner: 'AI', // All teams start AI-managed
       record: { wins: 0, losses: 0 },
       roster,
-      league: 'Diamond League',
+      league: leagueNames[tier - 1],
+      currentTier: tier,
+      tierHistory: [],
+      overallRating: Math.round(avgRating),
       crownStaked: 0,
       treasury: 100000 // Starting funds
     };
@@ -105,12 +169,12 @@ export class MockDataGenerator {
   /**
    * Generate a single player
    */
-  static generatePlayer(position: Position, teamId: string): Player {
+  static generatePlayer(position: Position, teamId: string, targetRating: number = 60): Player {
     const firstName = this.randomChoice(this.FIRST_NAMES);
     const lastName = this.randomChoice(this.LAST_NAMES);
     const name = `${firstName} ${lastName}`;
     
-    const attributes = this.generateAttributes(position);
+    const attributes = this.generateAttributes(position, targetRating);
     const overall = this.calculateOverall(attributes, position);
 
     return {
@@ -127,34 +191,37 @@ export class MockDataGenerator {
   }
 
   /**
-   * Generate player attributes based on position
+   * Generate player attributes based on position and target rating
    */
-  private static generateAttributes(position: Position): PlayerAttributes {
+  private static generateAttributes(position: Position, targetRating: number = 60): PlayerAttributes {
     const isPitcher = position === 'P';
+    
+    // Adjust stat ranges based on target rating
+    const statAdjust = (targetRating - 60) * 0.5; // ±15 for ±30 rating difference
 
     if (isPitcher) {
       return {
-        power: this.randomStat(20, 50),
-        contact: this.randomStat(20, 50),
-        speed: this.randomStat(30, 60),
-        fielding: this.randomStat(50, 80),
-        arm: this.randomStat(60, 95),
-        discipline: this.randomStat(40, 70),
-        stamina: this.randomStat(60, 95),
-        velocity: this.randomStat(65, 100), // Pitcher-specific
-        control: this.randomStat(55, 95),   // Pitcher-specific
-        movement: this.randomStat(50, 90)   // Pitcher-specific
+        power: this.randomStat(20 + statAdjust, 50 + statAdjust),
+        contact: this.randomStat(20 + statAdjust, 50 + statAdjust),
+        speed: this.randomStat(30 + statAdjust, 60 + statAdjust),
+        fielding: this.randomStat(50 + statAdjust, 80 + statAdjust),
+        arm: this.randomStat(60 + statAdjust, 95 + statAdjust),
+        discipline: this.randomStat(40 + statAdjust, 70 + statAdjust),
+        stamina: this.randomStat(60 + statAdjust, 95 + statAdjust),
+        velocity: this.randomStat(65 + statAdjust, 100), // Pitcher-specific
+        control: this.randomStat(55 + statAdjust, 95 + statAdjust),   // Pitcher-specific
+        movement: this.randomStat(50 + statAdjust, 90 + statAdjust)   // Pitcher-specific
       };
     } else {
       // Position players
       const baseStats = {
-        power: this.randomStat(40, 95),
-        contact: this.randomStat(45, 95),
-        speed: this.randomStat(40, 90),
-        fielding: this.randomStat(45, 90),
-        arm: this.randomStat(40, 85),
-        discipline: this.randomStat(40, 85),
-        stamina: this.randomStat(60, 90)
+        power: this.randomStat(40 + statAdjust, 95 + statAdjust),
+        contact: this.randomStat(45 + statAdjust, 95 + statAdjust),
+        speed: this.randomStat(40 + statAdjust, 90 + statAdjust),
+        fielding: this.randomStat(45 + statAdjust, 90 + statAdjust),
+        arm: this.randomStat(40 + statAdjust, 85 + statAdjust),
+        discipline: this.randomStat(40 + statAdjust, 85 + statAdjust),
+        stamina: this.randomStat(60 + statAdjust, 90 + statAdjust)
       };
 
       // Position-specific adjustments
