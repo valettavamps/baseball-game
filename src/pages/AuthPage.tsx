@@ -24,9 +24,13 @@ const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
 
     // TODO: Backend API call
     setTimeout(() => {
-      // Simulate 2FA requirement
-      setMode('2fa');
+      // For testing: skip directly to app
       setIsLoading(false);
+      onSuccess({
+        email,
+        username: email.split('@')[0],
+        userId: 'user-' + Date.now()
+      });
     }, 1000);
   };
 
@@ -72,6 +76,15 @@ const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
         userId: 'user-123'
       });
     }, 1000);
+  };
+
+  const handleSkip2FA = () => {
+    // For testing - skip directly to app
+    onSuccess({
+      email: email || 'test@example.com',
+      username: username || 'testuser',
+      userId: 'user-123'
+    });
   };
 
   const renderSignIn = () => (
@@ -237,6 +250,12 @@ const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
       >
         {isLoading ? 'Verifying...' : 'Verify & Continue'}
       </button>
+
+      <div className="skip-container">
+        <button className="skip-btn" onClick={handleSkip2FA}>
+          Skip for now (Testing)
+        </button>
+      </div>
 
       <div className="auth-footer">
         <button className="link-btn" onClick={() => {
