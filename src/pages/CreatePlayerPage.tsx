@@ -38,8 +38,8 @@ const randomStat = (min: number, max: number): number => {
   return Math.floor(min + Math.random() * (max - min + 1));
 };
 
-// Generate randomized starting attributes based on position
-const generateBaseAttributes = (position: string) => {
+// Generate randomized starting attributes based on position (FREE - no points needed)
+const generateAttributes = (position: string) => {
   switch (position) {
     case 'P':
       return {
@@ -104,7 +104,6 @@ const generateBaseAttributes = (position: string) => {
 const CreatePlayerPage: React.FC<CreatePlayerPageProps> = ({ onNavigate }) => {
   const [step, setStep] = useState<number>(1);
   const [playerCreated, setPlayerCreated] = useState<boolean>(false);
-  const [baseAttributes, setBaseAttributes] = useState<any>({}); // Floor values
   const [playerData, setPlayerData] = useState<Partial<PlayerCreationData>>({
     throwingHand: 'right',
     battingHand: 'right',
@@ -122,7 +121,18 @@ const CreatePlayerPage: React.FC<CreatePlayerPageProps> = ({ onNavigate }) => {
     }
   });
 
-  const [attributePoints, setAttributePoints] = useState<number>(30);
+  const getStepDescription = () => {
+    if (step === 3 && playerData.firstName && playerData.position) {
+      const positionName = positions.find(p => p.id === playerData.position)?.name || 'Player';
+      return `These are ${playerData.firstName}'s randomized attributes for the ${positionName} position. They look good!`;
+    }
+    if (step === 1) return 'Enter your player\'s name';
+    if (step === 2) return 'Choose your position on the field';
+    if (step === 3) return 'Review your randomized attributes (free for now)';
+    if (step === 4) return 'Set physical attributes';
+    if (step === 5) return 'Confirm and create your player';
+    return '';
+  };
 
   const positions = [
     { id: 'P', name: 'Pitcher', icon: '⚾', description: 'Control the game from the mound' },
