@@ -104,6 +104,8 @@ const generateAttributes = (position: string) => {
 const CreatePlayerPage: React.FC<CreatePlayerPageProps> = ({ onNavigate }) => {
   const [step, setStep] = useState<number>(1);
   const [playerCreated, setPlayerCreated] = useState<boolean>(false);
+  const [baseAttributes, setBaseAttributes] = useState<Record<string, number>>({});
+  const [attributePoints, setAttributePoints] = useState<number>(30);
   const [playerData, setPlayerData] = useState<Partial<PlayerCreationData>>({
     throwingHand: 'right',
     battingHand: 'right',

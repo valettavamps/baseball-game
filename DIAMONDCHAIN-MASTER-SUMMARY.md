@@ -88,7 +88,12 @@ baseball-game/
 ```
 
 ### Deployment Status
-- **Vercel:** Push sent 22:30 UTC, awaiting build result
+- **Vercel:** 3 pushes sent (22:30, 22:50, 22:56 UTC)
+  - First push: fixed package.json + moved server code
+  - Second push: added `vercel.json` to force CRA build config
+  - Third push: fixed TS error (`generateBaseAttributes` → `generateAttributes` in CreatePlayerPage.tsx line 156)
+  - **Awaiting build result on third push** — this should be the fix
+- **`vercel.json`** added to repo root — forces `framework: create-react-app`, `buildCommand: npm run build`, `outputDirectory: build`
 - **baseball-game-zee1:** Unknown repo (404 on GitHub) — likely stale Vercel project to delete
 
 ---
@@ -111,9 +116,12 @@ baseball-game/
 - Letter grades (A+ to F) over numbers
 - English auction for team ownership (7-day, anti-snipe)
 
-## 🎯 Next Step
+## 🎯 Next Steps
 
-**Get Vercel deployment green**, then deploy backend to Render.com free tier so data persists across sessions.
+1. **Confirm Vercel deployment is green** (3rd push should fix it — TS error was the blocker)
+2. **Deploy backend to Render.com** free tier (server/ dir has its own package.json, ready to go)
+3. **Wire frontend to backend** (update REACT_APP_API_URL env var in Vercel to point at Render URL)
+4. **Delete `baseball-game-zee1`** Vercel project (stale, repo doesn't exist)
 
 ---
 
@@ -124,5 +132,5 @@ baseball-game/
 | Mar 9 AM | Game engine + AI + economic docs | ~3h |
 | Mar 9 PM | UI integration + tiered leagues + mobile | ~4.5h |
 | Mar 9 PM | Auth + player creation + contracts | ~3h |
-| Mar 9 Night | Repo cleanup + fix Vercel build | ~1h |
-| **Total** | **60% MVP** | **~11.5h** |
+| Mar 9 Night | Repo cleanup + fix Vercel build (3 pushes) | ~2h |
+| **Total** | **60% MVP** | **~12.5h** |
