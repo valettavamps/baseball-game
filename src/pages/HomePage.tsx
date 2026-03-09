@@ -2,6 +2,13 @@ import React from 'react';
 import './HomePage.css';
 import { Game, LeagueStanding } from '../types';
 
+interface HomePageProps {
+  isSignedIn?: boolean;
+  onSignUp?: () => void;
+}
+
+const HomePage: React.FC<HomePageProps> = ({ isSignedIn = false, onSignUp }) => {
+
 // Mock data
 const upcomingGames: Game[] = [
   {
@@ -39,7 +46,6 @@ const standings: LeagueStanding[] = [
   { rank: 5, team: { id: 't5', name: 'Raydium Rockets', record: { wins: 30, losses: 30 } }, gamesPlayed: 60, wins: 30, losses: 30, winPct: 0.500, streak: 'L2' },
 ];
 
-const HomePage: React.FC = () => {
   return (
     <div className="home-page">
       {/* Hero / Overview */}
@@ -51,6 +57,17 @@ const HomePage: React.FC = () => {
           <p className="hero-subtitle">
             Build your dynasty. Own your players. Dominate the league.
           </p>
+          
+          {!isSignedIn && onSignUp && (
+            <div className="hero-cta">
+              <button className="cta-btn primary" onClick={onSignUp}>
+                <span className="cta-icon">⭐</span>
+                Start Your Career
+              </button>
+              <p className="cta-subtext">Create your player • Get scouted • Sign contracts</p>
+            </div>
+          )}
+
           <div className="hero-stats">
             <div className="hero-stat">
               <span className="hero-stat-value">2,847</span>
@@ -155,6 +172,6 @@ const HomePage: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default HomePage;

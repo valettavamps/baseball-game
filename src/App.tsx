@@ -13,21 +13,25 @@ import './styles/globals.css';
 import './App.css';
 
 const App: React.FC = () => {
-  const [activePage, setActivePage] = useState('create-player');
+  const [activePage, setActivePage] = useState('home');
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [userData, setUserData] = useState<any>(null);
   const [walletAddress, setWalletAddress] = useState<string>('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const handleAuthSuccess = (user: any) => {
     setIsSignedIn(true);
     setUserData(user);
+    setShowAuthModal(false);
+    setActivePage('create-player'); // Take them to player creation after sign up
   };
 
   const handleSignOut = () => {
     setIsSignedIn(false);
     setUserData(null);
     setWalletAddress('');
+    setActivePage('home');
   };
 
   const handleConnectWallet = () => {
@@ -36,10 +40,32 @@ const App: React.FC = () => {
     alert('Wallet connected! (Mock - for deposits/withdrawals only)');
   };
 
+  const handleSignInClick = () => {
+    setShowAuthModal(true);
+  };
+
   const renderPage = () => {
+    // Pages that require sign-in
+    const requiresAuth = ['create-player', 'my-offers', 'team'];
+    
+    if (!isSignedIn && requiresAuth.includes(activePage)) {
+      return (
+        <div className="auth-required-page">
+          <div className="auth-required-content">
+            <div className="auth-required-icon">🔒</div>
+            <h2>Sign In Required</h2>
+            <p>You need to sign in to access this feature</p>
+            <button className="sign-in-cta-btn" onClick={handleSignInClick}>
+              Sign In / Sign Up
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     switch (activePage) {
       case 'home':
-        return <HomePage />;
+        return <HomePage isSignedIn={isSignedIn} onSignUp={handleSignInClick} />;
       case 'create-player':
         return <CreatePlayerPage onNavigate={setActivePage} />;
       case 'my-offers':
@@ -59,21 +85,16 @@ const App: React.FC = () => {
       case 'about':
         return <div className="placeholder-page"><h2>ℹ️ About</h2><p>About DiamondChain coming soon...</p></div>;
       default:
-        return <CreatePlayerPage onNavigate={setActivePage} />;
+        return <HomePage />;
     }
   };
-
-  // Show auth page if not signed in
-  if (!isSignedIn) {
-    return <AuthPage onSuccess={handleAuthSuccess} />;
-  }
 
   return (
     <div className="app">
       <Header 
         onMenuToggle={() => setMobileMenuOpen(true)}
         isSignedIn={isSignedIn}
-        onSignIn={() => alert('Auth page (this shouldn\'t show when signed in)')}
+        onSignIn={handleSignInClick}
         onSignOut={handleSignOut}
         username={userData?.username}
       />
@@ -94,6 +115,18 @@ const App: React.FC = () => {
           {renderPage()}
         </main>
       </div>
+
+      {/* Auth Modal */}
+      {showAuthModal && (
+        <div className="auth-modal-overlay" onClick={() => setShowAuthModal(false)}>
+          <div className="auth-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" onClick={() => setShowAuthModal(false)}>
+              ×
+            </button>
+            <AuthPage onSuccess={handleAuthSuccess} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
