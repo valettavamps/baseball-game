@@ -153,7 +153,7 @@ const CreatePlayerPage: React.FC<CreatePlayerPageProps> = ({ onNavigate }) => {
 
   const handlePositionSelect = (position: Position) => {
     // Generate randomized base attributes for this position
-    const newBase = generateBaseAttributes(position);
+    const newBase = generateAttributes(position);
     setBaseAttributes(newBase);
     
     // Set player attributes to the base (user can add points on top)
