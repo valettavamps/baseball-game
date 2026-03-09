@@ -37,14 +37,14 @@ export interface Team {
   id: string;
   name: string;
   city: string;
-  tier: 1 | 2 | 3 | 4 | 5; // 1=Diamond, 5=Bronze
+  tier: 1 | 2 | 3 | 4 | 5;
   rating: number;
   wins: number;
   losses: number;
   runsScored: number;
   runsAllowed: number;
   streak: 'W' | 'L' | null;
-  players: string[]; // Player IDs
+  players: string[];
   ownerId?: string;
   treasury: number;
   tierHistory: { tier: number; season: number }[];
@@ -56,7 +56,7 @@ export interface User {
   email: string;
   passwordHash: string;
   twoFactorSecret?: string;
-  players: string[]; // Player IDs
+  players: string[];
   walletAddress?: string;
   createdAt: number;
 }
@@ -81,10 +81,7 @@ export interface Game {
   awayScore: number;
   status: 'scheduled' | 'in_progress' | 'completed';
   day: number;
-  innings?: {
-    home: number[];
-    away: number[];
-  };
+  innings?: { home: number[]; away: number[] };
   highlights?: string[];
 }
 
@@ -115,19 +112,16 @@ class DataStore {
   seasons: Map<string, Season> = new Map();
   stakes: Map<string, Stake> = new Map();
 
-  // Helper to generate IDs
   generateId(): string {
     return uuidv4();
   }
 
   // ============ USER METHODS ============
-  
+
   createUser(username: string, email: string, passwordHash: string): User {
     const user: User = {
       id: this.generateId(),
-      username,
-      email,
-      passwordHash,
+      username, email, passwordHash,
       players: [],
       createdAt: Date.now()
     };
@@ -154,10 +148,7 @@ class DataStore {
   // ============ PLAYER METHODS ============
 
   createPlayer(playerData: Omit<Player, 'id'>): Player {
-    const player: Player = {
-      ...playerData,
-      id: this.generateId()
-    };
+    const player: Player = { ...playerData, id: this.generateId() };
     this.players.set(player.id, player);
     return player;
   }
@@ -183,10 +174,7 @@ class DataStore {
   // ============ TEAM METHODS ============
 
   createTeam(teamData: Omit<Team, 'id'>): Team {
-    const team: Team = {
-      ...teamData,
-      id: this.generateId()
-    };
+    const team: Team = { ...teamData, id: this.generateId() };
     this.teams.set(team.id, team);
     return team;
   }
@@ -216,13 +204,10 @@ class DataStore {
   createSeason(year: number): Season {
     const season: Season = {
       id: this.generateId(),
-      year,
-      status: 'upcoming',
-      currentDay: 0,
-      totalDays: 162,
+      year, status: 'upcoming',
+      currentDay: 0, totalDays: 162,
       startDate: Date.now(),
-      schedules: {},
-      standings: {}
+      schedules: {}, standings: {}
     };
     this.seasons.set(season.id, season);
     return season;
@@ -249,10 +234,7 @@ class DataStore {
   createStake(userId: string, teamId: string, amount: number, seasonId: string): Stake {
     const stake: Stake = {
       id: this.generateId(),
-      userId,
-      teamId,
-      amount,
-      seasonId,
+      userId, teamId, amount, seasonId,
       createdAt: Date.now()
     };
     this.stakes.set(stake.id, stake);
@@ -268,5 +250,4 @@ class DataStore {
   }
 }
 
-// Export singleton instance
 export const dataStore = new DataStore();
