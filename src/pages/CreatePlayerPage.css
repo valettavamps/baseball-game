@@ -239,15 +239,43 @@
   text-align: center;
 }
 
+.attribute-grade {
+  font-size: 22px;
+  font-weight: 800;
+  font-family: var(--font-display);
+  min-width: 40px;
+  text-align: center;
+}
+
 .attribute-bar {
   height: 12px;
   background: var(--bg-secondary);
   border: 1px solid var(--border-primary);
   border-radius: 8px;
   overflow: hidden;
+  position: relative;
 }
 
 .attribute-fill {
+  height: 100%;
+  background: var(--gradient-primary);
+  transition: width 0.3s ease;
+}
+
+.attribute-fill-base {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--bg-tertiary);
+  border-right: 2px solid var(--border-secondary);
+  transition: width 0.3s ease;
+}
+
+.attribute-fill-bonus {
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 100%;
   background: var(--gradient-primary);
   transition: width 0.3s ease;
@@ -276,6 +304,12 @@
   font-weight: 700;
   font-family: var(--font-display);
   color: var(--accent-primary);
+}
+
+.rating-grade {
+  font-size: 42px;
+  font-weight: 800;
+  font-family: var(--font-display);
 }
 
 /* Step 4: Physical */

@@ -8,27 +8,121 @@ interface CreatePlayerPageProps {
   onNavigate?: (page: string) => void;
 }
 
+// Convert number to letter grade
+const getLetterGrade = (value: number): string => {
+  if (value >= 95) return 'A+';
+  if (value >= 90) return 'A';
+  if (value >= 85) return 'A-';
+  if (value >= 80) return 'B+';
+  if (value >= 75) return 'B';
+  if (value >= 70) return 'B-';
+  if (value >= 65) return 'C+';
+  if (value >= 60) return 'C';
+  if (value >= 55) return 'C-';
+  if (value >= 50) return 'D+';
+  if (value >= 45) return 'D';
+  if (value >= 40) return 'D-';
+  return 'F';
+};
+
+const getGradeColor = (value: number): string => {
+  if (value >= 85) return 'var(--accent-primary)';
+  if (value >= 70) return 'var(--accent-green)';
+  if (value >= 55) return 'var(--accent-gold)';
+  if (value >= 40) return 'var(--accent-red)';
+  return 'var(--text-muted)';
+};
+
+// Randomize a stat within a range
+const randomStat = (min: number, max: number): number => {
+  return Math.floor(min + Math.random() * (max - min + 1));
+};
+
+// Generate randomized starting attributes based on position
+const generateBaseAttributes = (position: string) => {
+  switch (position) {
+    case 'P':
+      return {
+        power: randomStat(20, 40), contact: randomStat(20, 40),
+        speed: randomStat(30, 55), fielding: randomStat(40, 60),
+        arm: randomStat(55, 75), discipline: randomStat(35, 55),
+        stamina: randomStat(55, 75),
+        velocity: randomStat(55, 75), control: randomStat(45, 65), movement: randomStat(45, 65)
+      };
+    case 'C':
+      return {
+        power: randomStat(35, 55), contact: randomStat(40, 60),
+        speed: randomStat(25, 45), fielding: randomStat(50, 70),
+        arm: randomStat(55, 75), discipline: randomStat(40, 60),
+        stamina: randomStat(50, 70)
+      };
+    case '1B': case 'DH':
+      return {
+        power: randomStat(55, 75), contact: randomStat(45, 65),
+        speed: randomStat(25, 45), fielding: randomStat(35, 55),
+        arm: randomStat(30, 50), discipline: randomStat(40, 60),
+        stamina: randomStat(45, 65)
+      };
+    case '2B': case 'SS':
+      return {
+        power: randomStat(30, 50), contact: randomStat(50, 70),
+        speed: randomStat(50, 70), fielding: randomStat(55, 75),
+        arm: randomStat(40, 60), discipline: randomStat(45, 65),
+        stamina: randomStat(50, 70)
+      };
+    case '3B':
+      return {
+        power: randomStat(50, 70), contact: randomStat(40, 60),
+        speed: randomStat(30, 50), fielding: randomStat(45, 65),
+        arm: randomStat(50, 70), discipline: randomStat(40, 60),
+        stamina: randomStat(45, 65)
+      };
+    case 'CF':
+      return {
+        power: randomStat(35, 55), contact: randomStat(45, 65),
+        speed: randomStat(60, 80), fielding: randomStat(55, 75),
+        arm: randomStat(40, 60), discipline: randomStat(40, 60),
+        stamina: randomStat(55, 75)
+      };
+    case 'LF': case 'RF':
+      return {
+        power: randomStat(45, 65), contact: randomStat(40, 60),
+        speed: randomStat(40, 60), fielding: randomStat(40, 60),
+        arm: randomStat(45, 65), discipline: randomStat(40, 60),
+        stamina: randomStat(45, 65)
+      };
+    default:
+      return {
+        power: randomStat(35, 55), contact: randomStat(35, 55),
+        speed: randomStat(35, 55), fielding: randomStat(35, 55),
+        arm: randomStat(35, 55), discipline: randomStat(35, 55),
+        stamina: randomStat(35, 55)
+      };
+  }
+};
+
 const CreatePlayerPage: React.FC<CreatePlayerPageProps> = ({ onNavigate }) => {
   const [step, setStep] = useState<number>(1);
   const [playerCreated, setPlayerCreated] = useState<boolean>(false);
+  const [baseAttributes, setBaseAttributes] = useState<any>({}); // Floor values
   const [playerData, setPlayerData] = useState<Partial<PlayerCreationData>>({
     throwingHand: 'right',
     battingHand: 'right',
-    height: 72, // 6'0"
+    height: 72,
     weight: 200,
     age: 22,
     attributes: {
-      power: 50,
-      contact: 50,
-      speed: 50,
-      fielding: 50,
-      arm: 50,
-      discipline: 50,
-      stamina: 50
+      power: 45,
+      contact: 45,
+      speed: 45,
+      fielding: 45,
+      arm: 45,
+      discipline: 45,
+      stamina: 45
     }
   });
 
-  const [attributePoints, setAttributePoints] = useState<number>(50);
+  const [attributePoints, setAttributePoints] = useState<number>(30);
 
   const positions = [
     { id: 'P', name: 'Pitcher', icon: '⚾', description: 'Control the game from the mound' },
@@ -48,52 +142,39 @@ const CreatePlayerPage: React.FC<CreatePlayerPageProps> = ({ onNavigate }) => {
   };
 
   const handlePositionSelect = (position: Position) => {
-    setPlayerData({ ...playerData, position });
+    // Generate randomized base attributes for this position
+    const newBase = generateBaseAttributes(position);
+    setBaseAttributes(newBase);
     
-    // Auto-adjust attributes based on position
-    const newAttributes = { ...playerData.attributes! };
+    // Set player attributes to the base (user can add points on top)
+    setPlayerData({ ...playerData, position, attributes: { ...newBase } });
     
-    if (position === 'P') {
-      newAttributes.velocity = 60;
-      newAttributes.control = 55;
-      newAttributes.movement = 55;
-      newAttributes.power = 30;
-      newAttributes.contact = 30;
-    } else if (position === 'C') {
-      newAttributes.arm = 65;
-      newAttributes.fielding = 60;
-      newAttributes.speed = 40;
-    } else if (['CF', 'SS'].includes(position)) {
-      newAttributes.speed = 65;
-      newAttributes.fielding = 60;
-    } else if (['1B', '3B', 'DH'].includes(position)) {
-      newAttributes.power = 65;
-      newAttributes.contact = 60;
-    }
-    
-    setPlayerData({ ...playerData, position, attributes: newAttributes });
+    // Reset bonus points
+    setAttributePoints(30);
   };
 
-  const handleAttributeChange = (attr: string, value: number) => {
-    const currentValue = (playerData.attributes as any)[attr] || 50;
-    const diff = value - currentValue;
+  const handleAttributeChange = (attr: string, direction: 'up' | 'down') => {
+    const currentValue = (playerData.attributes as any)[attr] || 45;
+    const floorValue = (baseAttributes as any)[attr] || 30;
     
-    if (attributePoints - diff >= 0) {
+    if (direction === 'up') {
+      // Can't go above 99 or use more points than available
+      if (currentValue >= 99 || attributePoints < 3) return;
+      const newValue = Math.min(99, currentValue + 3);
       setPlayerData({
         ...playerData,
-        attributes: { 
-          power: 50,
-          contact: 50,
-          speed: 50,
-          fielding: 50,
-          arm: 50,
-          discipline: 50,
-          stamina: 50,
-          ...playerData.attributes,
-          [attr]: value 
-        }
+        attributes: { ...playerData.attributes!, [attr]: newValue }
       });
-      setAttributePoints(attributePoints - diff);
+      setAttributePoints(attributePoints - 3);
+    } else {
+      // Can't go below the base/floor value
+      if (currentValue <= floorValue) return;
+      const newValue = Math.max(floorValue, currentValue - 3);
+      setPlayerData({
+        ...playerData,
+        attributes: { ...playerData.attributes!, [attr]: newValue }
+      });
+      setAttributePoints(attributePoints + 3);
     }
   };
 
@@ -227,45 +308,62 @@ const CreatePlayerPage: React.FC<CreatePlayerPageProps> = ({ onNavigate }) => {
       <div className="creation-step">
         <h2>Distribute Attributes</h2>
         <p className="step-description">
-          Points remaining: <span className="points-remaining">{attributePoints}</span>
+          Bonus points remaining: <span className="points-remaining">{attributePoints}</span>
         </p>
         
         <div className="attributes-list">
-          {attributesList.map(attr => (
-            <div key={attr.key} className="attribute-row">
-              <div className="attribute-info">
-                <span className="attribute-label">{attr.label}</span>
-                <span className="attribute-description">{attr.description}</span>
+          {attributesList.map(attr => {
+            const value = (attrs as any)[attr.key] || 45;
+            const floor = (baseAttributes as any)[attr.key] || 30;
+            const grade = getLetterGrade(value);
+            const gradeColor = getGradeColor(value);
+            const isAtFloor = value <= floor;
+            
+            return (
+              <div key={attr.key} className="attribute-row">
+                <div className="attribute-info">
+                  <span className="attribute-label">{attr.label}</span>
+                  <span className="attribute-description">{attr.description}</span>
+                </div>
+                <div className="attribute-control">
+                  <button 
+                    className="attr-btn"
+                    onClick={() => handleAttributeChange(attr.key, 'down')}
+                    disabled={isAtFloor}
+                  >
+                    -
+                  </button>
+                  <span className="attribute-grade" style={{ color: gradeColor }}>
+                    {grade}
+                  </span>
+                  <button 
+                    className="attr-btn"
+                    onClick={() => handleAttributeChange(attr.key, 'up')}
+                    disabled={attributePoints < 3 || value >= 99}
+                  >
+                    +
+                  </button>
+                </div>
+                <div className="attribute-bar">
+                  <div 
+                    className="attribute-fill-base"
+                    style={{ width: `${floor}%` }}
+                  />
+                  <div 
+                    className="attribute-fill-bonus"
+                    style={{ width: `${value}%` }}
+                  />
+                </div>
               </div>
-              <div className="attribute-control">
-                <button 
-                  className="attr-btn"
-                  onClick={() => handleAttributeChange(attr.key, Math.max(1, (attrs as any)[attr.key] - 5))}
-                >
-                  -
-                </button>
-                <span className="attribute-value">{(attrs as any)[attr.key]}</span>
-                <button 
-                  className="attr-btn"
-                  onClick={() => handleAttributeChange(attr.key, Math.min(99, (attrs as any)[attr.key] + 5))}
-                  disabled={attributePoints < 5}
-                >
-                  +
-                </button>
-              </div>
-              <div className="attribute-bar">
-                <div 
-                  className="attribute-fill"
-                  style={{ width: `${(attrs as any)[attr.key]}%` }}
-                />
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="overall-rating">
-          <span className="rating-label">Overall Rating:</span>
-          <span className="rating-value">{getTotalRating()}</span>
+          <span className="rating-label">Overall:</span>
+          <span className="rating-grade" style={{ color: getGradeColor(getTotalRating()) }}>
+            {getLetterGrade(getTotalRating())}
+          </span>
         </div>
 
         <div className="step-nav">
@@ -413,7 +511,7 @@ const CreatePlayerPage: React.FC<CreatePlayerPageProps> = ({ onNavigate }) => {
           <div className="summary-stats">
             <div className="summary-stat">
               <span className="stat-label">Overall</span>
-              <span className="stat-value">{getTotalRating()}</span>
+              <span className="stat-value" style={{ color: getGradeColor(getTotalRating()) }}>{getLetterGrade(getTotalRating())}</span>
             </div>
             <div className="summary-stat">
               <span className="stat-label">Height</span>
@@ -478,6 +576,7 @@ const CreatePlayerPage: React.FC<CreatePlayerPageProps> = ({ onNavigate }) => {
           <button className="secondary-btn" onClick={() => {
             setPlayerCreated(false);
             setStep(1);
+            setBaseAttributes({});
             setPlayerData({
               throwingHand: 'right',
               battingHand: 'right',
@@ -485,16 +584,16 @@ const CreatePlayerPage: React.FC<CreatePlayerPageProps> = ({ onNavigate }) => {
               weight: 200,
               age: 22,
               attributes: {
-                power: 50,
-                contact: 50,
-                speed: 50,
-                fielding: 50,
-                arm: 50,
-                discipline: 50,
-                stamina: 50
+                power: 45,
+                contact: 45,
+                speed: 45,
+                fielding: 45,
+                arm: 45,
+                discipline: 45,
+                stamina: 45
               }
             });
-            setAttributePoints(50);
+            setAttributePoints(30);
           }}>
             Create Another Player
           </button>
