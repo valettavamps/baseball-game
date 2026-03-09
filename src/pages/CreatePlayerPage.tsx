@@ -2,9 +2,15 @@ import React, { useState } from 'react';
 import './CreatePlayerPage.css';
 import { PlayerCreationData } from '../types/user';
 import { Position } from '../types';
+import PlayerCard from '../components/PlayerCard';
 
-const CreatePlayerPage: React.FC = () => {
+interface CreatePlayerPageProps {
+  onNavigate?: (page: string) => void;
+}
+
+const CreatePlayerPage: React.FC<CreatePlayerPageProps> = ({ onNavigate }) => {
   const [step, setStep] = useState<number>(1);
+  const [playerCreated, setPlayerCreated] = useState<boolean>(false);
   const [playerData, setPlayerData] = useState<Partial<PlayerCreationData>>({
     throwingHand: 'right',
     battingHand: 'right',
@@ -381,6 +387,17 @@ const CreatePlayerPage: React.FC = () => {
     </div>
   );
 
+  const handleCreatePlayer = () => {
+    // TODO: Backend integration
+    setPlayerCreated(true);
+  };
+
+  const handleViewOffers = () => {
+    if (onNavigate) {
+      onNavigate('my-offers');
+    }
+  };
+
   const renderStep5 = () => (
     <div className="creation-step">
       <h2>Confirm Your Player</h2>
@@ -433,9 +450,55 @@ const CreatePlayerPage: React.FC = () => {
         <button className="back-btn" onClick={() => setStep(4)}>
           ← Back
         </button>
-        <button className="next-btn create-final-btn" onClick={() => alert('Player created! (Backend integration coming)')}>
+        <button className="next-btn create-final-btn" onClick={handleCreatePlayer}>
           Create Player 🎉
         </button>
+      </div>
+    </div>
+  );
+
+  const renderPlayerCreated = () => (
+    <div className="creation-step">
+      <div className="player-created-success">
+        <div className="success-icon">🎉</div>
+        <h2>Player Created Successfully!</h2>
+        <p className="success-message">
+          Teams are reviewing your profile. You should receive contract offers soon!
+        </p>
+
+        <PlayerCard
+          playerName={`${playerData.firstName} ${playerData.lastName}`}
+          position={positions.find(p => p.id === playerData.position)?.name || playerData.position!}
+          overall={getTotalRating()}
+          pendingContracts={5}
+          onViewContracts={handleViewOffers}
+        />
+
+        <div className="created-actions">
+          <button className="secondary-btn" onClick={() => {
+            setPlayerCreated(false);
+            setStep(1);
+            setPlayerData({
+              throwingHand: 'right',
+              battingHand: 'right',
+              height: 72,
+              weight: 200,
+              age: 22,
+              attributes: {
+                power: 50,
+                contact: 50,
+                speed: 50,
+                fielding: 50,
+                arm: 50,
+                discipline: 50,
+                stamina: 50
+              }
+            });
+            setAttributePoints(50);
+          }}>
+            Create Another Player
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -443,25 +506,31 @@ const CreatePlayerPage: React.FC = () => {
   return (
     <div className="create-player-page">
       <div className="creation-container">
-        <div className="creation-header">
-          <h1>
-            <span className="gradient-text">Create</span> Your Player
-          </h1>
-          <div className="progress-dots">
-            {[1, 2, 3, 4, 5].map(s => (
-              <div 
-                key={s} 
-                className={`dot ${step >= s ? 'active' : ''} ${step === s ? 'current' : ''}`}
-              />
-            ))}
+        {!playerCreated && (
+          <div className="creation-header">
+            <h1>
+              <span className="gradient-text">Create</span> Your Player
+            </h1>
+            <div className="progress-dots">
+              {[1, 2, 3, 4, 5].map(s => (
+                <div 
+                  key={s} 
+                  className={`dot ${step >= s ? 'active' : ''} ${step === s ? 'current' : ''}`}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
-        {step === 1 && renderStep1()}
-        {step === 2 && renderStep2()}
-        {step === 3 && renderStep3()}
-        {step === 4 && renderStep4()}
-        {step === 5 && renderStep5()}
+        {playerCreated ? renderPlayerCreated() : (
+          <>
+            {step === 1 && renderStep1()}
+            {step === 2 && renderStep2()}
+            {step === 3 && renderStep3()}
+            {step === 4 && renderStep4()}
+            {step === 5 && renderStep5()}
+          </>
+        )}
       </div>
     </div>
   );

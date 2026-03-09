@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CryptoBanner from './components/CryptoBanner';
+import AuthBanner from './components/AuthBanner';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import HomePage from './pages/HomePage';
@@ -12,13 +12,28 @@ import './App.css';
 
 const App: React.FC = () => {
   const [activePage, setActivePage] = useState('create-player');
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [walletAddress, setWalletAddress] = useState<string>('');
+
+  const handleSignIn = () => {
+    // TODO: Implement real wallet connection
+    // For now, mock sign in
+    setIsSignedIn(true);
+    setWalletAddress('7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU');
+    alert('Wallet connected! (Mock)');
+  };
+
+  const handleSignOut = () => {
+    setIsSignedIn(false);
+    setWalletAddress('');
+  };
 
   const renderPage = () => {
     switch (activePage) {
       case 'home':
         return <HomePage />;
       case 'create-player':
-        return <CreatePlayerPage />;
+        return <CreatePlayerPage onNavigate={setActivePage} />;
       case 'my-offers':
         return <MyOffersPage />;
       case 'season':
@@ -36,13 +51,17 @@ const App: React.FC = () => {
       case 'about':
         return <div className="placeholder-page"><h2>ℹ️ About</h2><p>About DiamondChain coming soon...</p></div>;
       default:
-        return <CreatePlayerPage />;
+        return <CreatePlayerPage onNavigate={setActivePage} />;
     }
   };
 
   return (
     <div className="app">
-      <CryptoBanner
+      <AuthBanner
+        isSignedIn={isSignedIn}
+        onSignIn={handleSignIn}
+        onSignOut={handleSignOut}
+        walletAddress={walletAddress}
         solBalance={12.45}
         derbyBalance={25000}
         crownBalance={1500}

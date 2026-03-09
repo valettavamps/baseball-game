@@ -565,6 +565,62 @@
   }
 }
 
+/* Player Created Success */
+.player-created-success {
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+}
+
+.success-icon {
+  font-size: 72px;
+  margin-bottom: 24px;
+  animation: bounce 1s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.player-created-success h2 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.success-message {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.created-actions {
+  margin-top: 32px;
+  display: flex;
+  justify-content: center;
+}
+
+.secondary-btn {
+  padding: 12px 28px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-primary);
+}
+
+.secondary-btn:hover {
+  background: var(--bg-secondary);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
 @media (max-width: 480px) {
   .positions-grid {
     grid-template-columns: 1fr;
@@ -576,5 +632,13 @@
 
   .position-icon {
     font-size: 28px;
+  }
+
+  .player-created-success h2 {
+    font-size: 24px;
+  }
+
+  .success-message {
+    font-size: 14px;
   }
 }
