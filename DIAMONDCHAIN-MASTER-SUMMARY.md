@@ -87,14 +87,20 @@ baseball-game/
     ├── staking-leverage-math.md, team-ownership-auction.md
 ```
 
-### Deployment Status
-- **Vercel:** 3 pushes sent (22:30, 22:50, 22:56 UTC)
-  - First push: fixed package.json + moved server code
-  - Second push: added `vercel.json` to force CRA build config
-  - Third push: fixed TS error (`generateBaseAttributes` → `generateAttributes` in CreatePlayerPage.tsx line 156)
-  - **Awaiting build result on third push** — this should be the fix
-- **`vercel.json`** added to repo root — forces `framework: create-react-app`, `buildCommand: npm run build`, `outputDirectory: build`
-- **baseball-game-zee1:** Unknown repo (404 on GitHub) — likely stale Vercel project to delete
+### Deployment Status (Vercel - PROBLEMATIC)
+- **5 pushes sent** — all failing on TypeScript errors in CreatePlayerPage.tsx
+- Errors fixed so far:
+  1. `generateBaseAttributes` → `generateAttributes` (line 156)
+  2. Added missing `useState` hooks: `baseAttributes`, `attributePoints`
+  3. Cast `generateAttributes` return to `Record<string,number>` (type mismatch)
+- **5th build running** (commit e47425b) — awaiting result
+- **ALTERNATIVE:** Switch to GitHub Pages instead — already configured in package.json:
+  ```bash
+  npm install --save-dev gh-pages
+  # Add to package.json scripts: "deploy": "gh-pages -d build"
+  npm run build && npm run deploy
+  ```
+- **baseball-game-zee1:** Unknown repo (404) — delete this Vercel project
 
 ---
 
