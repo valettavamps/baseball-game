@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/baseball-game/static/css/main.ce5ef3a3.css",
+    "main.js": "/baseball-game/static/js/main.031d2414.js",
+    "index.html": "/baseball-game/index.html",
+    "main.ce5ef3a3.css.map": "/baseball-game/static/css/main.ce5ef3a3.css.map",
+    "main.031d2414.js.map": "/baseball-game/static/js/main.031d2414.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ce5ef3a3.css",
+    "static/js/main.031d2414.js"
+  ]
+}
