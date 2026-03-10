@@ -95,6 +95,25 @@ The `generateContractOffers()` function in `src/services/localStorage.ts` was ge
 
 ---
 
+## Issue 4: White Background / Notes-Looking (Jekyll Conflict)
+**Reported by:** John
+**Date:** 2026-03-10
+
+### Problem
+The site was showing a white background with plain text (like GitHub README notes) instead of the styled dark theme. The CSS wasn't loading.
+
+### Attempted Fix #1 (Did Not Work)
+Added `.nojekyll` file to prevent GitHub Pages from running Jekyll processing. This did not resolve the issue.
+
+### Attempted Fix #2 (Current)
+The issue was likely caused by GitHub Pages trying to process `README.md` with Jekyll. Moved `README.md` to `README.bak` temporarily so it won't be processed as a Jekyll page.
+
+If this works, we may need to either:
+- Delete or rename README.md permanently
+- Or configure Jekyll to ignore the React app files
+
+---
+
 ## Deployment Notes
 
 After each fix, run:
