@@ -402,6 +402,7 @@ export function getAllGameResults(): StoredGameResult[] {
 export interface StoredContractOffer {
   id: string;
   playerId: string;
+  playerPosition: string;
   teamId: string;
   teamName: string;
   teamCity: string;
@@ -416,7 +417,7 @@ export interface StoredContractOffer {
   expiresAt: number;
 }
 
-export function generateContractOffers(playerId: string): StoredContractOffer[] {
+export function generateContractOffers(playerId: string, position: string): StoredContractOffer[] {
   const teams = getTeams();
   const offers: StoredContractOffer[] = [];
   
@@ -424,13 +425,29 @@ export function generateContractOffers(playerId: string): StoredContractOffer[] 
   const shuffled = [...teams].sort(() => Math.random() - 0.5);
   const selected = shuffled.slice(0, 5);
 
-  const scoutReports = [
+  // Position-specific scout reports
+  const positionReports: Record<string, string[]> = {
+    'P': ['Looking for a pitcher to anchor our rotation.', 'Our scouts rate your stuff highly.', 'Could be a day-one starter in our bullpen.'],
+    'C': ['We need a catcher to lead our defense.', 'Your receiving skills impressed our scouts.', 'Would be a great addition behind the plate.'],
+    '1B': ['Looking for power at first base.', 'Your bat could be a big upgrade at the corner.', 'We need a consistent bat in the lineup.'],
+    '2B': ['Need a versatile second baseman.', 'Your range and hands impressed us.', 'Could be our everyday second baseman.'],
+    '3B': ['Hot corner specialist needed.', 'Your arm and reactions would play well at third.', 'Looking for a premium defender at the hot corner.'],
+    'SS': ['Elite shortstop to anchor our infield.', 'Your defensive metrics are off the charts.', 'Could be a Gold Glove contender at short.'],
+    'LF': ['Corner outfield power needed.', 'Your power would play well in left field.', 'Looking for a run producer in the outfield.'],
+    'CF': ['Center field coverage is a priority.', 'Your speed and range would anchor our outfield.', 'We need a true center fielder.'],
+    'RF': ['Right field arm strength is key.', 'Your combination of power and defense is rare.', 'Would be a great fit in right field.'],
+    'DH': ['Designated hitter spot available.', 'Your bat would play well in the DH role.', 'Looking for consistent production at the plate.']
+  };
+
+  const defaultReports = [
     'Our scouts love the raw potential. Could be a day-one starter.',
     'Great fit for our system. We see big things ahead.',
     'The coaching staff is excited about this prospect.',
     'A perfect addition to our roster for the upcoming season.',
     'Our analytics team rates this player highly for our needs.'
   ];
+
+  const reports = positionReports[position] || defaultReports;
 
   for (let i = 0; i < selected.length; i++) {
     const team = selected[i];
@@ -439,6 +456,7 @@ export function generateContractOffers(playerId: string): StoredContractOffer[] 
     offers.push({
       id: `offer_${Date.now()}_${i}`,
       playerId,
+      playerPosition: position,
       teamId: team.id,
       teamName: team.name,
       teamCity: team.city,
@@ -447,7 +465,7 @@ export function generateContractOffers(playerId: string): StoredContractOffer[] 
       salary: Math.floor((40000 + Math.random() * 60000) * tierMultiplier),
       duration: Math.floor(1 + Math.random() * 3),
       bonuses: Math.floor((2000 + Math.random() * 18000) * tierMultiplier),
-      scoutReport: scoutReports[i],
+      scoutReport: reports[i % reports.length],
       status: 'pending',
       createdAt: Date.now(),
       expiresAt: Date.now() + 86400000 * 3

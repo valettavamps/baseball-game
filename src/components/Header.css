@@ -15,9 +15,9 @@
   gap: 16px;
 }
 
-/* Hamburger - ALWAYS visible on mobile */
+/* Hamburger - ALWAYS visible */
 .hamburger-btn {
-  display: none;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;

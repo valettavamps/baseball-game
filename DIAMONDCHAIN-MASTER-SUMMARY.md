@@ -87,20 +87,16 @@ baseball-game/
     ├── staking-leverage-math.md, team-ownership-auction.md
 ```
 
-### Deployment Status (Vercel - PROBLEMATIC)
-- **5 pushes sent** — all failing on TypeScript errors in CreatePlayerPage.tsx
-- Errors fixed so far:
-  1. `generateBaseAttributes` → `generateAttributes` (line 156)
+### Deployment Status
+- **Deployed to GitHub Pages** — https://valettavamps.github.io/ (root URL)
+- Switched from Vercel to GitHub Pages (more reliable, free)
+- Build: `npm run build && npm run deploy`
+- 8 pushes total fixing TypeScript errors in CreatePlayerPage.tsx:
+  1. `generateBaseAttributes` → `generateAttributes`
   2. Added missing `useState` hooks: `baseAttributes`, `attributePoints`
-  3. Cast `generateAttributes` return to `Record<string,number>` (type mismatch)
-- **5th build running** (commit e47425b) — awaiting result
-- **ALTERNATIVE:** Switch to GitHub Pages instead — already configured in package.json:
-  ```bash
-  npm install --save-dev gh-pages
-  # Add to package.json scripts: "deploy": "gh-pages -d build"
-  npm run build && npm run deploy
-  ```
-- **baseball-game-zee1:** Unknown repo (404) — delete this Vercel project
+  3. Cast return types to `any` to fix type mismatch
+- Last fix: changed `homepage` from `/baseball-game` to `/` so it works at root URL
+- **STATUS:** Published, awaiting GitHub Pages propagation (~5-10 min after each deploy)
 
 ---
 

@@ -51,7 +51,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
     // TODO: Backend API call
     setTimeout(() => {
       // Simulate QR code generation for 2FA setup
-      setQrCode('https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=otpauth://totp/DiamondChain:' + email + '?secret=JBSWY3DPEHPK3PXP&issuer=DiamondChain');
+      setQrCode('https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=otpauth://totp/SimForge:' + email + '?secret=JBSWY3DPEHPK3PXP&issuer=SimForge');
       setMode('2fa');
       setIsLoading(false);
     }, 1000);
