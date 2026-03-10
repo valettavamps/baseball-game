@@ -120,10 +120,13 @@ baseball-game/
 
 ## 🎯 Next Steps
 
-1. **Confirm Vercel deployment is green** (3rd push should fix it — TS error was the blocker)
-2. **Deploy backend to Render.com** free tier (server/ dir has its own package.json, ready to go)
-3. **Wire frontend to backend** (update REACT_APP_API_URL env var in Vercel to point at Render URL)
-4. **Delete `baseball-game-zee1`** Vercel project (stale, repo doesn't exist)
+1. **Deploy to Netlify** — Replace GitHub Pages with Netlify
+   - Go to Netlify.com → Sign up with GitHub
+   - Add new site → Import baseball-game repo
+   - Build command: `npm run build`
+   - Publish directory: `build`
+   - Deploys to free URL like `simforge.netlify.app`
+2. Test the deployed site
 
 ---
 
