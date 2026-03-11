@@ -83,13 +83,16 @@ const App: React.FC = () => {
         username={userData?.username}
       />
       <div className="app-body">
-        <Sidebar activeItem={activePage} onNavigate={setActivePage} />
+        {/* Sidebar removed - using slide-out menu for all screens */}
         
         <MobileMenu
           isOpen={mobileMenuOpen}
           onClose={() => setMobileMenuOpen(false)}
           activeItem={activePage}
-          onNavigate={setActivePage}
+          onNavigate={(page) => {
+            setActivePage(page);
+            setMobileMenuOpen(false);
+          }}
           pendingContracts={5}
         />
         

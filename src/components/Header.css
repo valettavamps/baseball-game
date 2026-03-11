@@ -15,26 +15,32 @@
   gap: 16px;
 }
 
-/* Hamburger - ONLY visible on mobile */
+/* Hamburger - ALWAYS visible */
 .hamburger-btn {
-  display: none;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 5px;
-  width: 44px;
-  height: 44px;
+  gap: 4px;
+  width: 36px;
+  height: 36px;
   background: none;
   border: 1px solid var(--border-primary);
   cursor: pointer;
-  padding: 10px;
-  border-radius: 8px;
+  padding: 8px;
+  border-radius: 6px;
 }
 
-@media (max-width: 768px) {
-  .hamburger-btn {
-    display: flex;
-  }
+.hamburger-btn:active {
+  background: var(--bg-tertiary);
+}
+
+.hamburger-line {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--text-primary);
+  border-radius: 2px;
 }
 
 .hamburger-btn:active {
