@@ -16,7 +16,7 @@
   top: 0;
   left: 0;
   bottom: 0;
-  width: 280px;
+  width: 200px;
   background: var(--bg-sidebar);
   border-right: 1px solid var(--border-primary);
   z-index: 1999;
@@ -25,12 +25,6 @@
   display: flex;
   flex-direction: column;
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
-}
-
-@media (min-width: 769px) {
-  .mobile-menu {
-    width: 220px;
-  }
 }
 
 .mobile-menu.open {
