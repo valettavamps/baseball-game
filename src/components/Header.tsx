@@ -26,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({
         </button>
         <div className="logo">
           <span className="logo-icon">⚾</span>
-          <span className="logo-text">SIMFORGE<span className="logo-highlight">BASEBALL</span></span>
+          <span className="logo-text hide-mobile">SIMFORGE<span className="logo-highlight">BASEBALL</span></span>
         </div>
       </div>
       

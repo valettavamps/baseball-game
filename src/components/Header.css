@@ -15,9 +15,9 @@
   gap: 16px;
 }
 
-/* Hamburger - ALWAYS visible */
+/* Hamburger - ONLY visible on mobile */
 .hamburger-btn {
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -29,6 +29,12 @@
   cursor: pointer;
   padding: 10px;
   border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .hamburger-btn {
+    display: flex;
+  }
 }
 
 .hamburger-btn:active {
@@ -146,27 +152,40 @@
 /* MOBILE */
 @media (max-width: 768px) {
   .app-header {
-    padding: 0 12px;
+    padding: 0 8px;
+    height: 52px;
+  }
+
+  .header-left {
+    gap: 8px;
   }
 
   .hamburger-btn {
     display: flex;
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+  }
+
+  .hamburger-line {
+    width: 18px;
+    height: 2px;
   }
 
   .header-center {
     display: none;
   }
 
-  .logo-text {
-    font-size: 16px;
-  }
-  
   .logo-icon {
-    font-size: 24px;
+    font-size: 22px;
+  }
+
+  .logo-text {
+    font-size: 14px;
   }
 
   .header-right {
-    gap: 6px;
+    gap: 4px;
   }
 
   .sign-in-btn {
@@ -174,8 +193,9 @@
   }
 
   .sign-up-btn {
-    padding: 8px 12px;
-    font-size: 12px;
+    padding: 6px 10px;
+    font-size: 11px;
+    border-radius: 6px;
   }
   
   .sign-up-btn span {
@@ -184,19 +204,18 @@
   
   .sign-up-btn::before {
     content: "➕";
+    font-size: 14px;
   }
 
   .username-display {
-    font-size: 12px;
-    max-width: 80px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: 11px;
+    max-width: 60px;
   }
 
   .sign-out-btn {
-    padding: 8px 10px;
-    font-size: 11px;
+    padding: 6px 8px;
+    font-size: 10px;
+    border-radius: 6px;
   }
 }
 

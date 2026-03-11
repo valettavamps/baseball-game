@@ -129,6 +129,11 @@ a:hover {
   body {
     overflow-x: hidden;
   }
+  
+  /* Scale down everything on mobile */
+  html {
+    font-size: 14px;
+  }
 }
 
 /* Responsive containers */
