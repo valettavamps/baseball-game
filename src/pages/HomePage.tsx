@@ -44,6 +44,9 @@ const standings: LeagueStanding[] = [
   { rank: 3, team: { id: 't3', name: 'Anchor Arms', record: { wins: 35, losses: 25 } }, gamesPlayed: 60, wins: 35, losses: 25, winPct: 0.583, streak: 'L1' },
   { rank: 4, team: { id: 't4', name: 'Metaplex Maulers', record: { wins: 33, losses: 27 } }, gamesPlayed: 60, wins: 33, losses: 27, winPct: 0.550, streak: 'W3' },
   { rank: 5, team: { id: 't5', name: 'Raydium Rockets', record: { wins: 30, losses: 30 } }, gamesPlayed: 60, wins: 30, losses: 30, winPct: 0.500, streak: 'L2' },
+  { rank: 6, team: { id: 't6', name: 'Jupiter Giants', record: { wins: 28, losses: 32 } }, gamesPlayed: 60, wins: 28, losses: 32, winPct: 0.467, streak: 'W1' },
+  { rank: 7, team: { id: 't7', name: 'Orca Outfielders', record: { wins: 25, losses: 35 } }, gamesPlayed: 60, wins: 25, losses: 35, winPct: 0.417, streak: 'L3' },
+  { rank: 8, team: { id: 't8', name: 'Sage Ballers', record: { wins: 22, losses: 38 } }, gamesPlayed: 60, wins: 22, losses: 38, winPct: 0.367, streak: 'W2' },
 ];
 
   return (
@@ -52,7 +55,7 @@ const standings: LeagueStanding[] = [
       <section className="hero-section">
         <div className="hero-content">
           <h1 className="hero-title">
-            <span className="gradient-text">DIAMOND</span>CHAIN
+            <span className="gradient-text">SIMFORGE</span> BASEBALL
           </h1>
           <p className="hero-subtitle">
             Build your dynasty. Own your players. Dominate the league.
