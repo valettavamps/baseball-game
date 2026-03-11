@@ -160,23 +160,43 @@
   .logo-text {
     font-size: 16px;
   }
+  
+  .logo-icon {
+    font-size: 24px;
+  }
+
+  .header-right {
+    gap: 6px;
+  }
 
   .sign-in-btn {
     display: none;
   }
 
   .sign-up-btn {
-    padding: 8px 14px;
-    font-size: 13px;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  
+  .sign-up-btn span {
+    display: none;
+  }
+  
+  .sign-up-btn::before {
+    content: "➕";
   }
 
   .username-display {
-    font-size: 13px;
+    font-size: 12px;
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .sign-out-btn {
-    padding: 8px 12px;
-    font-size: 12px;
+    padding: 8px 10px;
+    font-size: 11px;
   }
 }
 

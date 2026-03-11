@@ -252,6 +252,113 @@
   font-weight: 600;
 }
 
+/* Mobile */
+@media (max-width: 768px) {
+  .home-page {
+    padding: 16px;
+  }
+  
+  .hero-section {
+    padding: 20px;
+  }
+  
+  .hero-title {
+    font-size: 28px;
+    letter-spacing: 2px;
+  }
+  
+  .hero-subtitle {
+    font-size: 14px;
+  }
+  
+  .hero-stats {
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .hero-stat {
+    min-width: 45%;
+    text-align: center;
+  }
+  
+  .hero-stat-value {
+    font-size: 18px;
+  }
+  
+  .hero-stat-label {
+    font-size: 10px;
+  }
+  
+  .hero-cta {
+    margin-bottom: 20px;
+  }
+  
+  .cta-btn {
+    padding: 14px 28px;
+    font-size: 16px;
+    width: 100%;
+  }
+  
+  .home-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .card {
+    padding: 16px;
+  }
+  
+  .card-header h2 {
+    font-size: 14px;
+  }
+  
+  /* Games - compact on mobile */
+  .game-card {
+    padding: 12px;
+  }
+  
+  .team-name {
+    font-size: 12px;
+  }
+  
+  .team-record {
+    font-size: 10px;
+  }
+  
+  .game-score {
+    font-size: 16px;
+  }
+  
+  .game-time {
+    font-size: 11px;
+  }
+  
+  .game-league {
+    font-size: 9px;
+  }
+  
+  /* Standings - scrollable on mobile */
+  .standings-section {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .standings-table {
+    min-width: 280px;
+  }
+  
+  .standings-table th,
+  .standings-table td {
+    padding: 8px 6px;
+    font-size: 11px;
+  }
+  
+  .rank {
+    width: 24px;
+  }
+}
+
 /* Hero CTA */
 .hero-cta {
   display: flex;

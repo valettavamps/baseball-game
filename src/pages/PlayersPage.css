@@ -412,3 +412,38 @@
 .contract-row span:last-child {
   font-weight: 600;
 }
+
+/* Mobile */
+@media (max-width: 768px) {
+  .players-page {
+    padding: 16px;
+  }
+  
+  .players-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .players-header h1 {
+    font-size: 20px;
+  }
+  
+  .filters-bar {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .filter-group {
+    width: 100%;
+  }
+  
+  .filter-select {
+    width: 100%;
+  }
+  
+  .players-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
