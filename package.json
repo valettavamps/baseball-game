@@ -2,7 +2,7 @@
   "name": "diamondchain-baseball",
   "version": "0.2.0",
   "private": true,
-  "homepage": "https://valettavamps.github.io/baseball-game",
+  "homepage": ".",
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
