@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 import BaseballField, { GameState } from './BaseballField';
 import './LiveGameVisualizer.css';
 
-interface PlayByPlay {
+export interface PlayByPlay {
   inning: number;
   topBottom: 'top' | 'bottom';
   description: string;

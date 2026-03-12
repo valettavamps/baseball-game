@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './HomePage.css';
 import { Game, LeagueStanding } from '../types';
-import LiveGameVisualizer from '../components/LiveGameVisualizer';
+import LiveGameVisualizer, { PlayByPlay } from '../components/LiveGameVisualizer';
 import { GameState } from '../components/BaseballField';
 
 interface HomePageProps {
@@ -36,7 +36,7 @@ const HomePage: React.FC<HomePageProps> = ({ isSignedIn = false, onSignUp }) => 
     pitcherId: 'Kevin Hart'
   });
 
-  const [livePlayByPlay] = useState([
+  const [livePlayByPlay] = useState<PlayByPlay[]>([
     { inning: 1, topBottom: 'top', description: 'Kevin Hart strikes out Jake Torres looking', runsThisPlay: 0 },
     { inning: 1, topBottom: 'top', description: 'Single by Carlos Mendez', runsThisPlay: 0 },
     { inning: 1, topBottom: 'top', description: 'Tony Russo homers! 2 runs score', runsThisPlay: 2 },
