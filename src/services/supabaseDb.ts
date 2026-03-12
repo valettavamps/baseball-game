@@ -148,7 +148,8 @@ export async function getPlayersByUser(userId: string): Promise<StoredPlayer[]> 
         weight: p.weight,
         age: p.age,
         overall: p.overall,
-        attributes: p.attributes
+        attributes: p.attributes,
+        createdAt: p.created_at ? new Date(p.created_at).getTime() : Date.now()
       }));
     }
   }
@@ -178,7 +179,8 @@ export async function getPlayerById(playerId: string): Promise<StoredPlayer | nu
         weight: data.weight,
         age: data.age,
         overall: data.overall,
-        attributes: data.attributes
+        attributes: data.attributes,
+        createdAt: data.created_at ? new Date(data.created_at).getTime() : Date.now()
       };
     }
   }
