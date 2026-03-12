@@ -3,7 +3,7 @@
 
 const STORAGE_PREFIX = 'diamondchain_';
 
-function getItem<T>(key: string): T | null {
+export function getItem<T>(key: string): T | null {
   try {
     const data = localStorage.getItem(`${STORAGE_PREFIX}${key}`);
     return data ? JSON.parse(data) : null;
@@ -12,7 +12,7 @@ function getItem<T>(key: string): T | null {
   }
 }
 
-function setItem<T>(key: string, value: T): void {
+export function setItem<T>(key: string, value: T): void {
   try {
     localStorage.setItem(`${STORAGE_PREFIX}${key}`, JSON.stringify(value));
   } catch (e) {
@@ -20,7 +20,7 @@ function setItem<T>(key: string, value: T): void {
   }
 }
 
-function removeItem(key: string): void {
+export function removeItem(key: string): void {
   localStorage.removeItem(`${STORAGE_PREFIX}${key}`);
 }
 
