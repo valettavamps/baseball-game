@@ -23,8 +23,7 @@ export async function createUser(username: string, email: string): Promise<Store
     const { error } = await supabase.from('users').insert({
       id: user.id,
       username: user.username,
-      email: user.email,
-      created_at: new Date(user.createdAt).toISOString()
+      email: user.email
     });
     if (error) console.error('Supabase insert error:', error);
   }
@@ -105,8 +104,7 @@ export async function createPlayer(player: Omit<StoredPlayer, 'id' | 'createdAt'
       weight: newPlayer.weight,
       age: newPlayer.age,
       overall: newPlayer.overall,
-      attributes: newPlayer.attributes,
-      created_at: new Date(newPlayer.createdAt).toISOString()
+      attributes: newPlayer.attributes
     });
   }
 
@@ -209,8 +207,7 @@ export async function saveContractOffers(playerId: string, offers: StoredContrac
       bonuses: offer.bonuses,
       scout_report: offer.scoutReport,
       status: offer.status,
-      expires_at: new Date(offer.expiresAt).toISOString(),
-      created_at: new Date(offer.createdAt).toISOString()
+      expires_at: new Date(offer.expiresAt).toISOString()
     }));
     
     await supabase.from('contract_offers').insert(toInsert);
