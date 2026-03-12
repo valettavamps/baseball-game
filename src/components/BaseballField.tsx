@@ -140,8 +140,6 @@ const BaseballField: React.FC<BaseballFieldProps> = ({
       {/* Infield dirt */}
       <div style={{
         position: 'absolute',
-        top: 280,
-        left: 200,
         width: 200,
         height: 200,
         background: '#8b6914',
