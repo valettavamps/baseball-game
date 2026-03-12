@@ -69,7 +69,7 @@ const MyOffersPage: React.FC = () => {
             teamId: offer.teamId,
             teamName: offer.teamName,
             tier: offer.tier,
-            position: offer.position,
+            position: offer.playerPosition,
             salary: offer.salary,
             duration: offer.duration,
             bonuses: [],
