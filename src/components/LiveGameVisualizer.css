@@ -1,0 +1,184 @@
+.live-game-visualizer {
+  background: #1a1a2e;
+  border-radius: 12px;
+  padding: 20px;
+  color: #fff;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Scoreboard */
+.scoreboard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #16213e;
+  border-radius: 8px;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+}
+
+.team-score {
+  text-align: center;
+  min-width: 100px;
+}
+
+.team-score.away .team-name { color: #e94560; }
+.team-score.home .team-name { color: #4ecca3; }
+
+.team-name {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.team-abbrev {
+  font-size: 10px;
+  color: #666;
+  letter-spacing: 1px;
+}
+
+.score {
+  font-size: 36px;
+  font-weight: 800;
+  font-family: 'Courier New', monospace;
+}
+
+.game-info {
+  text-align: center;
+}
+
+.inning {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.status {
+  font-size: 12px;
+}
+
+.live-indicator {
+  color: #e94560;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Count Display */
+.count-display {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #16213e;
+  border-radius: 8px;
+}
+
+.balls, .strikes, .outs {
+  text-align: center;
+}
+
+.count-display .label {
+  font-size: 11px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.ball-dot, .strike-dot, .out-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #555;
+}
+
+.ball-dot.filled { background: #4ecca3; border-color: #4ecca3; }
+.strike-dot.filled { background: #e94560; border-color: #e94560; }
+.out-dot.filled { background: #ffc107; border-color: #ffc107; }
+
+/* Field */
+.field-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* Current Play */
+.current-play {
+  text-align: center;
+  font-size: 16px;
+  padding: 15px;
+  background: #16213e;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  min-height: 24px;
+}
+
+/* Play-by-Play */
+.play-by-play h4 {
+  font-size: 14px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.play-list {
+  max-height: 200px;
+  overflow-y: auto;
+  background: #16213e;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.play-item {
+  padding: 8px;
+  border-bottom: 1px solid #2a2a4a;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+}
+
+.play-item:last-child {
+  border-bottom: none;
+}
+
+.play-inning {
+  color: #888;
+  min-width: 40px;
+  font-size: 11px;
+}
+
+.play-desc {
+  flex: 1;
+}
+
+.play-runs {
+  color: #4ecca3;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .scoreboard {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .count-display {
+    gap: 15px;
+  }
+}
