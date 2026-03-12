@@ -69,7 +69,7 @@ const MyOffersPage: React.FC = () => {
             teamId: offer.teamId,
             teamName: offer.teamName,
             tier: offer.tier,
-            position: offer.playerPosition,
+            position: offer.position,
             salary: offer.salary,
             duration: offer.duration,
             bonuses: [],
@@ -230,7 +230,7 @@ const MyOffersPage: React.FC = () => {
                       </div>
                       <div className="offer-detail">
                         <span className="detail-icon">⚾</span>
-                        <span>Position: {offer.playerPosition}</span>
+                        <span>Position: {offer.position}</span>
                       </div>
                       <div className="offer-detail">
                         <span className="detail-icon">💰</span>
@@ -284,7 +284,7 @@ const MyOffersPage: React.FC = () => {
                         </div>
                         <div className="term">
                           <span className="term-label">Position</span>
-                          <span className="term-value">{selectedOffer.playerPosition}</span>
+                          <span className="term-value">{selectedOffer.position}</span>
                         </div>
                         <div className="term">
                           <span className="term-label">Total Value</span>
