@@ -14,7 +14,7 @@ import { LeagueSettings } from './types/LeagueSettings';
 
 export interface PitchResult {
   type: 'strike' | 'ball' | 'foul' | 'swinging_strike' | 'in_play';
-  outcome?: 'single' | 'double' | 'triple' | 'homerun' | 'out' | 'error';
+  outcome?: 'single' | 'double' | 'triple' | 'homerun' | 'out' | 'strikeout' | 'walk' | 'error' | 'sacrifice';
   description: string;
 }
 
