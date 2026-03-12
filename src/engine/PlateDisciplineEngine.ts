@@ -9,8 +9,8 @@ import {
   HiddenAttributes,
   PitchMix,
   calculateEffectiveRating 
-} from './PlayerTypes';
-import { LeagueSettings } from './LeagueSettings';
+} from './types/PlayerTypes';
+import { LeagueSettings } from './types/LeagueSettings';
 
 export interface PitchResult {
   type: 'strike' | 'ball' | 'foul' | 'swinging_strike' | 'in_play';
