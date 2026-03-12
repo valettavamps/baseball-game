@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './MyOffersPage.css';
 import { TeamOffer } from '../types/user';
+import { getContractOffersFromDb } from '../services/db';
 
 // Mock data generator - will be replaced with real API calls
 const generateMockOffers = (): TeamOffer[] => {
@@ -57,11 +58,11 @@ const MyOffersPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Load real offers from localStorage
-    import('../services/localStorage').then(({ getContractOffers, getCurrentPlayerId }) => {
-      const playerId = getCurrentPlayerId();
+    // Load offers from database (Supabase or localStorage)
+    const loadOffers = async () => {
+      const playerId = localStorage.getItem('currentPlayerId');
       if (playerId) {
-        const realOffers = getContractOffers(playerId);
+        const realOffers = await getContractOffersFromDb(playerId);
         if (realOffers.length > 0) {
           // Map to TeamOffer format
           const mappedOffers: TeamOffer[] = realOffers.map(offer => ({
@@ -85,10 +86,9 @@ const MyOffersPage: React.FC = () => {
       // Fallback to mock if no real offers
       setOffers(generateMockOffers());
       setIsLoading(false);
-    }).catch(() => {
-      setOffers(generateMockOffers());
-      setIsLoading(false);
-    });
+    };
+
+    loadOffers();
   }, []);
 
   const handleAcceptOffer = (offer: TeamOffer) => {

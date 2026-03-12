@@ -3,6 +3,7 @@ import './CreatePlayerPage.css';
 import { PlayerCreationData } from '../types/user';
 import { Position } from '../types';
 import PlayerCard from '../components/PlayerCard';
+import { createPlayer } from '../services/db';
 
 interface CreatePlayerPageProps {
   onNavigate?: (page: string) => void;
@@ -497,8 +498,32 @@ const CreatePlayerPage: React.FC<CreatePlayerPageProps> = ({ onNavigate }) => {
     </div>
   );
 
-  const handleCreatePlayer = () => {
-    // TODO: Backend integration
+  const handleCreatePlayer = async () => {
+    // Get userId from localStorage
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      alert('Please sign in first');
+      return;
+    }
+
+    // Save player to database (Supabase or localStorage)
+    const player = await createPlayer({
+      userId,
+      firstName: playerData.firstName!,
+      lastName: playerData.lastName!,
+      position: playerData.position!,
+      throwingHand: playerData.throwingHand!,
+      battingHand: playerData.battingHand!,
+      height: playerData.height!,
+      weight: playerData.weight!,
+      age: playerData.age!,
+      overall: getTotalRating(),
+      attributes: playerData.attributes!
+    });
+
+    // Store current player ID
+    localStorage.setItem('currentPlayerId', player.id);
+
     setPlayerCreated(true);
   };
 

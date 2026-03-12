@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './AuthPage.css';
+import { createUser, getUserByEmail } from '../services/db';
 
 interface AuthPageProps {
   onSuccess: (userData: any) => void;
@@ -22,16 +23,29 @@ const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
     setError('');
     setIsLoading(true);
 
-    // TODO: Backend API call
-    setTimeout(() => {
-      // For testing: skip directly to app
+    try {
+      // Find user in database
+      const user = await getUserByEmail(email);
+      
+      if (!user) {
+        setError('No account found with this email');
+        setIsLoading(false);
+        return;
+      }
+
+      // Store userId in localStorage for persistence
+      localStorage.setItem('userId', user.id);
+      
       setIsLoading(false);
       onSuccess({
-        email,
-        username: email.split('@')[0],
-        userId: 'user-' + Date.now()
+        email: user.email,
+        username: user.username,
+        userId: user.id
       });
-    }, 1000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Login failed');
+      setIsLoading(false);
+    }
   };
 
   const handleSignUp = async () => {
@@ -48,13 +62,20 @@ const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
     setError('');
     setIsLoading(true);
 
-    // TODO: Backend API call
-    setTimeout(() => {
+    try {
+      // Create user in database (Supabase or localStorage)
+      const newUser = await createUser(username || email.split('@')[0], email);
+      
+      // Store userId in localStorage for persistence
+      localStorage.setItem('userId', newUser.id);
+      
       // Simulate QR code generation for 2FA setup
       setQrCode('https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=otpauth://totp/SimForge:' + email + '?secret=JBSWY3DPEHPK3PXP&issuer=SimForge');
       setMode('2fa');
-      setIsLoading(false);
-    }, 1000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Registration failed');
+    }
+    setIsLoading(false);
   };
 
   const handleVerify2FA = async () => {
@@ -66,16 +87,29 @@ const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
     setError('');
     setIsLoading(true);
 
-    // TODO: Backend API call to verify 2FA
-    setTimeout(() => {
+    try {
+      // Get user from database
+      const user = await getUserByEmail(email);
+      
+      if (!user) {
+        setError('User not found');
+        setIsLoading(false);
+        return;
+      }
+
+      // Store userId in localStorage
+      localStorage.setItem('userId', user.id);
+      
       setIsLoading(false);
-      // Mock successful login
       onSuccess({
-        email,
-        username: username || email.split('@')[0],
-        userId: 'user-123'
+        email: user.email,
+        username: user.username,
+        userId: user.id
       });
-    }, 1000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Verification failed');
+      setIsLoading(false);
+    }
   };
 
   const handleSkip2FA = () => {
