@@ -239,6 +239,7 @@ export async function getContractOffersFromDb(playerId: string): Promise<StoredC
         teamName: o.team_name,
         teamCity: o.team_city,
         tier: o.tier,
+        tierName: o.tier_name || getTierName(o.tier),
         salary: o.salary,
         duration: o.duration,
         bonuses: o.bonuses,
@@ -253,6 +254,11 @@ export async function getContractOffersFromDb(playerId: string): Promise<StoredC
   // Fallback
   const allOffers = localGet<StoredContractOffer[]>('contractOffers') || [];
   return allOffers.filter(o => o.playerId === playerId);
+}
+
+function getTierName(tier: number): string {
+  const names = ['', 'Diamond', 'Platinum', 'Gold', 'Silver', 'Bronze'];
+  return names[tier] || 'Bronze';
 }
 
 export async function updateOfferStatus(offerId: string, status: string): Promise<void> {
