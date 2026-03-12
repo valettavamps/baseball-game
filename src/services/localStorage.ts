@@ -310,6 +310,8 @@ export function createPlayer(player: Omit<StoredPlayer, 'id' | 'createdAt'>): St
   };
   players.push(newPlayer);
   setItem('players', players);
+  // Set as current player for this user
+  setItem('currentPlayerId', newPlayer.id);
   return newPlayer;
 }
 
@@ -551,4 +553,15 @@ export function getStakesByUser(userId: string): StoredStake[] {
 export function resetAllData(): void {
   const keys = Object.keys(localStorage).filter(k => k.startsWith(STORAGE_PREFIX));
   keys.forEach(k => localStorage.removeItem(k));
+}
+
+// ============ CONTRACT OFFERS ============
+
+export function getContractOffers(playerId: string): StoredContractOffer[] {
+  const allOffers = getItem<StoredContractOffer[]>('contractOffers') || [];
+  return allOffers.filter(o => o.playerId === playerId);
+}
+
+export function getCurrentPlayerId(): string | null {
+  return getItem<string>('currentPlayerId');
 }

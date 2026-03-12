@@ -57,11 +57,38 @@ const MyOffersPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
+    // Load real offers from localStorage
+    import('../services/localStorage').then(({ getContractOffers, getCurrentPlayerId }) => {
+      const playerId = getCurrentPlayerId();
+      if (playerId) {
+        const realOffers = getContractOffers(playerId);
+        if (realOffers.length > 0) {
+          // Map to TeamOffer format
+          const mappedOffers: TeamOffer[] = realOffers.map(offer => ({
+            id: offer.id,
+            teamId: offer.teamId,
+            teamName: offer.teamName,
+            tier: offer.tier,
+            position: offer.playerPosition,
+            salary: offer.salary,
+            duration: offer.duration,
+            bonuses: [],
+            expiresAt: new Date(offer.expiresAt),
+            status: offer.status,
+            scoutingReport: offer.scoutReport
+          }));
+          setOffers(mappedOffers);
+          setIsLoading(false);
+          return;
+        }
+      }
+      // Fallback to mock if no real offers
       setOffers(generateMockOffers());
       setIsLoading(false);
-    }, 1000);
+    }).catch(() => {
+      setOffers(generateMockOffers());
+      setIsLoading(false);
+    });
   }, []);
 
   const handleAcceptOffer = (offer: TeamOffer) => {
@@ -203,7 +230,7 @@ const MyOffersPage: React.FC = () => {
                       </div>
                       <div className="offer-detail">
                         <span className="detail-icon">⚾</span>
-                        <span>Position: {offer.position}</span>
+                        <span>Position: {offer.playerPosition}</span>
                       </div>
                       <div className="offer-detail">
                         <span className="detail-icon">💰</span>
@@ -257,7 +284,7 @@ const MyOffersPage: React.FC = () => {
                         </div>
                         <div className="term">
                           <span className="term-label">Position</span>
-                          <span className="term-value">{selectedOffer.position}</span>
+                          <span className="term-value">{selectedOffer.playerPosition}</span>
                         </div>
                         <div className="term">
                           <span className="term-label">Total Value</span>
