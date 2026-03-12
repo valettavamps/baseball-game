@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './HomePage.css';
 import { Game, LeagueStanding } from '../types';
+import LiveGameVisualizer from '../components/LiveGameVisualizer';
+import { GameState } from '../components/BaseballField';
 
 interface HomePageProps {
   isSignedIn?: boolean;
@@ -8,6 +10,42 @@ interface HomePageProps {
 }
 
 const HomePage: React.FC<HomePageProps> = ({ isSignedIn = false, onSignUp }) => {
+  // Sample live game for visualizer
+  const [liveGameState] = useState<GameState>({
+    inning: 4,
+    topBottom: 'bottom',
+    outs: 1,
+    balls: 2,
+    strikes: 1,
+    homeScore: 3,
+    awayScore: 2,
+    runners: [true, false, true],
+    battingOrder: [],
+    fielders: {
+      pitcher: 'Marcus Webb',
+      catcher: 'Jake Torres',
+      firstBase: 'Carlos Mendez',
+      secondBase: 'Tony Russo',
+      thirdBase: 'Derek Kim',
+      shortstop: 'Mike Santos',
+      leftField: 'Tyler Blake',
+      centerField: 'Chris Park',
+      rightField: 'Danny O\'Brien'
+    },
+    batterId: 'Chen',
+    pitcherId: 'Kevin Hart'
+  });
+
+  const [livePlayByPlay] = useState([
+    { inning: 1, topBottom: 'top', description: 'Kevin Hart strikes out Jake Torres looking', runsThisPlay: 0 },
+    { inning: 1, topBottom: 'top', description: 'Single by Carlos Mendez', runsThisPlay: 0 },
+    { inning: 1, topBottom: 'top', description: 'Tony Russo homers! 2 runs score', runsThisPlay: 2 },
+    { inning: 2, topBottom: 'bottom', description: 'Marcus Webb walks Steve Williams', runsThisPlay: 0 },
+    { inning: 2, topBottom: 'bottom', description: 'Pat O\'Neil doubles, Williams scores', runsThisPlay: 1 },
+    { inning: 3, topBottom: 'top', description: 'Chris Park hits sacrifice fly to center', runsThisPlay: 1 },
+    { inning: 4, topBottom: 'bottom', description: 'James Turner reaches on error', runsThisPlay: 0 },
+    { inning: 4, topBottom: 'bottom', description: 'Now batting: Derek Kim, 2-1 count', runsThisPlay: 0 }
+  ]);
 
 // Mock data
 const upcomingGames: Game[] = [
@@ -90,6 +128,19 @@ const standings: LeagueStanding[] = [
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Live Game Visualizer */}
+      <section className="live-game-section">
+        <LiveGameVisualizer
+          homeTeamName="New York Eagles"
+          awayTeamName="Boston Wolves"
+          homeTeamColor="#4ecca3"
+          awayTeamColor="#e94560"
+          gameState={liveGameState}
+          playByPlay={livePlayByPlay}
+          isLive={true}
+        />
       </section>
 
       <div className="home-grid">

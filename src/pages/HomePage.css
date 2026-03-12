@@ -4,6 +4,15 @@
   height: 100%;
 }
 
+/* Live Game Section */
+.live-game-section {
+  margin-bottom: 24px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border-primary);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
 /* Hero */
 .hero-section {
   background: var(--gradient-card);
