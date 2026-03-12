@@ -21,7 +21,6 @@ export async function createUser(username: string, email: string): Promise<Store
 
   if (isSupabaseConfigured() && supabase) {
     const { error } = await supabase.from('users').insert({
-      id: user.id,
       username: user.username,
       email: user.email
     });
@@ -93,7 +92,6 @@ export async function createPlayer(player: Omit<StoredPlayer, 'id' | 'createdAt'
 
   if (isSupabaseConfigured() && supabase) {
     await supabase.from('players').insert({
-      id: newPlayer.id,
       user_id: newPlayer.userId,
       first_name: newPlayer.firstName,
       last_name: newPlayer.lastName,
@@ -194,7 +192,6 @@ export async function saveContractOffers(playerId: string, offers: StoredContrac
     await supabase.from('contract_offers').delete().eq('player_id', playerId);
     
     const toInsert = offers.map(offer => ({
-      id: offer.id,
       player_id: offer.playerId,
       player_position: offer.playerPosition,
       team_id: offer.teamId,
