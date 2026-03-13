@@ -55,7 +55,8 @@ const sampleGameState: GameState = {
     rightField: homeTeamRoster.rightField
   },
   batterId: 'Chen',
-  pitcherId: awayTeamRoster.pitcher
+  pitcherId: awayTeamRoster.pitcher,
+  fieldConfig: 'standard'
 };
 
 // Generate realistic play-by-play
