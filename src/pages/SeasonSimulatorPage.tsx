@@ -318,17 +318,27 @@ const SeasonSimulatorPage: React.FC = () => {
       {games.length > 0 && (
         <div className="sim-content">
           {/* Record Summary */}
+          {games.length > 0 && (
           <div className="record-summary">
             <div className="team-record">
-              <h3>{team1?.name}</h3>
-              <span className="record">{team1?.record.wins}W - {team1?.record.losses}L</span>
+              <h3>{team1?.name || 'Team 1'}</h3>
+              <span className="record">{team1?.record?.wins || 0}W - {team1?.record?.losses || 0}L</span>
             </div>
             <div className="vs">VS</div>
             <div className="team-record">
-              <h3>{team2?.name}</h3>
-              <span className="record">{team2?.record.wins}W - {team2?.record.losses}L</span>
+              <h3>{team2?.name || 'Team 2'}</h3>
+              <span className="record">{team2?.record?.wins || 0}W - {team2?.record?.losses || 0}L</span>
             </div>
           </div>
+          )}
+
+          {/* Debug info */}
+          {games.length > 0 && (
+            <div className="debug-info" style={{padding: '10px', background: '#eee', margin: '10px 0'}}>
+              <p>Games simulated: {games.length}</p>
+              <p>Sample game: {JSON.stringify(games[0])}</p>
+            </div>
+          )}
 
           {/* Schedule View */}
           {view === 'schedule' && (
@@ -351,14 +361,14 @@ const SeasonSimulatorPage: React.FC = () => {
                     <tr key={game.id} className={game.id % 2 === 0 ? 'even' : ''}>
                       <td>{game.id}</td>
                       <td>Day {game.date}</td>
-                      <td>{game.awayTeam}</td>
-                      <td>{game.homeTeam}</td>
+                      <td>{game.awayTeam || 'Away'}</td>
+                      <td>{game.homeTeam || 'Home'}</td>
                       <td>
-                        <span className={game.winner === 'home' ? 'win' : 'loss'}>
-                          {game.winner === 'home' ? 'W' : 'L'}
+                        <span className={game.winner === 'home' ? 'win' : game.winner === 'away' ? 'loss' : ''}>
+                          {game.winner === 'home' ? 'W' : game.winner === 'away' ? 'L' : '-'}
                         </span>
                       </td>
-                      <td>{game.winner === 'home' ? `${game.homeScore}-${game.awayScore}` : `${game.awayScore}-${game.homeScore}`}</td>
+                      <td>{game.homeScore}-{game.awayScore}</td>
                       <td>
                         <button className="box-btn" onClick={() => setSelectedGame(game)}>
                           📊 Box
@@ -375,7 +385,10 @@ const SeasonSimulatorPage: React.FC = () => {
           {/* Team Stats View */}
           {(view === 'team1' || view === 'team2') && (
             <div className="stats-view">
-              <h2>📊 {view === 'team1' ? team1?.name : team2?.name} - Batting Stats</h2>
+              <h2>📊 {(view === 'team1' ? team1?.name : team2?.name) || 'Team'} - Batting Stats</h2>
+              {(view === 'team1' ? team1Stats : team2Stats).length === 0 ? (
+                <p style={{padding: '20px', textAlign: 'center'}}>No stats available yet</p>
+              ) : (
               <table className="stats-table">
                 <thead>
                   <tr>
@@ -430,6 +443,7 @@ const SeasonSimulatorPage: React.FC = () => {
                   })}
                 </tbody>
               </table>
+              )}
             </div>
           )}
         </div>
@@ -450,18 +464,18 @@ const SeasonSimulatorPage: React.FC = () => {
                 <span>R</span><span>H</span><span>E</span>
               </div>
               <div className="team-row">
-                <span>{selectedGame.awayTeam}</span>
-                {selectedGame.awayInnings.map((r, i) => <span key={i}>{r}</span>)}
-                {[...Array(9 - selectedGame.awayInnings.length)].map((_, i) => <span key={i}>-</span>)}
-                <span>{selectedGame.awayScore}</span>
-                <span>{selectedGame.awayHits}</span>
-                <span>{selectedGame.awayErrors}</span>
+                <span>{selectedGame.awayTeam || 'Away'}</span>
+                {(selectedGame.awayInnings || []).map((r: number, i: number) => <span key={i}>{r}</span>)}
+                {[...Array(9 - (selectedGame.awayInnings?.length || 0))].map((_, i) => <span key={i}>-</span>)}
+                <span>{selectedGame.awayScore || 0}</span>
+                <span>{selectedGame.awayHits || 0}</span>
+                <span>{selectedGame.awayErrors || 0}</span>
               </div>
               <div className="team-row">
-                <span>{selectedGame.homeTeam}</span>
-                {selectedGame.homeInnings.map((r, i) => <span key={i}>{r}</span>)}
-                {[...Array(9 - selectedGame.homeInnings.length)].map((_, i) => <span key={i}>-</span>)}
-                <span>{selectedGame.homeScore}</span>
+                <span>{selectedGame.homeTeam || 'Home'}</span>
+                {(selectedGame.homeInnings || []).map((r: number, i: number) => <span key={i}>{r}</span>)}
+                {[...Array(9 - (selectedGame.homeInnings?.length || 0))].map((_, i) => <span key={i}>-</span>)}
+                <span>{selectedGame.homeScore || 0}</span>
                 <span>{selectedGame.homeHits}</span>
                 <span>{selectedGame.homeErrors}</span>
               </div>
