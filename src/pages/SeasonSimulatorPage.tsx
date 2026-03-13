@@ -5,8 +5,7 @@
 
 import React, { useState } from 'react';
 import { GameSimulator } from '../engine/GameSimulator';
-import { Team, Player, PlayerStats } from '../types';
-import './SeasonSimulatorPage.css';
+import { Team, Player, PlayerStats, Position } from '../types';
 import './SeasonSimulatorPage.css';
 
 interface SeasonGame {
@@ -97,7 +96,7 @@ const SeasonSimulatorPage: React.FC = () => {
       roster.push({
         id: `${teamId}-${i + 1}`,
         name: `${namePool[(seed + i * 5 + 10) % namePool.length]} ${lastNames[(seed * 3 + i * 11) % lastNames.length]}`,
-        position: positions[i],
+        position: positions[i] as Position,
         teamId,
         overall,
         attributes: {
