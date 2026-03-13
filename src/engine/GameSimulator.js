@@ -177,11 +177,12 @@ class GameSimulator {
     const pitcherControl = pitcher.attributes.control || 50;
     const pitcherVelocity = pitcher.attributes.velocity || 50;
 
-    const pitcherAdvantage = (pitcherVelocity / 100) * 0.5;
-    const contactChance = Math.min(0.22, (batterContact / 100) * 0.28 - pitcherAdvantage * 0.1);
-    const powerChance = Math.min(0.04, (batterPower / 100) * 0.05);
-    const walkChance = Math.min(0.09, Math.max(0.05, (batterDiscipline / 100) * 0.10));
-    const errorChance = 0.008;
+    // Tune to match MLB 2025: ~8.5 hits, ~1.1 HR, ~23% K, ~8% BB per game
+    const pitcherAdvantage = (pitcherVelocity / 100) * 0.6;
+    const contactChance = Math.min(0.20, (batterContact / 100) * 0.24 - pitcherAdvantage * 0.15);
+    const powerChance = Math.min(0.035, (batterPower / 100) * 0.04); // ~3.5% of ABs = ~1 HR/game
+    const walkChance = Math.min(0.08, Math.max(0.04, (batterDiscipline / 100) * 0.09)); // 4-8%
+    const errorChance = 0.006; // 0.6% errors
 
     const roll = Math.random();
 
@@ -196,23 +197,27 @@ class GameSimulator {
         return { outcome: 'error', rbi: 0, batterName: batter.name, pitcherName: pitcher.name };
       }
 
-      if (hitQuality < 0.03) {
+      // Hit type distribution to get ~1 HR per game, ~1.5 doubles, ~0.2 triples
+      // Total ~8.5 hits per game
+      if (hitQuality < 0.012) { // 1.2% = ~1 HR per game
         return { outcome: 'homerun', rbi: 1, batterName: batter.name, pitcherName: pitcher.name };
       }
 
-      if (hitQuality < 0.04) {
+      if (hitQuality < 0.018) { // 0.6% = ~0.2 triples per game
         return { outcome: 'triple', rbi: 0, batterName: batter.name, pitcherName: pitcher.name };
       }
 
-      if (hitQuality < 0.24) {
+      if (hitQuality < 0.10) { // 8.2% = ~1.5 doubles per game
         return { outcome: 'double', rbi: 0, batterName: batter.name, pitcherName: pitcher.name };
       }
 
+      // 90% of hits are singles = ~6.5 per game
       return { outcome: 'single', rbi: 0, batterName: batter.name, pitcherName: pitcher.name };
     }
 
-    const strikeoutChance = Math.min(0.28, (pitcherVelocity / 100) * 0.32);
-    if (Math.random() < strikeoutChance) {
+    // Strikeout: ~23% to match MLB
+    const strikeoutChance = 0.23 + (pitcherVelocity / 100) * 0.10;
+    if (Math.random() < Math.min(0.35, strikeoutChance)) {
       return { outcome: 'strikeout', rbi: 0, batterName: batter.name, pitcherName: pitcher.name };
     }
 
