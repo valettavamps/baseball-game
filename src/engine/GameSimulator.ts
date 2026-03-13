@@ -212,34 +212,38 @@ export class GameSimulator {
       // Update game state based on outcome
       switch (result.outcome) {
         case 'homerun':
-          runs += 1 + this.countBaseRunners(baseRunners) + result.rbi;
+          runs += 1 + this.countBaseRunners(baseRunners); // All runners score + batter
           hits++;
           baseRunners = { first: false, second: false, third: false };
           break;
         case 'triple':
-          runs += this.countBaseRunners(baseRunners);
+          runs += this.countBaseRunners(baseRunners); // All runners score
           hits++;
           baseRunners = { first: false, second: false, third: true };
           break;
         case 'double':
-          runs += (baseRunners.third ? 1 : 0) + (baseRunners.second ? 1 : 0);
+          // Runner on third scores, runner on first goes to third
+          runs += baseRunners.third ? 1 : 0;
           hits++;
           baseRunners = { first: false, second: true, third: baseRunners.first };
           break;
         case 'single':
-          runs += (baseRunners.third ? 1 : 0);
+          // Runner on third scores, runner on second goes to third, runner on first goes to second
+          runs += baseRunners.third ? 1 : 0;
           hits++;
           baseRunners = { 
             first: true, 
-            second: baseRunners.first, 
-            third: baseRunners.second 
+            second: baseRunners.third,  // Was on third
+            third: baseRunners.second   // Was on second
           };
           break;
         case 'walk':
+          // Walk with bases loaded forces in a run
           if (baseRunners.first && baseRunners.second && baseRunners.third) {
             runs++;
           }
-          baseRunners.third = baseRunners.second && baseRunners.first;
+          // Otherwise, shift runners
+          baseRunners.third = baseRunners.second;
           baseRunners.second = baseRunners.first;
           baseRunners.first = true;
           break;
