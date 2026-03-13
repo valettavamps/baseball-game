@@ -88,10 +88,10 @@ const SeasonSimulatorPage: React.FC = () => {
     const namePool = ['Mike', 'Chris', 'Carlos', 'Juan', 'Alex', 'David', 'Jose', 'Anthony', 'Jacob', 'Nick', 'Matt', 'Ryan', 'Steve', 'Paul', 'Mark', 'Tom', 'James', 'John', 'William', 'Robert'];
     const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez', 'Hernandez', 'Lopez', 'Gonzalez', 'Wilson', 'Anderson', 'Taylor', 'Thomas', 'Moore', 'Jackson', 'Martin'];
 
-    // 5 pitchers
+    // 5 pitchers - make them throw hard with good control
     for (let i = 0; i < 5; i++) {
-      const velocity = 70 + Math.floor(Math.random() * 25) + (seed % 10);
-      const control = 60 + Math.floor(Math.random() * 30);
+      const velocity = 80 + Math.floor(Math.random() * 18); // 80-98
+      const control = 65 + Math.floor(Math.random() * 30); // 65-95
       roster.push({
         id: `${teamId}-P${i + 1}`,
         name: `${namePool[(seed + i * 3) % namePool.length]} ${lastNames[(seed * 2 + i * 7) % lastNames.length]}`,
@@ -118,7 +118,7 @@ const SeasonSimulatorPage: React.FC = () => {
 
     // 9 position players
     for (let i = 0; i < 9; i++) {
-      const overall = 60 + Math.floor(Math.random() * 38);
+      const overall = 70 + Math.floor(Math.random() * 28); // 70-97
       const isPowerHitter = Math.random() > 0.5;
       
       roster.push({
@@ -128,12 +128,12 @@ const SeasonSimulatorPage: React.FC = () => {
         teamId,
         overall,
         attributes: {
-          contact: 50 + Math.floor(Math.random() * 40),
-          power: isPowerHitter ? 70 + Math.floor(Math.random() * 30) : 40 + Math.floor(Math.random() * 30),
-          speed: 30 + Math.floor(Math.random() * 60),
-          discipline: 50 + Math.floor(Math.random() * 40),
-          fielding: 50 + Math.floor(Math.random() * 40),
-          arm: 50 + Math.floor(Math.random() * 40),
+          contact: 60 + Math.floor(Math.random() * 35), // 60-95
+          power: isPowerHitter ? 75 + Math.floor(Math.random() * 25) : 50 + Math.floor(Math.random() * 30), // 50-100
+          speed: 40 + Math.floor(Math.random() * 55), // 40-95
+          discipline: 55 + Math.floor(Math.random() * 40), // 55-95
+          fielding: 50 + Math.floor(Math.random() * 45), // 50-95
+          arm: 50 + Math.floor(Math.random() * 45), // 50-95
           stamina: 70 + Math.floor(Math.random() * 30),
           velocity: 30 + Math.floor(Math.random() * 30),
           control: 40 + Math.floor(Math.random() * 30),
