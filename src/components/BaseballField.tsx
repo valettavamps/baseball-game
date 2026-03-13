@@ -4,38 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-
-// Field dimensions (relative units)
-const FIELD = {
-  width: 600,
-  height: 500,
-  infieldSize: 150,
-  moundDistance: 60,
-  baseDistance: 40,
-};
-
-// Position coordinates (relative to center)
-const POSITIONS = {
-  // Bases
-  home: { x: 300, y: 400 },
-  first: { x: 340, y: 360 },
-  second: { x: 300, y: 320 },
-  third: { x: 260, y: 360 },
-  
-  // Infield
-  pitcher: { x: 300, y: 340 },
-  catcher: { x: 300, y: 390 },
-  firstBase: { x: 340, y: 360 },
-  secondBase: { x: 300, y: 320 },
-  thirdBase: { x: 260, y: 360 },
-  shortstop: { x: 260, y: 340 },
-  secondBaseman: { x: 340, y: 340 },
-  
-  // Outfield
-  leftField: { x: 180, y: 250 },
-  centerField: { x: 300, y: 180 },
-  rightField: { x: 420, y: 250 },
-};
+import { FIELD, POSITIONS, FIELDER_POSITIONS } from '../engine/FieldPositions';
 
 export interface GameState {
   inning: number;
@@ -66,6 +35,9 @@ export interface GameState {
   // Current batter/pitcher
   batterId: string;
   pitcherId: string;
+  
+  // Field configuration (standard, shift, etc.)
+  fieldConfig: keyof typeof FIELDER_POSITIONS;
 }
 
 export interface AnimationState {
@@ -96,6 +68,9 @@ const BaseballField: React.FC<BaseballFieldProps> = ({
     runnerAnimations: [],
     lastPlay: ''
   });
+  
+  // Get fielder positions based on current configuration
+  const fielderPositions = FIELDER_POSITIONS[gameState.fieldConfig || 'standard'] || FIELDER_POSITIONS.standard;
   
   // Get team color for batting team
   const battingTeam = gameState.topBottom === 'top' ? awayTeamColor : homeTeamColor;
@@ -192,8 +167,7 @@ const BaseballField: React.FC<BaseballFieldProps> = ({
       
       {/* Fielder positions */}
       {Object.entries(gameState.fielders).map(([position, playerId]) => {
-        const pos = position as keyof typeof POSITIONS;
-        const coords = POSITIONS[pos as keyof typeof POSITIONS] || POSITIONS.pitcher;
+        const coords = fielderPositions[position as keyof typeof fielderPositions];
         
         return (
           <div
@@ -206,8 +180,8 @@ const BaseballField: React.FC<BaseballFieldProps> = ({
               background: fieldingTeam,
               borderRadius: '50%',
               transform: 'translate(-50%, -50%)',
-              left: coords.x,
-              top: coords.y,
+              left: coords?.x,
+              top: coords?.y,
               border: '2px solid #fff',
               display: 'flex',
               alignItems: 'center',

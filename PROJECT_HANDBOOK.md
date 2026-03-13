@@ -8,7 +8,22 @@
 
 ---
 
-## ✅ ACCOMPLISHED (2026-03-12)
+## ✅ ACCOMPLISHED (2026-03-13)
+
+### Field Visual Fixes (2026-03-13)
+- Created `src/engine/FieldPositions.ts` with accurate baseball field dimensions:
+  - 90ft between bases
+  - 60.5ft pitcher mound to home
+  - 325-400ft outfield walls
+  - Proper defensive position coordinates
+- Added `FIELDER_POSITIONS` with multiple configurations:
+  - `standard` - normal defense
+  - `shiftVsLeft` - shift vs left-handed pull hitters
+  - `infieldIn` - runners on third
+  - `noDoubles` - protect against extra base hits
+- Updated `BaseballField.tsx` to use the new position system
+
+### Earlier Work (2026-03-12)
 
 ### 1. Supabase Integration
 - Connected app to Supabase for cloud persistence
