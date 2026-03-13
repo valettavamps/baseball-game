@@ -48,7 +48,7 @@ const HomePage: React.FC<HomePageProps> = ({ isSignedIn = false, onSignUp }) => 
     id: name.toLowerCase().replace(/\s/g, '-'),
     name,
     owner: 'AI',
-    players: Array.from({ length: 9 }, (_, i) => ({
+    roster: Array.from({ length: 9 }, (_, i) => ({
       id: `p${i}`,
       name: `Player ${i + 1}`,
       position: i === 0 ? 'P' : i === 1 ? 'C' : i === 2 ? '1B' : i === 3 ? '2B' : i === 4 ? '3B' : i === 5 ? 'SS' : i === 6 ? 'LF' : i === 7 ? 'CF' : 'RF',
@@ -60,6 +60,12 @@ const HomePage: React.FC<HomePageProps> = ({ isSignedIn = false, onSignUp }) => 
       arm: 60 + Math.floor(Math.random() * 35),
     })) as Player[],
     record: { wins: Math.floor(Math.random() * 30), losses: Math.floor(Math.random() * 30) },
+    league: 'Diamond League',
+    currentTier: 1,
+    tierHistory: [],
+    overallRating: 75,
+    crownStaked: 1000,
+    treasury: 5000,
   });
 
   // Simulate a full game
