@@ -78,6 +78,29 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.stat-type-tabs {
+  display: flex;
+  gap: 5px;
+  background: #e0e0e0;
+  padding: 5px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.stat-type-tabs button {
+  background: transparent;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: 500;
+}
+
+.stat-type-tabs button.active {
+  background: #1a5f2a;
+  color: white;
+}
+
 .record-summary {
   display: flex;
   justify-content: center;

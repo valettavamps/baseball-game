@@ -44,15 +44,41 @@ interface PlayerSeasonStats {
   caughtStealing: number;
 }
 
+interface PitchingStats {
+  id: string;
+  name: string;
+  games: number;
+  wins: number;
+  losses: number;
+  innings: number;
+  hits: number;
+  runs: number;
+  earnedRuns: number;
+  walks: number;
+  strikeouts: number;
+  homeRuns: number;
+  era: number;
+  whip: number;
+}
+
+type StatView = 'batting' | 'pitching';
+type SortField = string;
+type SortDir = 'asc' | 'desc';
+
 const SeasonSimulatorPage: React.FC = () => {
   const [games, setGames] = useState<SeasonGame[]>([]);
   const [team1Stats, setTeam1Stats] = useState<PlayerSeasonStats[]>([]);
   const [team2Stats, setTeam2Stats] = useState<PlayerSeasonStats[]>([]);
+  const [team1Pitching, setTeam1Pitching] = useState<PitchingStats[]>([]);
+  const [team2Pitching, setTeam2Pitching] = useState<PitchingStats[]>([]);
   const [team1, setTeam1] = useState<Team | null>(null);
   const [team2, setTeam2] = useState<Team | null>(null);
   const [simming, setSimming] = useState(false);
   const [selectedGame, setSelectedGame] = useState<SeasonGame | null>(null);
   const [view, setView] = useState<'schedule' | 'team1' | 'team2'>('schedule');
+  const [statView, setStatView] = useState<StatView>('batting');
+  const [sortField, setSortField] = useState<SortField>('hits');
+  const [sortDir, setSortDir] = useState<SortDir>('desc');
 
   // Generate realistic team
   const generateTeam = (teamId: string, teamName: string, seed: number): Team => {
@@ -200,6 +226,73 @@ const SeasonSimulatorPage: React.FC = () => {
     return Array.from(stats.values()).sort((a, b) => b.hits - a.hits);
   };
 
+  const calculatePitchingStats = (team: Team, games: SeasonGame[]): PitchingStats[] => {
+    const stats: Map<string, PitchingStats> = new Map();
+
+    // Initialize stats for all pitchers
+    team.roster.filter(p => p.position === 'P').forEach(player => {
+      stats.set(player.id, {
+        id: player.id,
+        name: player.name,
+        games: 0,
+        wins: 0,
+        losses: 0,
+        innings: 0,
+        hits: 0,
+        runs: 0,
+        earnedRuns: 0,
+        walks: 0,
+        strikeouts: 0,
+        homeRuns: 0,
+        era: 0,
+        whip: 0
+      });
+    });
+
+    games.forEach(game => {
+      const isHome = game.homeTeam === team.name;
+      const opponentScore = isHome ? game.awayScore : game.homeScore;
+      const opponentHits = isHome ? game.awayHits : game.homeHits;
+      const pitcherName = isHome ? game.homePitcher : game.awayPitcher;
+      const pitcher = team.roster.find(p => p.name === pitcherName);
+      
+      if (pitcher) {
+        const s = stats.get(pitcher.id)!;
+        s.games++;
+        s.innings += 9; // Full game
+        s.hits += opponentHits;
+        s.runs += opponentScore;
+        s.earnedRuns += Math.floor(opponentScore * 0.85); // ~85% are earned
+        s.walks += Math.floor(Math.random() * 4);
+        s.strikeouts += Math.floor(Math.random() * 7);
+        s.homeRuns += Math.floor(Math.random() * 1.5);
+        
+        if (opponentScore > team.roster.find(p => p.position === 'P')!.attributes.control! / 10) {
+          // Win if opponent scored less than pitcher control / 10
+        }
+      }
+    });
+
+    // Calculate ERA and WHIP
+    stats.forEach(s => {
+      if (s.innings > 0) {
+        s.era = (s.earnedRuns * 9) / (s.innings / 9);
+        s.whip = (s.walks + s.hits) / (s.innings / 9);
+      }
+    });
+
+    return Array.from(stats.values()).sort((a, b) => a.era - b.era);
+  };
+
+  const sortStats = (field: SortField) => {
+    if (sortField === field) {
+      setSortDir(sortDir === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDir('desc');
+    }
+  };
+
   const runSeason = async (numGames: number = 160) => {
     setSimming(true);
     
@@ -267,6 +360,8 @@ const SeasonSimulatorPage: React.FC = () => {
     setGames(simulatedGames);
     setTeam1Stats(calculateBattingStats(t1, simulatedGames));
     setTeam2Stats(calculateBattingStats(t2, simulatedGames));
+    setTeam1Pitching(calculatePitchingStats(t1, simulatedGames));
+    setTeam2Pitching(calculatePitchingStats(t2, simulatedGames));
     setSimming(false);
   };
 
@@ -311,6 +406,22 @@ const SeasonSimulatorPage: React.FC = () => {
                 ⚾ {team2?.name}
               </button>
             </div>
+            {(view === 'team1' || view === 'team2') && (
+              <div className="stat-type-tabs">
+                <button 
+                  className={statView === 'batting' ? 'active' : ''} 
+                  onClick={() => setStatView('batting')}
+                >
+                  Batting
+                </button>
+                <button 
+                  className={statView === 'pitching' ? 'active' : ''} 
+                  onClick={() => setStatView('pitching')}
+                >
+                  Pitching
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -383,9 +494,9 @@ const SeasonSimulatorPage: React.FC = () => {
           )}
 
           {/* Team Stats View */}
-          {(view === 'team1' || view === 'team2') && (
+          {(view === 'team1' || view === 'team2') && statView === 'batting' && (
             <div className="stats-view">
-              <h2>📊 {(view === 'team1' ? team1?.name : team2?.name) || 'Team'} - Batting Stats</h2>
+              <h2>📊 {(view === 'team1' ? team1?.name : team2?.name) - Batting</h2>
               {(view === 'team1' ? team1Stats : team2Stats).length === 0 ? (
                 <p style={{padding: '20px', textAlign: 'center'}}>No stats available yet</p>
               ) : (
@@ -441,6 +552,55 @@ const SeasonSimulatorPage: React.FC = () => {
                       </tr>
                     );
                   })}
+                </tbody>
+              </table>
+              )}
+            </div>
+          )}
+
+          {/* Pitching Stats View */}
+          {(view === 'team1' || view === 'team2') && statView === 'pitching' && (
+            <div className="stats-view">
+              <h2>📊 {(view === 'team1' ? team1?.name : team2?.name) - Pitching</h2>
+              {(view === 'team1' ? team1Pitching : team2Pitching).length === 0 ? (
+                <p style={{padding: '20px', textAlign: 'center'}}>No pitching stats available</p>
+              ) : (
+              <table className="stats-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>G</th>
+                    <th>W</th>
+                    <th>L</th>
+                    <th>IP</th>
+                    <th>H</th>
+                    <th>R</th>
+                    <th>ER</th>
+                    <th>BB</th>
+                    <th>SO</th>
+                    <th>HR</th>
+                    <th>ERA</th>
+                    <th>WHIP</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(view === 'team1' ? team1Pitching : team2Pitching).map(player => (
+                    <tr key={player.id}>
+                      <td>{player.name}</td>
+                      <td>{player.games}</td>
+                      <td>{player.wins}</td>
+                      <td>{player.losses}</td>
+                      <td>{player.innings.toFixed(1)}</td>
+                      <td>{player.hits}</td>
+                      <td>{player.runs}</td>
+                      <td>{player.earnedRuns}</td>
+                      <td>{player.walks}</td>
+                      <td>{player.strikeouts}</td>
+                      <td>{player.homeRuns}</td>
+                      <td>{player.era.toFixed(2)}</td>
+                      <td>{player.whip.toFixed(2)}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
               )}
