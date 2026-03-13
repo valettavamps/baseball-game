@@ -171,57 +171,56 @@ class GameSimulator {
   }
 
   static simulateAtBat(batter, pitcher, fieldingTeam) {
-    const batterPower = batter.attributes.power;
-    const batterContact = batter.attributes.contact;
-    const batterDiscipline = batter.attributes.discipline;
-    const pitcherControl = pitcher.attributes.control || 50;
+    const batterPower = batter.attributes.power || 50;
+    const batterContact = batter.attributes.contact || 50;
+    const batterDiscipline = batter.attributes.discipline || 50;
     const pitcherVelocity = pitcher.attributes.velocity || 50;
+    const pitcherControl = pitcher.attributes.control || 50;
 
-    // Tune to match MLB 2025: ~8.5 hits, ~1.1 HR, ~23% K, ~8% BB per game
-    const pitcherAdvantage = (pitcherVelocity / 100) * 0.6;
-    const contactChance = Math.min(0.20, (batterContact / 100) * 0.24 - pitcherAdvantage * 0.15);
-    const powerChance = Math.min(0.035, (batterPower / 100) * 0.04); // ~3.5% of ABs = ~1 HR/game
-    const walkChance = Math.min(0.08, Math.max(0.04, (batterDiscipline / 100) * 0.09)); // 4-8%
-    const errorChance = 0.006; // 0.6% errors
-
+    // Use player attributes to determine outcomes
+    const walkChance = (batterDiscipline / 100) * 0.12; // Discipline affects walks
+    const strikeoutChance = 0.18 + (100 - pitcherControl) / 100 * 0.15; // Control affects K
+    const contactChance = (batterContact / 100) * 0.35; // Contact affects hit frequency
+    
     const roll = Math.random();
-
+    
+    // Walk: ~8% of at-bats (modified by discipline)
     if (roll < walkChance) {
       return { outcome: 'walk', rbi: 0, batterName: batter.name, pitcherName: pitcher.name };
     }
-
-    if (roll < contactChance + walkChance) {
-      const hitQuality = Math.random();
-      
-      if (hitQuality < errorChance) {
-        return { outcome: 'error', rbi: 0, batterName: batter.name, pitcherName: pitcher.name };
-      }
-
-      // Hit type distribution to get ~1 HR per game, ~1.5 doubles, ~0.2 triples
-      // Total ~8.5 hits per game
-      if (hitQuality < 0.012) { // 1.2% = ~1 HR per game
-        return { outcome: 'homerun', rbi: 1, batterName: batter.name, pitcherName: pitcher.name };
-      }
-
-      if (hitQuality < 0.018) { // 0.6% = ~0.2 triples per game
-        return { outcome: 'triple', rbi: 0, batterName: batter.name, pitcherName: pitcher.name };
-      }
-
-      if (hitQuality < 0.10) { // 8.2% = ~1.5 doubles per game
-        return { outcome: 'double', rbi: 0, batterName: batter.name, pitcherName: pitcher.name };
-      }
-
-      // 90% of hits are singles = ~6.5 per game
-      return { outcome: 'single', rbi: 0, batterName: batter.name, pitcherName: pitcher.name };
-    }
-
-    // Strikeout: ~23% to match MLB
-    const strikeoutChance = 0.23 + (pitcherVelocity / 100) * 0.10;
-    if (Math.random() < Math.min(0.35, strikeoutChance)) {
+    
+    // Strikeout: ~23% of at-bats  
+    if (roll < walkChance + strikeoutChance) {
       return { outcome: 'strikeout', rbi: 0, batterName: batter.name, pitcherName: pitcher.name };
     }
-
+    
+    // Contact - get a hit
+    if (roll < walkChance + strikeoutChance + contactChance) {
+      const hitRoll = Math.random();
+      const power = batterPower / 100;
+      
+      // HR: ~4% of at-bats (modified by power)
+      if (hitRoll < 0.04 * power) {
+        return { outcome: 'homerun', rbi: 1, batterName: batter.name, pitcherName: pitcher.name };
+      }
+      
+      // Triple: ~1%
+      if (hitRoll < 0.05) {
+        return { outcome: 'triple', rbi: 0, batterName: batter.name, pitcherName: pitcher.name };
+      }
+      
+      // Double: ~5%
+      if (hitRoll < 0.10) {
+        return { outcome: 'double', rbi: 0, batterName: batter.name, pitcherName: pitcher.name };
+      }
+      
+      // Single: remaining hits
+      return { outcome: 'single', rbi: 0, batterName: batter.name, pitcherName: pitcher.name };
+    }
+    
+    // Out (GB/FB/LD)
     return { outcome: 'out', rbi: 0, batterName: batter.name, pitcherName: pitcher.name };
+  }
   }
 
   static getStartingPitcher(team) {
