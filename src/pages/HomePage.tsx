@@ -44,10 +44,10 @@ const HomePage: React.FC<HomePageProps> = ({ isSignedIn = false, onSignUp }) => 
   const [isTop, setIsTop] = useState(true);
 
   // Create mock teams for simulation
-  const createMockTeam = (name: string, color: string): Team => ({
+  const createMockTeam = (name: string): Team => ({
     id: name.toLowerCase().replace(/\s/g, '-'),
     name,
-    color,
+    owner: 'AI',
     players: Array.from({ length: 9 }, (_, i) => ({
       id: `p${i}`,
       name: `Player ${i + 1}`,
@@ -69,8 +69,8 @@ const HomePage: React.FC<HomePageProps> = ({ isSignedIn = false, onSignUp }) => 
     setIsTop(true);
     setLivePlayByPlay([]);
     
-    const homeTeam = createMockTeam('New York Eagles', '#4ecca3');
-    const awayTeam = createMockTeam('Boston Wolves', '#e94560');
+    const homeTeam = createMockTeam('New York Eagles');
+    const awayTeam = createMockTeam('Boston Wolves');
     
     // Run simulation
     const result = GameSimulator.simulateGame(homeTeam, awayTeam);
