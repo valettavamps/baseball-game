@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import './HomePage.css';
-import { Game, LeagueStanding } from '../types';
+import { Game, LeagueStanding, Team, Player } from '../types';
 import LiveGameVisualizer, { PlayByPlay } from '../components/LiveGameVisualizer';
 import { GameState } from '../components/BaseballField';
+import { GameSimulator } from '../engine/GameSimulator';
 
 interface HomePageProps {
   isSignedIn?: boolean;
@@ -11,7 +12,133 @@ interface HomePageProps {
 
 const HomePage: React.FC<HomePageProps> = ({ isSignedIn = false, onSignUp }) => {
   // Sample live game for visualizer
-  const [liveGameState] = useState<GameState>({
+  const [liveGameState, setLiveGameState] = useState<GameState>({
+    inning: 1,
+    topBottom: 'top',
+    outs: 0,
+    balls: 0,
+    strikes: 0,
+    homeScore: 0,
+    awayScore: 0,
+    runners: [false, false, false],
+    battingOrder: [],
+    fielders: {
+      pitcher: 'Marcus Webb',
+      catcher: 'Jake Torres',
+      firstBase: 'Carlos Mendez',
+      secondBase: 'Tony Russo',
+      thirdBase: 'Derek Kim',
+      shortstop: 'Mike Santos',
+      leftField: 'Tyler Blake',
+      centerField: 'Chris Park',
+      rightField: 'Danny O\'Brien'
+    },
+    batterId: 'Chen',
+    pitcherId: 'Kevin Hart',
+    fieldConfig: 'standard'
+  });
+  
+  const [livePlayByPlay, setLivePlayByPlay] = useState<PlayByPlay[]>([]);
+  const [isSimulating, setIsSimulating] = useState(false);
+  const [gameInning, setGameInning] = useState(1);
+  const [isTop, setIsTop] = useState(true);
+
+  // Create mock teams for simulation
+  const createMockTeam = (name: string, color: string): Team => ({
+    id: name.toLowerCase().replace(/\s/g, '-'),
+    name,
+    color,
+    players: Array.from({ length: 9 }, (_, i) => ({
+      id: `p${i}`,
+      name: `Player ${i + 1}`,
+      position: i === 0 ? 'P' : i === 1 ? 'C' : i === 2 ? '1B' : i === 3 ? '2B' : i === 4 ? '3B' : i === 5 ? 'SS' : i === 6 ? 'LF' : i === 7 ? 'CF' : 'RF',
+      overall: 70 + Math.floor(Math.random() * 25),
+      contact: 60 + Math.floor(Math.random() * 35),
+      power: 60 + Math.floor(Math.random() * 35),
+      speed: 60 + Math.floor(Math.random() * 35),
+      discipline: 60 + Math.floor(Math.random() * 35),
+      arm: 60 + Math.floor(Math.random() * 35),
+    })) as Player[],
+    record: { wins: Math.floor(Math.random() * 30), losses: Math.floor(Math.random() * 30) },
+  });
+
+  // Simulate a full game
+  const simulateGame = useCallback(() => {
+    setIsSimulating(true);
+    setGameInning(1);
+    setIsTop(true);
+    setLivePlayByPlay([]);
+    
+    const homeTeam = createMockTeam('New York Eagles', '#4ecca3');
+    const awayTeam = createMockTeam('Boston Wolves', '#e94560');
+    
+    // Run simulation
+    const result = GameSimulator.simulateGame(homeTeam, awayTeam);
+    
+    // Build play-by-play from innings
+    const newPlayByPlay: PlayByPlay[] = [];
+    let currentInning = 1;
+    let isTopInning = true;
+    
+    // Process each inning
+    const processInning = () => {
+      if (currentInning > 9) {
+        setIsSimulating(false);
+        return;
+      }
+      
+      const inningResult = result.innings[currentInning - 1];
+      if (!inningResult) {
+        currentInning++;
+        setGameInning(currentInning);
+        setTimeout(processInning, 500);
+        return;
+      }
+      
+      const events = isTopInning ? inningResult.events : inningResult.events;
+      
+      // Update game state for each event
+      events.forEach((event, idx) => {
+        newPlayByPlay.push({
+          inning: currentInning,
+          topBottom: isTopInning ? 'top' : 'bottom',
+          description: event.description,
+          runsThisPlay: event.rbi || 0
+        });
+        
+        // Update game state
+        setLiveGameState(prev => ({
+          ...prev,
+          inning: currentInning,
+          topBottom: isTopInning ? 'top' : 'bottom',
+          outs: prev.outs + (event.type === 'out' || event.type === 'strikeout' ? 1 : 0),
+          balls: event.type === 'walk' ? 4 : 0,
+          strikes: event.type === 'strikeout' ? 3 : (event.type === 'out' ? 1 : 0),
+          homeScore: isTopInning ? prev.homeScore : (prev.homeScore + (event.rbi || 0)),
+          awayScore: isTopInning ? (prev.awayScore + (event.rbi || 0)) : prev.awayScore,
+          runners: event.type === 'single' ? [true, prev.runners[0], prev.runners[1]] :
+                   event.type === 'double' ? [false, true, prev.runners[0]] :
+                   event.type === 'walk' ? [true, prev.runners[0], prev.runners[1]] : prev.runners
+        }));
+      });
+      
+      setLivePlayByPlay([...newPlayByPlay]);
+      
+      // Move to next half-inning or inning
+      if (isTopInning) {
+        setIsTop(false);
+      } else {
+        setIsTop(true);
+        currentInning++;
+      }
+      setGameInning(currentInning);
+      
+      setTimeout(processInning, 800);
+    };
+    
+    // Start the simulation loop
+    setTimeout(processInning, 500);
+  }, []);
     inning: 4,
     topBottom: 'bottom',
     outs: 1,
@@ -33,19 +160,9 @@ const HomePage: React.FC<HomePageProps> = ({ isSignedIn = false, onSignUp }) => 
       rightField: 'Danny O\'Brien'
     },
     batterId: 'Chen',
-    pitcherId: 'Kevin Hart'
+    pitcherId: 'Kevin Hart',
+    fieldConfig: 'standard'
   });
-
-  const [livePlayByPlay] = useState<PlayByPlay[]>([
-    { inning: 1, topBottom: 'top', description: 'Kevin Hart strikes out Jake Torres looking', runsThisPlay: 0 },
-    { inning: 1, topBottom: 'top', description: 'Single by Carlos Mendez', runsThisPlay: 0 },
-    { inning: 1, topBottom: 'top', description: 'Tony Russo homers! 2 runs score', runsThisPlay: 2 },
-    { inning: 2, topBottom: 'bottom', description: 'Marcus Webb walks Steve Williams', runsThisPlay: 0 },
-    { inning: 2, topBottom: 'bottom', description: 'Pat O\'Neil doubles, Williams scores', runsThisPlay: 1 },
-    { inning: 3, topBottom: 'top', description: 'Chris Park hits sacrifice fly to center', runsThisPlay: 1 },
-    { inning: 4, topBottom: 'bottom', description: 'James Turner reaches on error', runsThisPlay: 0 },
-    { inning: 4, topBottom: 'bottom', description: 'Now batting: Derek Kim, 2-1 count', runsThisPlay: 0 }
-  ]);
 
 // Mock data
 const upcomingGames: Game[] = [
@@ -132,6 +249,24 @@ const standings: LeagueStanding[] = [
 
       {/* Live Game Visualizer */}
       <section className="live-game-section">
+        <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
+          <button 
+            onClick={simulateGame} 
+            disabled={isSimulating}
+            style={{
+              padding: '0.75rem 2rem',
+              fontSize: '1.1rem',
+              fontWeight: 'bold',
+              background: isSimulating ? '#666' : '#4ecca3',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: isSimulating ? 'not-allowed' : 'pointer'
+            }}
+          >
+            {isSimulating ? 'Simulating Game...' : '⚾ Simulate New Game'}
+          </button>
+        </div>
         <LiveGameVisualizer
           homeTeamName="New York Eagles"
           awayTeamName="Boston Wolves"
