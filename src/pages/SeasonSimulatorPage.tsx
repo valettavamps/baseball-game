@@ -22,6 +22,8 @@ interface SeasonGame {
   winner: 'home' | 'away';
   homePitcher: string;
   awayPitcher: string;
+  homeInnings: number[];
+  awayInnings: number[];
 }
 
 interface PlayerSeasonStats {
@@ -156,45 +158,42 @@ const SeasonSimulatorPage: React.FC = () => {
       });
     });
 
-    // Simulate stats based on game outcomes (simplified)
-    const teamGames = games.filter(g => g.homeTeam === team.name || g.awayTeam === team.name);
-    const isHome = teamGames.map(g => g.homeTeam === team.name);
+    // Calculate stats from games
+    const players = team.roster.filter(p => p.position !== 'P');
+    const playerCount = players.length;
     
-    teamGames.forEach((game, idx) => {
-      const home = isHome[idx];
-      const score = home ? game.homeScore : game.awayScore;
-      const hits = home ? game.homeHits : game.awayHits;
-      const runs = score;
+    games.forEach(game => {
+      const isHome = game.homeTeam === team.name;
+      const hits = isHome ? game.homeHits : game.awayHits;
+      const runs = isHome ? game.homeScore : game.awayScore;
       
-      // Distribute hits and runs across players
-      const players = team.roster.filter(p => p.position !== 'P');
-      let remainingHits = hits;
-      let remainingRuns = runs;
+      // Each player gets roughly equal AB
+      const abPerPlayer = Math.floor(4.5 * playerCount / playerCount);
       
-      players.forEach((player, i) => {
+      players.forEach(player => {
         const s = stats.get(player.id)!;
         s.games++;
-        s.atBats += 4; // Approximate AB per game
+        s.atBats += abPerPlayer;
+        s.runs += Math.floor(runs / playerCount);
         
-        // Random distribution
-        if (remainingHits > 0 && Math.random() < 0.3) {
-          const hitType = Math.random();
+        // Distribute hits
+        const hitsForPlayer = Math.floor(hits / playerCount);
+        s.hits += hitsForPlayer;
+        
+        // Some random distribution for extra hits
+        const remainingHits = hits - (hitsForPlayer * playerCount);
+        if (Math.random() < remainingHits / playerCount) {
           s.hits++;
-          if (hitType < 0.03) { s.homeRuns++; s.rbi += Math.random() > 0.5 ? 1 : 0; }
-          else if (hitType < 0.05) { s.triples++; }
-          else if (hitType < 0.25) { s.doubles++; }
-          remainingHits--;
         }
         
-        if (remainingRuns > 0 && Math.random() < 0.2) {
-          s.runs++;
-          remainingRuns--;
-        }
-        
-        if (Math.random() < 0.08) s.walks++;
-        if (Math.random() < 0.22) s.strikeouts++;
-        if (Math.random() < 0.02) s.stolenBases++;
-        if (Math.random() < 0.01) s.caughtStealing++;
+        // Distribute other stats
+        s.walks += Math.floor(Math.random() * 3);
+        s.strikeouts += Math.floor(Math.random() * 4);
+        s.doubles += Math.floor(Math.random() * 2);
+        s.triples += Math.floor(Math.random() * 0.5);
+        s.homeRuns += Math.floor(Math.random() * 1.5);
+        s.rbi += Math.floor(Math.random() * 4);
+        s.stolenBases += Math.floor(Math.random() * 1.5);
       });
     });
 
@@ -220,6 +219,19 @@ const SeasonSimulatorPage: React.FC = () => {
       
       const result = GameSimulator.simulateGame(homeTeam, awayTeam);
       
+      // Extract inning scores
+      const homeInnings: number[] = [];
+      const awayInnings: number[] = [];
+      result.innings.forEach((inning, idx) => {
+        if (idx === 0) {
+          awayInnings.push(inning.awayScore);
+          homeInnings.push(inning.homeScore);
+        } else {
+          awayInnings.push(inning.awayScore - result.innings[idx - 1].awayScore);
+          homeInnings.push(inning.homeScore - result.innings[idx - 1].homeScore);
+        }
+      });
+      
       const game: SeasonGame = {
         id: i + 1,
         date: i + 1,
@@ -233,7 +245,9 @@ const SeasonSimulatorPage: React.FC = () => {
         awayErrors: result.awayTeam.errors,
         winner: result.winner,
         homePitcher: homeTeam.roster.find(p => p.position === 'P')?.name || 'Unknown',
-        awayPitcher: awayTeam.roster.find(p => p.position === 'P')?.name || 'Unknown'
+        awayPitcher: awayTeam.roster.find(p => p.position === 'P')?.name || 'Unknown',
+        homeInnings,
+        awayInnings
       };
       
       simulatedGames.push(game);
@@ -435,16 +449,16 @@ const SeasonSimulatorPage: React.FC = () => {
               </div>
               <div className="team-row">
                 <span>{selectedGame.awayTeam}</span>
-                <span>0</span><span>0</span><span>0</span><span>{selectedGame.winner === 'away' ? selectedGame.awayScore : 0}</span>
-                <span>0</span><span>0</span><span>0</span><span>0</span><span>0</span>
+                {selectedGame.awayInnings.map((r, i) => <span key={i}>{r}</span>)}
+                {[...Array(9 - selectedGame.awayInnings.length)].map((_, i) => <span key={i}>-</span>)}
                 <span>{selectedGame.awayScore}</span>
                 <span>{selectedGame.awayHits}</span>
                 <span>{selectedGame.awayErrors}</span>
               </div>
               <div className="team-row">
                 <span>{selectedGame.homeTeam}</span>
-                <span>0</span><span>0</span><span>0</span><span>{selectedGame.winner === 'home' ? selectedGame.homeScore : 0}</span>
-                <span>0</span><span>0</span><span>0</span><span>0</span><span>0</span>
+                {selectedGame.homeInnings.map((r, i) => <span key={i}>{r}</span>)}
+                {[...Array(9 - selectedGame.homeInnings.length)].map((_, i) => <span key={i}>-</span>)}
                 <span>{selectedGame.homeScore}</span>
                 <span>{selectedGame.homeHits}</span>
                 <span>{selectedGame.homeErrors}</span>

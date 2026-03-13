@@ -225,14 +225,16 @@
 .box-score {
   margin: 20px 0;
   font-family: monospace;
+  overflow-x: auto;
 }
 
 .inning-header, .team-row {
   display: grid;
   grid-template-columns: 120px repeat(9, 1fr) 40px 40px 40px;
-  gap: 5px;
+  gap: 4px;
   padding: 8px;
   text-align: center;
+  min-width: 500px;
 }
 
 .inning-header {
