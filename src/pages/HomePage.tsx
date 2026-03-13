@@ -4,6 +4,7 @@ import { Game, LeagueStanding, Team, Player } from '../types';
 import LiveGameVisualizer, { PlayByPlay } from '../components/LiveGameVisualizer';
 import { GameState } from '../components/BaseballField';
 import { GameSimulator } from '../engine/GameSimulator';
+import { MockDataGenerator } from '../engine/MockDataGenerator';
 
 interface HomePageProps {
   isSignedIn?: boolean;
@@ -43,30 +44,10 @@ const HomePage: React.FC<HomePageProps> = ({ isSignedIn = false, onSignUp }) => 
   const [gameInning, setGameInning] = useState(1);
   const [isTop, setIsTop] = useState(true);
 
-  // Create mock teams for simulation
-  const createMockTeam = (name: string): Team => ({
-    id: name.toLowerCase().replace(/\s/g, '-'),
-    name,
-    owner: 'AI',
-    roster: Array.from({ length: 9 }, (_, i) => ({
-      id: `p${i}`,
-      name: `Player ${i + 1}`,
-      position: i === 0 ? 'P' : i === 1 ? 'C' : i === 2 ? '1B' : i === 3 ? '2B' : i === 4 ? '3B' : i === 5 ? 'SS' : i === 6 ? 'LF' : i === 7 ? 'CF' : 'RF',
-      overall: 70 + Math.floor(Math.random() * 25),
-      contact: 60 + Math.floor(Math.random() * 35),
-      power: 60 + Math.floor(Math.random() * 35),
-      speed: 60 + Math.floor(Math.random() * 35),
-      discipline: 60 + Math.floor(Math.random() * 35),
-      arm: 60 + Math.floor(Math.random() * 35),
-    })) as Player[],
-    record: { wins: Math.floor(Math.random() * 30), losses: Math.floor(Math.random() * 30) },
-    league: 'Diamond League',
-    currentTier: 1,
-    tierHistory: [],
-    overallRating: 75,
-    crownStaked: 1000,
-    treasury: 5000,
-  });
+  // Create mock teams for simulation using MockDataGenerator
+  const createMockTeam = (name: string, teamId: string): Team => {
+    return MockDataGenerator.generateTeam(name, teamId, 1, 75);
+  };
 
   // Simulate a full game
   const simulateGame = useCallback(() => {
@@ -75,8 +56,8 @@ const HomePage: React.FC<HomePageProps> = ({ isSignedIn = false, onSignUp }) => 
     setIsTop(true);
     setLivePlayByPlay([]);
     
-    const homeTeam = createMockTeam('New York Eagles');
-    const awayTeam = createMockTeam('Boston Wolves');
+    const homeTeam = createMockTeam('New York Eagles', 'ny-eagles');
+    const awayTeam = createMockTeam('Boston Wolves', 'boston-wolves');
     
     // Run simulation
     const result = GameSimulator.simulateGame(homeTeam, awayTeam);
