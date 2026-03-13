@@ -1,0 +1,30 @@
+name: Stress Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      games:
+        description: 'Number of games to simulate'
+        required: false
+        default: '500'
+        type: string
+
+jobs:
+  run-stress-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run stress test
+        run: node src/scripts/stressTest.js
+        env:
+          GAMES: ${{ github.event.inputs.games }}

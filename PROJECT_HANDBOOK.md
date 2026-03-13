@@ -10,6 +10,29 @@
 
 ## ✅ ACCOMPLISHED (2026-03-13)
 
+### Season Simulator Page (2026-03-13)
+- Created `src/pages/SeasonSimulatorPage.tsx` - Full React page for season simulation
+- Created `src/pages/SeasonSimulatorPage.css` - Styling
+- **Features:**
+  - Click button → simulate 160-game season in seconds
+  - Generates 2 realistic teams with 5 pitchers + 9 position players each
+  - Shows season schedule with W/L results (BaseHit-style)
+  - Team batting stats table: G, AB, R, H, 2B, 3B, HR, RBI, BB, SO, SB, CS, AVG, OBP, SLG, OPS
+  - Click box score to see game details (innings, score, pitchers)
+  - "Run Another Season" button to re-simulate
+- Added to navigation (MobileMenu)
+- Access via: Menu → Simulator
+
+### Stress Test Script (2026-03-13)
+- Created `src/scripts/stressTest.js` - CLI tool to simulate hundreds of games and compare stats to real MLB
+- Created `src/engine/GameSimulator.js` - CommonJS version of the game engine for Node.js execution
+- Created `.github/workflows/stress-test.yml` - GitHub Action workflow to run stress tests
+- Script generates 2 teams, simulates N games, outputs:
+  - Per-game averages (runs, hits, HRs, Ks, BBs, errors)
+  - Rate stats (batting avg, K%, BB%, HR%)
+  - Comparison to MLB targets with ✅/⚠️ ratings
+- **Purpose:** Validate engine produces realistic MLB-style statistics
+
 ### Field Visual Fixes (2026-03-13)
 - Created `src/engine/FieldPositions.ts` with accurate baseball field dimensions:
   - 90ft between bases
@@ -70,8 +93,7 @@ Created `docs/BASEBALL-RESARCH.md` with:
 - ✅ Sample game displays with mock rosters
 
 ### What's Not Connected Yet
-- ❌ Game engine not connected to live visualizer
-- ❌ No real games being simulated
+- ❌ Game engine not connected to live visualizer (but Season Simulator now works!)
 - ❌ No commissioner control center UI
 - ❌ No team owner sliders
 - ❌ No consumables implemented
@@ -87,10 +109,10 @@ Created `docs/BASEBALL-RESARCH.md` with:
 ## 📌 FUTURE STEPS (Priority Order)
 
 ### Phase 1: Core Simulation
-1. **Connect engine to visualizer** - Run actual games through PlateDisciplineEngine and display results
-2. **Create real team/league data** - Generate teams with player rosters in Supabase
-3. **Game scheduling system** - Set up games between teams, track schedule
-4. **Run full 9-inning simulations** - End-to-end game flow
+1. ~~Connect engine to visualizer~~ - Season Simulator now runs full games!
+2. ~~Run full 9-inning simulations~~ - Done via Season Simulator page
+3. **Create real team/league data** - Generate teams with player rosters in Supabase
+4. **Game scheduling system** - Set up games between teams, track schedule
 
 ### Phase 2: User Features
 5. **Commissioner Control Center UI** - Page to adjust league settings (HR rate, K rate, etc.)
@@ -112,15 +134,14 @@ Created `docs/BASEBALL-RESARCH.md` with:
 ## 🛠️ KEY FILES
 
 ### Engine
-- `src/engine/PlateDisciplineEngine.ts` - Core simulation logic
+- `src/engine/GameSimulator.ts` - Core simulation logic (9-inning games)
+- `src/engine/GameSimulator.js` - CommonJS version for Node.js
+- `src/engine/PlateDisciplineEngine.ts` - Pitch-by-pitch plate discipline model
 - `src/engine/types/LeagueSettings.ts` - League configuration
 - `src/engine/types/PlayerTypes.ts` - Player attributes & fatigue
 
-### Visualizer
-- `src/components/LiveGameVisualizer.tsx` - Main game display
-- `src/components/BaseballField.tsx` - Field rendering
-
 ### Pages
+- `src/pages/SeasonSimulatorPage.tsx` - **NEW!** Full season sim with stats & box scores
 - `src/pages/HomePage.tsx` - Homepage with visualizer
 - `src/pages/LiveGamePage.tsx` - Standalone game page (demo)
 

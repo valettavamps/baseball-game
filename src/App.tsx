@@ -5,6 +5,7 @@ import MobileMenu from './components/MobileMenu';
 import HomePage from './pages/HomePage';
 import PlayersPage from './pages/PlayersPage';
 import MultiLeagueSeasonPage from './pages/MultiLeagueSeasonPage';
+import SeasonSimulatorPage from './pages/SeasonSimulatorPage';
 import CreatePlayerPage from './pages/CreatePlayerPage';
 import MyOffersPage from './pages/MyOffersPage';
 import AuthPage from './pages/AuthPage';
@@ -62,6 +63,8 @@ const App: React.FC = () => {
         return <MyOffersPage />;
       case 'season':
         return <MultiLeagueSeasonPage />;
+      case 'simulator':
+        return <SeasonSimulatorPage />;
       case 'players':
         return <PlayersPage />;
       case 'team':

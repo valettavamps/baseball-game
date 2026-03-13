@@ -21,6 +21,7 @@ const menuItems: MenuItem[] = [
   { id: 'create-player', label: 'Create Player', icon: '⭐' },
   { id: 'my-offers', label: 'My Offers', icon: '📬' },
   { id: 'season', label: 'Season', icon: '📅' },
+  { id: 'simulator', label: 'Simulator', icon: '🎮' },
   { id: 'players', label: 'Players', icon: '⚾' },
   { id: 'team', label: 'My Team', icon: '🏟️' },
   { id: 'marketplace', label: 'Marketplace', icon: '🏪' },

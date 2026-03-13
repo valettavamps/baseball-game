@@ -1,0 +1,298 @@
+.season-simulator {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.sim-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.sim-header h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.sim-header p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.sim-btn {
+  background: linear-gradient(135deg, #1a5f2a 0%, #2d8a3e 100%);
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.sim-btn:hover:not(:disabled) {
+  transform: scale(1.02);
+}
+
+.sim-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sim-btn.secondary {
+  background: #555;
+  font-size: 1rem;
+  padding: 10px 20px;
+}
+
+.sim-controls {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.view-tabs {
+  display: flex;
+  gap: 5px;
+  background: #f0f0f0;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.view-tabs button {
+  background: transparent;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: 500;
+}
+
+.view-tabs button.active {
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.record-summary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: #f8f8f8;
+  border-radius: 10px;
+}
+
+.team-record {
+  text-align: center;
+}
+
+.team-record h3 {
+  margin: 0 0 5px 0;
+  font-size: 1.3rem;
+}
+
+.team-record .record {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1a5f2a;
+}
+
+.vs {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #999;
+}
+
+/* Schedule Table */
+.schedule-table, .stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.schedule-table th, .stats-table th,
+.schedule-table td, .stats-table td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+.schedule-table th, .stats-table th {
+  background: #1a5f2a;
+  color: white;
+  font-weight: 600;
+}
+
+.schedule-table td:first-child, .stats-table td:first-child {
+  text-align: left;
+}
+
+.schedule-table tr.even {
+  background: #f9f9f9;
+}
+
+.schedule-table .win {
+  color: #2d8a3e;
+  font-weight: bold;
+}
+
+.schedule-table .loss {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+.box-btn {
+  background: #1a5f2a;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.box-btn:hover {
+  background: #2d8a3e;
+}
+
+.more-games {
+  text-align: center;
+  color: #666;
+  padding: 20px;
+  font-style: italic;
+}
+
+/* Stats Table */
+.stats-table {
+  font-size: 0.9rem;
+}
+
+.stats-table td {
+  padding: 8px 10px;
+}
+
+.stats-table tr:hover {
+  background: #f5f5f5;
+}
+
+/* Box Score Modal */
+.box-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.box-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+.box-score {
+  margin: 20px 0;
+  font-family: monospace;
+}
+
+.inning-header, .team-row {
+  display: grid;
+  grid-template-columns: 120px repeat(9, 1fr) 40px 40px 40px;
+  gap: 5px;
+  padding: 8px;
+  text-align: center;
+}
+
+.inning-header {
+  background: #1a5f2a;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px 5px 0 0;
+}
+
+.team-row {
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.team-row:first-of-type {
+  border-radius: 0;
+}
+
+.box-details {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.box-details p {
+  margin: 5px 0;
+}
+
+.schedule-view h2, .stats-view h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .season-simulator {
+    padding: 10px;
+  }
+  
+  .record-summary {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .sim-controls {
+    flex-direction: column;
+  }
+  
+  .view-tabs {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .schedule-table, .stats-table {
+    font-size: 0.8rem;
+  }
+  
+  .schedule-table th, .schedule-table td,
+  .stats-table th, .stats-table td {
+    padding: 6px 4px;
+  }
+}
