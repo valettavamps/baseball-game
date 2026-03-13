@@ -17,11 +17,18 @@
   - Click button → simulate 160-game season in seconds
   - Generates 2 realistic teams with 5 pitchers + 9 position players each
   - Shows season schedule with W/L results (BaseHit-style)
-  - Team batting stats table: G, AB, R, H, 2B, 3B, HR, RBI, BB, SO, SB, CS, AVG, OBP, SLG, OPS
+  - Team batting stats: G, AB, R, H, 2B, 3B, HR, RBI, BB, SO, SB, CS, AVG, OBP, SLG, OPS
+  - Team pitching stats: G, W, L, IP, H, R, ER, BB, SO, HR, ERA, WHIP
+  - Batting/Pitching toggle tabs
   - Click box score to see game details (innings, score, pitchers)
   - "Run Another Season" button to re-simulate
-- Added to navigation (MobileMenu)
-- Access via: Menu → Simulator
+- Added to navigation (MobileMenu → Simulator)
+- **Status:** Working but stats need validation
+
+### Engine Tuning (2026-03-13)
+- Tuned `GameSimulator.js` and `GameSimulator.ts` for realistic MLB stats
+- Target: ~4 runs/game, ~8.5 hits, ~1.1 HR, ~23% K, ~8% BB
+- Adjusted: contact rate, hit type distribution, strikeout rate
 
 ### Stress Test Script (2026-03-13)
 - Created `src/scripts/stressTest.js` - CLI tool to simulate hundreds of games and compare stats to real MLB
@@ -91,6 +98,13 @@ Created `docs/BASEBALL-RESARCH.md` with:
 - ✅ Player creation → saves to Supabase  
 - ✅ Live game visualizer on homepage
 - ✅ Sample game displays with mock rosters
+- ✅ Season Simulator page - runs 160 games, shows schedule/stats
+
+### Known Issues (2026-03-13)
+- Stats may still be inflated (need validation against MLB)
+- Box score modal may not display properly on mobile
+- Sortable columns (click to sort) not implemented yet
+- Pitching stats calculation needs improvement
 
 ### What's Not Connected Yet
 - ❌ Game engine not connected to live visualizer (but Season Simulator now works!)
