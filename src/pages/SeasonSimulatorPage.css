@@ -2,6 +2,9 @@
   padding: 20px;
   max-width: 1400px;
   margin: 0 auto;
+  background: white;
+  min-height: 100vh;
+  color: #222;
 }
 
 .sim-header {
@@ -115,13 +118,16 @@
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  color: #333;
 }
 
 .schedule-table th, .stats-table th,
 .schedule-table td, .stats-table td {
   padding: 12px;
   text-align: center;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #ddd;
+  background: white;
+  color: #222;
 }
 
 .schedule-table th, .stats-table th {
@@ -135,7 +141,11 @@
 }
 
 .schedule-table tr.even {
-  background: #f9f9f9;
+  background: #f0f0f0;
+}
+
+.schedule-table tr {
+  background: white;
 }
 
 .schedule-table .win {
@@ -189,22 +199,42 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.9);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 9999;
+  padding: 20px;
 }
 
 .box-content {
   background: white;
-  padding: 30px;
+  padding: 20px;
   border-radius: 12px;
-  max-width: 600px;
-  width: 90%;
-  max-height: 80vh;
+  max-width: 100%;
+  width: 100%;
+  max-height: 90vh;
   overflow-y: auto;
   position: relative;
+  color: #222;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff4444;
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .close-btn {
