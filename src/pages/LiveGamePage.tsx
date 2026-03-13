@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import LiveGameVisualizer from '../components/LiveGameVisualizer';
+import LiveGameVisualizer, { PlayByPlay } from '../components/LiveGameVisualizer';
 import { GameState } from '../components/BaseballField';
 
 // Mock roster data for realistic game
@@ -59,7 +59,7 @@ const sampleGameState: GameState = {
 };
 
 // Generate realistic play-by-play
-const generatePlayByPlay = () => [
+const generatePlayByPlay = (): PlayByPlay[] => [
   { inning: 1, topBottom: 'top', description: `${awayTeamRoster.pitcher} strikes out ${homeTeamRoster.catcher} looking`, runsThisPlay: 0 },
   { inning: 1, topBottom: 'top', description: `Single by ${homeTeamRoster.firstBase}`, runsThisPlay: 0 },
   { inning: 1, topBottom: 'top', description: `${homeTeamRoster.secondBase} homers! 2 runs score`, runsThisPlay: 2 },
@@ -72,7 +72,7 @@ const generatePlayByPlay = () => [
 
 const LiveGamePage: React.FC = () => {
   const [gameState] = useState<GameState>(sampleGameState);
-  const [playByPlay] = useState(generatePlayByPlay);
+  const [playByPlay] = useState<PlayByPlay[]>(generatePlayByPlay());
   const [isLive] = useState<boolean>(true);
 
   return (
