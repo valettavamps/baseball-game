@@ -124,7 +124,6 @@ const SeasonSimulatorPage: React.FC = () => {
       roster,
       record: { wins: 0, losses: 0 },
       league: 'Test League',
-      division: 'Test',
       currentTier: 1,
       tierHistory: [],
       overallRating: 75,
