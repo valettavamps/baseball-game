@@ -196,7 +196,8 @@ export class GameSimulator {
     const lineup = this.getLineup(battingTeam);
     let batterIndex = (inning - 1) % lineup.length;
 
-    while (outs < 3 && batterIndex < lineup.length * 2) {
+    // Process batters until 3 outs
+    while (outs < 3) {
       const batter = lineup[batterIndex % lineup.length];
       const result = this.simulateAtBat(batter, pitcher, fieldingTeam);
 
@@ -260,6 +261,7 @@ export class GameSimulator {
 
   /**
    * Simulate a single at-bat
+   * Tuned for realistic MLB scoring (3-5 runs per team per game)
    */
   private static simulateAtBat(batter: Player, pitcher: Player, fieldingTeam: Team): BatterResult {
     const batterPower = batter.attributes.power;
@@ -268,11 +270,25 @@ export class GameSimulator {
     const pitcherControl = pitcher.attributes.control || 50;
     const pitcherVelocity = pitcher.attributes.velocity || 50;
 
-    // Calculate probabilities
-    const contactChance = (batterContact + (100 - pitcherVelocity)) / 200;
-    const powerChance = (batterPower / 100) * contactChance;
-    const walkChance = ((batterDiscipline + (100 - pitcherControl)) / 200) * 0.3;
-    const errorChance = 0.05; // 5% error rate
+    // REALISTIC MLB probabilities (2024-2025 stats):
+    // - ~23% hit rate (BA ~.250)
+    // - ~8% walk rate  
+    // - ~20% strikeout rate
+    // - ~3-4% HR rate, ~4-5% 2B, ~1% 3B
+    
+    // Contact adjusted for realism (reduce high contact rates)
+    const baseContact = batterContact / 100; // 0.6-0.9
+    const pitcherEffect = (100 - pitcherVelocity) / 100 * 0.3; // pitcher reduces contact
+    const contactChance = Math.min(0.35, Math.max(0.15, baseContact * 0.4 - pitcherEffect));
+    
+    // Power chance - reduced significantly
+    const powerChance = Math.min(0.12, (batterPower / 100) * 0.15);
+    
+    // Walk chance - realistic
+    const walkChance = Math.min(0.12, Math.max(0.05, (batterDiscipline / 100) * 0.15));
+    
+    // Error rate - very low in MLB
+    const errorChance = 0.02;
 
     const roll = Math.random();
 
@@ -300,8 +316,8 @@ export class GameSimulator {
         };
       }
 
-      // Home run
-      if (hitQuality < powerChance * 0.15) {
+      // Home run - ~5% of hits in modern MLB
+      if (hitQuality < 0.05) {
         return {
           outcome: 'homerun',
           rbi: 1,
@@ -310,8 +326,8 @@ export class GameSimulator {
         };
       }
 
-      // Triple
-      if (hitQuality < powerChance * 0.25) {
+      // Triple - rare, ~1% of hits
+      if (hitQuality < 0.06) {
         return {
           outcome: 'triple',
           rbi: 0,
@@ -320,8 +336,8 @@ export class GameSimulator {
         };
       }
 
-      // Double
-      if (hitQuality < powerChance * 0.5) {
+      // Double - ~20% of hits
+      if (hitQuality < 0.26) {
         return {
           outcome: 'double',
           rbi: 0,
@@ -330,7 +346,7 @@ export class GameSimulator {
         };
       }
 
-      // Single
+      // Single - remaining ~73% of hits
       return {
         outcome: 'single',
         rbi: 0,
@@ -339,8 +355,8 @@ export class GameSimulator {
       };
     }
 
-    // Out (strikeout or fielded)
-    const strikeoutChance = (pitcherVelocity / 100) * 0.6;
+    // Out (strikeout or fielded out) - ~65% of at-bats in MLB
+    const strikeoutChance = Math.min(0.35, (pitcherVelocity / 100) * 0.4);
     if (Math.random() < strikeoutChance) {
       return {
         outcome: 'strikeout',
