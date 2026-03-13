@@ -261,7 +261,7 @@ export class GameSimulator {
 
   /**
    * Simulate a single at-bat
-   * Tuned for realistic MLB scoring (~4 runs per game)
+   * TUNED for realistic MLB scoring (~4 runs per game total)
    */
   private static simulateAtBat(batter: Player, pitcher: Player, fieldingTeam: Team): BatterResult {
     const batterPower = batter.attributes.power;
@@ -270,30 +270,26 @@ export class GameSimulator {
     const pitcherControl = pitcher.attributes.control || 50;
     const pitcherVelocity = pitcher.attributes.velocity || 50;
 
-    // REALISTIC MLB probabilities:
-    // Walk rate: ~8%
-    // Strikeout rate: ~23%
-    // Hit rate: ~24% (.240-.260 BA)
-    // HR rate: ~3.5% of at-bats
-    // 2B+3B: ~5% of at-bats
+    // REALISTIC MLB probabilities (2024 stats):
+    // Walk: 8.2%, Strikeout: 23%, Hit: 24%, HR: 3.5%
     
-    // Very low contact - pitchers dominate in modern MLB
-    const baseContact = batterContact / 100 * 0.35; // Max ~35% contact
-    const pitcherEffect = (100 - pitcherVelocity) / 100 * 0.15;
-    const contactChance = Math.min(0.30, Math.max(0.12, baseContact - pitcherEffect));
+    // Contact is RARE - pitchers dominate
+    // Use batter contact + pitcher velocity to determine
+    const pitcherAdvantage = pitcherVelocity / 100 * 0.5; // velocity dominates
+    const contactChance = Math.min(0.22, (batterContact / 100) * 0.28 - pitcherAdvantage * 0.1);
     
-    // Power - rare extra base hits
-    const powerChance = (batterPower / 100) * 0.08;
+    // Power - very rare
+    const powerChance = Math.min(0.04, (batterPower / 100) * 0.05);
     
-    // Walk - realistic MLB rate
-    const walkChance = Math.min(0.10, Math.max(0.04, (batterDiscipline / 100) * 0.12));
+    // Walk - realistic
+    const walkChance = Math.min(0.09, Math.max(0.05, (batterDiscipline / 100) * 0.10));
     
-    // Error - very rare
-    const errorChance = 0.01;
+    // Error - extremely rare in MLB
+    const errorChance = 0.008;
 
     const roll = Math.random();
 
-    // Walk
+    // Walk (~8% of at-bats)
     if (roll < walkChance) {
       return {
         outcome: 'walk',
@@ -303,7 +299,7 @@ export class GameSimulator {
       };
     }
 
-    // Contact made
+    // Contact made (~22% of at-bats max)
     if (roll < contactChance + walkChance) {
       const hitQuality = Math.random();
       
@@ -317,7 +313,7 @@ export class GameSimulator {
         };
       }
 
-      // Home run - ~3% of at-bats in MLB
+      // Home run - ~3% of hits (~0.7% of at-bats)
       if (hitQuality < 0.03) {
         return {
           outcome: 'homerun',
@@ -327,8 +323,8 @@ export class GameSimulator {
         };
       }
 
-      // Triple - very rare ~0.5%
-      if (hitQuality < 0.035) {
+      // Triple - ~1% of hits
+      if (hitQuality < 0.04) {
         return {
           outcome: 'triple',
           rbi: 0,
@@ -337,8 +333,8 @@ export class GameSimulator {
         };
       }
 
-      // Double - ~4%
-      if (hitQuality < 0.075) {
+      // Double - ~20% of hits
+      if (hitQuality < 0.24) {
         return {
           outcome: 'double',
           rbi: 0,
@@ -347,7 +343,7 @@ export class GameSimulator {
         };
       }
 
-      // Single - rest of hits (~92%)
+      // Single - ~76% of hits
       return {
         outcome: 'single',
         rbi: 0,
@@ -356,8 +352,8 @@ export class GameSimulator {
       };
     }
 
-    // Out - rest of at-bats (~65%+)
-    const strikeoutChance = Math.min(0.30, (pitcherVelocity / 100) * 0.35);
+    // OUTS - ~68% of at-bats in modern MLB!
+    const strikeoutChance = Math.min(0.28, (pitcherVelocity / 100) * 0.32);
     if (Math.random() < strikeoutChance) {
       return {
         outcome: 'strikeout',
@@ -367,6 +363,7 @@ export class GameSimulator {
       };
     }
 
+    // Regular out (ground ball, fly ball)
     return {
       outcome: 'out',
       rbi: 0,
