@@ -16,6 +16,7 @@ const HomePage: React.FC<HomePageProps> = ({ isSignedIn = false, onSignUp }) => 
   const [isSimulating, setIsSimulating] = useState(false);
   const [currentInning, setCurrentInning] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [playbackSpeed, setPlaybackSpeed] = useState(800); // ms delay
 
   // Simulate a full game - text only
   const simulateGame = useCallback(() => {
@@ -73,10 +74,10 @@ const HomePage: React.FC<HomePageProps> = ({ isSignedIn = false, onSignUp }) => 
       setAwayScore(aScore);
       setCurrentInning(inning);
       
-      setTimeout(() => processInning(idx + 1), 400);
+      setTimeout(() => processInning(idx + 1), playbackSpeed);
     };
     
-    setTimeout(() => processInning(0), 500);
+    setTimeout(() => processInning(0), playbackSpeed);
   }, []);
 
 // Mock data
@@ -170,7 +171,7 @@ const standings: LeagueStanding[] = [
         margin: '2rem auto',
         maxWidth: '800px'
       }}>
-        <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
           <button 
             onClick={simulateGame} 
             disabled={isSimulating}
@@ -186,6 +187,53 @@ const standings: LeagueStanding[] = [
             }}
           >
             {isSimulating ? `⏳ Inning ${currentInning}...` : gameOver ? '🔄 Play Again' : '⚾ Simulate Game'}
+          </button>
+        </div>
+        
+        {/* Speed Controls */}
+        <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+          <span style={{ color: '#888', marginRight: '10px' }}>Speed:</span>
+          <button 
+            onClick={() => setPlaybackSpeed(1500)}
+            style={{
+              padding: '0.4rem 0.8rem',
+              margin: '0 4px',
+              background: playbackSpeed === 1500 ? '#4ecca3' : '#333',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            🐢 Slow
+          </button>
+          <button 
+            onClick={() => setPlaybackSpeed(800)}
+            style={{
+              padding: '0.4rem 0.8rem',
+              margin: '0 4px',
+              background: playbackSpeed === 800 ? '#4ecca3' : '#333',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            ⚡ Normal
+          </button>
+          <button 
+            onClick={() => setPlaybackSpeed(300)}
+            style={{
+              padding: '0.4rem 0.8rem',
+              margin: '0 4px',
+              background: playbackSpeed === 300 ? '#4ecca3' : '#333',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            🚀 Fast
           </button>
         </div>
         
