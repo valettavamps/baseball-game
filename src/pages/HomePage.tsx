@@ -1,8 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import './HomePage.css';
 import { Game, LeagueStanding, Team, Player } from '../types';
-import LiveGameVisualizer, { PlayByPlay } from '../components/LiveGameVisualizer';
-import { GameState } from '../components/BaseballField';
 import { GameSimulator } from '../engine/GameSimulator';
 import { MockDataGenerator } from '../engine/MockDataGenerator';
 
@@ -12,119 +10,73 @@ interface HomePageProps {
 }
 
 const HomePage: React.FC<HomePageProps> = ({ isSignedIn = false, onSignUp }) => {
-  // Sample live game for visualizer
-  const [liveGameState, setLiveGameState] = useState<GameState>({
-    inning: 1,
-    topBottom: 'top',
-    outs: 0,
-    balls: 0,
-    strikes: 0,
-    homeScore: 0,
-    awayScore: 0,
-    runners: [false, false, false],
-    battingOrder: [],
-    fielders: {
-      pitcher: 'Marcus Webb',
-      catcher: 'Jake Torres',
-      firstBase: 'Carlos Mendez',
-      secondBase: 'Tony Russo',
-      thirdBase: 'Derek Kim',
-      shortstop: 'Mike Santos',
-      leftField: 'Tyler Blake',
-      centerField: 'Chris Park',
-      rightField: 'Danny O\'Brien'
-    },
-    batterId: 'Chen',
-    pitcherId: 'Kevin Hart',
-    fieldConfig: 'standard'
-  });
-  
-  const [livePlayByPlay, setLivePlayByPlay] = useState<PlayByPlay[]>([]);
+  const [gameLog, setGameLog] = useState<string[]>([]);
+  const [homeScore, setHomeScore] = useState(0);
+  const [awayScore, setAwayScore] = useState(0);
   const [isSimulating, setIsSimulating] = useState(false);
-  const [gameInning, setGameInning] = useState(1);
-  const [isTop, setIsTop] = useState(true);
+  const [currentInning, setCurrentInning] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
 
-  // Create mock teams for simulation using MockDataGenerator
-  const createMockTeam = (name: string, teamId: string): Team => {
-    return MockDataGenerator.generateTeam(name, teamId, 1, 75);
-  };
-
-  // Simulate a full game
+  // Simulate a full game - text only
   const simulateGame = useCallback(() => {
     setIsSimulating(true);
-    setGameInning(1);
-    setIsTop(true);
-    setLivePlayByPlay([]);
+    setGameLog([]);
+    setHomeScore(0);
+    setAwayScore(0);
+    setCurrentInning(0);
+    setGameOver(false);
     
-    const homeTeam = createMockTeam('New York Eagles', 'ny-eagles');
-    const awayTeam = createMockTeam('Boston Wolves', 'boston-wolves');
+    const homeTeam = MockDataGenerator.generateTeam('New York Eagles', 'ny-eagles', 1, 75);
+    const awayTeam = MockDataGenerator.generateTeam('Boston Wolves', 'boston-wolves', 1, 75);
     
-    // Run simulation
     const result = GameSimulator.simulateGame(homeTeam, awayTeam);
     
-    // Build play-by-play from innings
-    const newPlayByPlay: PlayByPlay[] = [];
-    let currentInning = 1;
-    let isTopInning = true;
+    const log: string[] = [];
+    let hScore = 0;
+    let aScore = 0;
     
-    // Process each inning
-    const processInning = () => {
-      if (currentInning > 9) {
+    log.push(`🏟️ ${awayTeam.name} @ ${homeTeam.name}`);
+    log.push('─────────────────────────────────');
+    
+    let inning = 0;
+    const processInning = (idx: number) => {
+      if (idx >= result.innings.length) {
+        log.push('─────────────────────────────────');
+        log.push(`🏁 FINAL: ${homeTeam.name} ${hScore} - ${aScore} ${awayTeam.name}`);
+        log.push(`🏆 Winner: ${hScore > aScore ? homeTeam.name : awayTeam.name}`);
+        setGameLog(log);
+        setHomeScore(hScore);
+        setAwayScore(aScore);
         setIsSimulating(false);
+        setGameOver(true);
         return;
       }
       
-      const inningResult = result.innings[currentInning - 1];
-      if (!inningResult) {
-        currentInning++;
-        setGameInning(currentInning);
-        setTimeout(processInning, 500);
-        return;
-      }
+      const inn = result.innings[idx];
+      inning++;
+      const topInning = inn.awayScore > 0 || inn.events.some(e => e.type !== 'out');
       
-      const events = isTopInning ? inningResult.events : inningResult.events;
+      log.push(`\n� inning ${inning} - ${inn.awayScore > 0 ? `${inn.awayScore} runs` : '0 runs'}`);
       
-      // Update game state for each event
-      events.forEach((event, idx) => {
-        newPlayByPlay.push({
-          inning: currentInning,
-          topBottom: isTopInning ? 'top' : 'bottom',
-          description: event.description,
-          runsThisPlay: event.rbi || 0
-        });
-        
-        // Update game state
-        setLiveGameState(prev => ({
-          ...prev,
-          inning: currentInning,
-          topBottom: isTopInning ? 'top' : 'bottom',
-          outs: prev.outs + (event.type === 'out' || event.type === 'strikeout' ? 1 : 0),
-          balls: event.type === 'walk' ? 4 : 0,
-          strikes: event.type === 'strikeout' ? 3 : (event.type === 'out' ? 1 : 0),
-          homeScore: isTopInning ? prev.homeScore : (prev.homeScore + (event.rbi || 0)),
-          awayScore: isTopInning ? (prev.awayScore + (event.rbi || 0)) : prev.awayScore,
-          runners: event.type === 'single' ? [true, prev.runners[0], prev.runners[1]] :
-                   event.type === 'double' ? [false, true, prev.runners[0]] :
-                   event.type === 'walk' ? [true, prev.runners[0], prev.runners[1]] : prev.runners
-        }));
+      inn.events.forEach(event => {
+        log.push(event.description);
+        if (event.rbi && event.rbi > 0) {
+          log.push(`   💥 ${event.rbi} RBI!`);
+        }
       });
       
-      setLivePlayByPlay([...newPlayByPlay]);
+      hScore += inn.homeScore;
+      aScore += inn.awayScore;
       
-      // Move to next half-inning or inning
-      if (isTopInning) {
-        setIsTop(false);
-      } else {
-        setIsTop(true);
-        currentInning++;
-      }
-      setGameInning(currentInning);
+      setGameLog([...log]);
+      setHomeScore(hScore);
+      setAwayScore(aScore);
+      setCurrentInning(inning);
       
-      setTimeout(processInning, 800);
+      setTimeout(() => processInning(idx + 1), 400);
     };
     
-    // Start the simulation loop
-    setTimeout(processInning, 500);
+    setTimeout(() => processInning(0), 500);
   }, []);
 
 // Mock data
@@ -210,15 +162,21 @@ const standings: LeagueStanding[] = [
         </div>
       </section>
 
-      {/* Live Game Visualizer */}
-      <section className="live-game-section">
-        <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
+      {/* Game Simulation */}
+      <section className="live-game-section" style={{ 
+        background: '#1a1a2e', 
+        borderRadius: '12px', 
+        padding: '2rem',
+        margin: '2rem auto',
+        maxWidth: '800px'
+      }}>
+        <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
           <button 
             onClick={simulateGame} 
             disabled={isSimulating}
             style={{
-              padding: '0.75rem 2rem',
-              fontSize: '1.1rem',
+              padding: '1rem 2.5rem',
+              fontSize: '1.2rem',
               fontWeight: 'bold',
               background: isSimulating ? '#666' : '#4ecca3',
               color: '#fff',
@@ -227,18 +185,54 @@ const standings: LeagueStanding[] = [
               cursor: isSimulating ? 'not-allowed' : 'pointer'
             }}
           >
-            {isSimulating ? 'Simulating Game...' : '⚾ Simulate New Game'}
+            {isSimulating ? `⏳ Inning ${currentInning}...` : gameOver ? '🔄 Play Again' : '⚾ Simulate Game'}
           </button>
         </div>
-        <LiveGameVisualizer
-          homeTeamName="New York Eagles"
-          awayTeamName="Boston Wolves"
-          homeTeamColor="#4ecca3"
-          awayTeamColor="#e94560"
-          gameState={liveGameState}
-          playByPlay={livePlayByPlay}
-          isLive={true}
-        />
+        
+        {gameOver && (
+          <div style={{ textAlign: 'center', marginBottom: '1rem', fontSize: '1.5rem', fontWeight: 'bold' }}>
+            {homeScore > awayScore ? '🦅 New York Eagles Win!' : '🐺 Boston Wolves Win!'}
+          </div>
+        )}
+        
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-around', 
+          marginBottom: '1rem',
+          fontSize: '2rem',
+          fontWeight: 'bold'
+        }}>
+          <div style={{ color: '#4ecca3' }}>Eagles: {homeScore}</div>
+          <div style={{ color: '#e94560' }}>Wolves: {awayScore}</div>
+        </div>
+        
+        <div style={{
+          background: '#0f0f1a',
+          borderRadius: '8px',
+          padding: '1rem',
+          height: '400px',
+          overflowY: 'auto',
+          fontFamily: 'monospace',
+          fontSize: '0.9rem',
+          lineHeight: '1.6'
+        }}>
+          {gameLog.length === 0 ? (
+            <div style={{ color: '#666', textAlign: 'center', marginTop: '150px' }}>
+              Click "Simulate Game" to play!
+            </div>
+          ) : (
+            gameLog.map((line, i) => (
+              <div key={i} style={{ 
+                color: line.includes('🏁') ? '#4ecca3' : 
+                       line.includes(' inning') ? '#ffd700' :
+                       line.includes('💥') ? '#ff6b6b' : '#ddd',
+                marginBottom: '4px'
+              }}>
+                {line}
+              </div>
+            ))
+          )}
+        </div>
       </section>
 
       <div className="home-grid">
