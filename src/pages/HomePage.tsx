@@ -139,30 +139,6 @@ const HomePage: React.FC<HomePageProps> = ({ isSignedIn = false, onSignUp }) => 
     // Start the simulation loop
     setTimeout(processInning, 500);
   }, []);
-    inning: 4,
-    topBottom: 'bottom',
-    outs: 1,
-    balls: 2,
-    strikes: 1,
-    homeScore: 3,
-    awayScore: 2,
-    runners: [true, false, true],
-    battingOrder: [],
-    fielders: {
-      pitcher: 'Marcus Webb',
-      catcher: 'Jake Torres',
-      firstBase: 'Carlos Mendez',
-      secondBase: 'Tony Russo',
-      thirdBase: 'Derek Kim',
-      shortstop: 'Mike Santos',
-      leftField: 'Tyler Blake',
-      centerField: 'Chris Park',
-      rightField: 'Danny O\'Brien'
-    },
-    batterId: 'Chen',
-    pitcherId: 'Kevin Hart',
-    fieldConfig: 'standard'
-  });
 
 // Mock data
 const upcomingGames: Game[] = [
