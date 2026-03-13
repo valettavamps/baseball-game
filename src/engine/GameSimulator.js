@@ -221,7 +221,6 @@ class GameSimulator {
     // Out (GB/FB/LD)
     return { outcome: 'out', rbi: 0, batterName: batter.name, pitcherName: pitcher.name };
   }
-  }
 
   static getStartingPitcher(team) {
     const pitchers = team.roster.filter(p => p.position === 'P');
