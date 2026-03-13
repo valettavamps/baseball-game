@@ -496,7 +496,7 @@ const SeasonSimulatorPage: React.FC = () => {
           {/* Team Stats View */}
           {(view === 'team1' || view === 'team2') && statView === 'batting' && (
             <div className="stats-view">
-              <h2>📊 {(view === 'team1' ? team1?.name : team2?.name) - Batting</h2>
+              <h2>📊 {view === 'team1' ? team1?.name : team2?.name} – Batting</h2>
               {(view === 'team1' ? team1Stats : team2Stats).length === 0 ? (
                 <p style={{padding: '20px', textAlign: 'center'}}>No stats available yet</p>
               ) : (
@@ -561,7 +561,7 @@ const SeasonSimulatorPage: React.FC = () => {
           {/* Pitching Stats View */}
           {(view === 'team1' || view === 'team2') && statView === 'pitching' && (
             <div className="stats-view">
-              <h2>📊 {(view === 'team1' ? team1?.name : team2?.name) - Pitching</h2>
+              <h2>📊 {view === 'team1' ? team1?.name : team2?.name} – Pitching</h2>
               {(view === 'team1' ? team1Pitching : team2Pitching).length === 0 ? (
                 <p style={{padding: '20px', textAlign: 'center'}}>No pitching stats available</p>
               ) : (
