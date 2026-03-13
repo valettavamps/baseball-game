@@ -80,7 +80,6 @@ function generateTeam(teamId, teamName, seed) {
     roster,
     record: { wins: 0, losses: 0 },
     league: 'American',
-    division: 'West',
     currentTier: 1,
     tierHistory: [],
     overallRating: 75,
