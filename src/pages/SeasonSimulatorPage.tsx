@@ -222,6 +222,8 @@ const SeasonSimulatorPage: React.FC = () => {
       // Extract inning scores
       const homeInnings: number[] = [];
       const awayInnings: number[] = [];
+      
+      // innings[i] has CUMULATIVE score, so we need to calculate per-inning
       result.innings.forEach((inning, idx) => {
         if (idx === 0) {
           awayInnings.push(inning.awayScore);
