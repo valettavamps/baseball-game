@@ -287,38 +287,42 @@ const PlayerProfilePage: React.FC<PlayerProfileProps> = ({ player, onBack }) => 
           <div className="summary-tab">
             {isPitcher ? (
               // Pitcher Summary
-              player.seasonPitching && (
-                <div className="stats-section">
-                  <h4>{player.seasonPitching.year} Season</h4>
-                  <div className="stats-grid">
-                    <div className="stat-box"><span className="stat-val">{player.seasonPitching.wins}</span><span className="stat-lbl">W</span></div>
-                    <div className="stat-box"><span className="stat-val">{player.seasonPitching.losses}</span><span className="stat-lbl">L</span></div>
-                    <div className="stat-box"><span className="stat-val">{player.seasonPitching.era.toFixed(2)}</span><span className="stat-lbl">ERA</span></div>
-                    <div className="stat-box"><span className="stat-val">{player.seasonPitching.innings.toFixed(1)}</span><span className="stat-lbl">IP</span></div>
-                    <div className="stat-box"><span className="stat-val">{player.seasonPitching.strikeouts}</span><span className="stat-lbl">K</span></div>
-                    <div className="stat-box"><span className="stat-val">{player.seasonPitching.walks}</span><span className="stat-lbl">BB</span></div>
-                    <div className="stat-box"><span className="stat-val">{player.seasonPitching.hits}</span><span className="stat-lbl">H</span></div>
-                    <div className="stat-box"><span className="stat-val">{player.seasonPitching.hr}</span><span className="stat-lbl">HR</span></div>
+              <>
+                {player.seasonPitching && (
+                  <div className="stats-section">
+                    <h4>{player.seasonPitching.year} Season</h4>
+                    <div className="stats-grid">
+                      <div className="stat-box"><span className="stat-val">{player.seasonPitching.wins}</span><span className="stat-lbl">W</span></div>
+                      <div className="stat-box"><span className="stat-val">{player.seasonPitching.losses}</span><span className="stat-lbl">L</span></div>
+                      <div className="stat-box"><span className="stat-val">{player.seasonPitching.era.toFixed(2)}</span><span className="stat-lbl">ERA</span></div>
+                      <div className="stat-box"><span className="stat-val">{player.seasonPitching.innings.toFixed(1)}</span><span className="stat-lbl">IP</span></div>
+                      <div className="stat-box"><span className="stat-val">{player.seasonPitching.strikeouts}</span><span className="stat-lbl">K</span></div>
+                      <div className="stat-box"><span className="stat-val">{player.seasonPitching.walks}</span><span className="stat-lbl">BB</span></div>
+                      <div className="stat-box"><span className="stat-val">{player.seasonPitching.hits}</span><span className="stat-lbl">H</span></div>
+                      <div className="stat-box"><span className="stat-val">{player.seasonPitching.hr}</span><span className="stat-lbl">HR</span></div>
+                    </div>
                   </div>
-                </div>
-              )
+                )}
+              </>
             ) : (
               // Batter Summary
-              player.seasonBatting && (
-                <div className="stats-section">
-                  <h4>{player.seasonBatting.year} Season</h4>
-                  <div className="stats-grid">
-                    <div className="stat-box"><span className="stat-val">{player.seasonBatting.gamesPlayed}</span><span className="stat-lbl">G</span></div>
-                    <div className="stat-box"><span className="stat-val">{player.seasonBatting.pa}</span><span className="stat-lbl">PA</span></div>
-                    <div className="stat-box"><span className="stat-val">{player.seasonBatting.hits}</span><span className="stat-lbl">H</span></div>
-                    <div className="stat-box"><span className="stat-val">{player.seasonBatting.homeRuns}</span><span className="stat-lbl">HR</span></div>
-                    <div className="stat-box"><span className="stat-val">{player.seasonBatting.rbi}</span><span className="stat-lbl">RBI</span></div>
-                    <div className="stat-box"><span className="stat-val">{player.seasonBatting.runs}</span><span className="stat-lbl">R</span></div>
-                    <div className="stat-box"><span className="stat-val">{player.seasonBatting.avg.toFixed(3)}</span><span className="stat-lbl">AVG</span></div>
-                    <div className="stat-box"><span className="stat-val">{player.seasonBatting.ops.toFixed(3)}</span><span className="stat-lbl">OPS</span></div>
+              <>
+                {player.seasonBatting && (
+                  <div className="stats-section">
+                    <h4>{player.seasonBatting.year} Season</h4>
+                    <div className="stats-grid">
+                      <div className="stat-box"><span className="stat-val">{player.seasonBatting.gamesPlayed}</span><span className="stat-lbl">G</span></div>
+                      <div className="stat-box"><span className="stat-val">{player.seasonBatting.pa}</span><span className="stat-lbl">PA</span></div>
+                      <div className="stat-box"><span className="stat-val">{player.seasonBatting.hits}</span><span className="stat-lbl">H</span></div>
+                      <div className="stat-box"><span className="stat-val">{player.seasonBatting.homeRuns}</span><span className="stat-lbl">HR</span></div>
+                      <div className="stat-box"><span className="stat-val">{player.seasonBatting.rbi}</span><span className="stat-lbl">RBI</span></div>
+                      <div className="stat-box"><span className="stat-val">{player.seasonBatting.runs}</span><span className="stat-lbl">R</span></div>
+                      <div className="stat-box"><span className="stat-val">{player.seasonBatting.avg.toFixed(3)}</span><span className="stat-lbl">AVG</span></div>
+                      <div className="stat-box"><span className="stat-val">{player.seasonBatting.ops.toFixed(3)}</span><span className="stat-lbl">OPS</span></div>
+                    </div>
                   </div>
-                </div>
-              )
+                )}
+              </>
             )}
             
             {/* Fielding */}
