@@ -1,12 +1,21 @@
 // Player types
 export interface Player {
   id: string;
+  firstName?: string;
+  lastName?: string;
   name: string;
   position: Position;
   team?: string;
   teamId?: string;
   overall: number;
   avatar?: string;
+  
+  // Physical
+  throwingHand?: string;
+  battingHand?: string;
+  height?: number;
+  weight?: number;
+  age?: number;
   
   // Attributes
   attributes: PlayerAttributes;
