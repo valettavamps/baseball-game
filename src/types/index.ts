@@ -35,6 +35,10 @@ export interface Player {
   lastGameDate?: string;
   salary?: number;
   acquired?: string;
+  draftYear?: number;
+  draftRound?: number;
+  draftPick?: number;
+  draftedBy?: string;
   draftInfo?: DraftInfo;
   
   // Ratings
