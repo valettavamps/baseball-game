@@ -526,7 +526,7 @@ const PlayerProfilePage: React.FC<PlayerProfileProps> = ({ player, onBack }) => 
                 <thead>
                   <tr>
                     <th>Year</th><th>Team</th><th>Pos</th><th>G</th><th>AVG</th><th>HR</th><th>RBI</th>
-                    {isPitcher && <th>W-L</th><th>ERA</th>}
+                    {isPitcher && (<><th>W-L</th><th>ERA</th></>)}
                   </tr>
                 </thead>
                 <tbody>
@@ -539,8 +539,7 @@ const PlayerProfilePage: React.FC<PlayerProfileProps> = ({ player, onBack }) => 
                       <td>{h.avg.toFixed(3)}</td>
                       <td>{h.hr}</td>
                       <td>{h.rbi}</td>
-                      {isPitcher && <td>{h.wins}-{h.losses}</td>}
-                      {isPitcher && <td>{h.era?.toFixed(2)}</td>}
+                      {isPitcher && (<><td>{h.wins}-{h.losses}</td><td>{h.era?.toFixed(2)}</td></>)}
                     </tr>
                   ))}
                 </tbody>
