@@ -19,6 +19,220 @@ export interface Player {
   
   // Upcoming games
   upcomingGames: Game[];
+  
+  // Extended data (from BaseHit)
+  experience?: number;
+  debutDate?: string;
+  lastGameDate?: string;
+  salary?: number;
+  acquired?: string;
+  draftInfo?: DraftInfo;
+  
+  // Ratings
+  ratings?: PlayerRatings;
+  potential?: PlayerRatings;
+  
+  // Season stats
+  seasonBatting?: SeasonBattingStats;
+  seasonPitching?: SeasonPitchingStats;
+  
+  // Career totals
+  careerBatting?: CareerBattingStats;
+  careerPitching?: CareerPitchingStats;
+  
+  // Fielding
+  fieldingStats?: FieldingStats[];
+  
+  // Awards
+  awards?: PlayerAwards;
+  
+  // History
+  seasonHistory?: SeasonHistoryEntry[];
+  achievements?: PlayerAchievement[];
+}
+
+export interface DraftInfo {
+  year: number;
+  round: number;
+  pick: number;
+  team: string;
+}
+
+export interface PlayerRatings {
+  discipline: number;   // DI
+  contact: number;     // CN
+  power: number;       // BA
+  speed: number;       // SP
+  runAccuracy: number; // RA
+  glove: number;       // GL
+  arm: number;         // AR
+  endurance: number;   // EN
+}
+
+export interface SeasonBattingStats {
+  year: number;
+  teamId: string;
+  teamName: string;
+  gamesPlayed: number;
+  pa: number;
+  ab: number;
+  runs: number;
+  hits: number;
+  doubles: number;
+  triples: number;
+  homeRuns: number;
+  rbi: number;
+  walks: number;
+  strikeouts: number;
+  stolenBases: number;
+  caughtStealing: number;
+  avg: number;
+  obp: number;
+  slg: number;
+  ops: number;
+  // Extended
+  tb: number;
+  gbFb: number;
+  sf: number;
+  hbp: number;
+  gdp: number;
+  roe: number;
+  xb: number;
+  bro: number;
+  sa: number;
+  rc: number;
+  lWts: number;
+  abHr: number;
+  tbpa: number;
+}
+
+export interface CareerBattingStats {
+  gamesPlayed: number;
+  pa: number;
+  ab: number;
+  runs: number;
+  hits: number;
+  doubles: number;
+  triples: number;
+  homeRuns: number;
+  rbi: number;
+  walks: number;
+  strikeouts: number;
+  stolenBases: number;
+  caughtStealing: number;
+  avg: number;
+  obp: number;
+  slg: number;
+  ops: number;
+}
+
+export interface SeasonPitchingStats {
+  year: number;
+  teamId: string;
+  teamName: string;
+  gamesPlayed: number;
+  gamesStarted: number;
+  wins: number;
+  losses: number;
+  era: number;
+  innings: number;
+  hits: number;
+  runs: number;
+  earnedRuns: number;
+  walks: number;
+  strikeouts: number;
+  hr: number;
+  // Extended
+  so9: number;
+  bb9: number;
+  soBb: number;
+  go: number;
+  fo: number;
+  ffo: number;
+  ir: number;
+  irs: number;
+  oavg: number;
+  oobp: number;
+  oslg: number;
+  oops: number;
+  lWts: number;
+  babip: number;
+}
+
+export interface CareerPitchingStats {
+  gamesPlayed: number;
+  gamesStarted: number;
+  wins: number;
+  losses: number;
+  era: number;
+  innings: number;
+  hits: number;
+  runs: number;
+  earnedRuns: number;
+  walks: number;
+  strikeouts: number;
+  homeRuns: number;
+  so9: number;
+  bb9: number;
+  soBb: number;
+  go: number;
+  fo: number;
+  oavg: number;
+  oobp: number;
+  oslg: number;
+  oops: number;
+}
+
+export interface FieldingStats {
+  position: string;
+  gamesPlayed: number;
+  po: number;
+  a: number;
+  e: number;
+  tc: number;
+  dp: number;
+  sb: number;
+  cs: number;
+  csPct: number;
+  pct: number;
+  rng: number;
+}
+
+export interface PlayerAwards {
+  mvp: number;
+  allStar: number;
+  goldGlove: number;
+  silverSlugger: number;
+  cyYoung: number;
+  roty: number;
+  playerOfGame: number;
+  worldSeriesRings: number;
+  hallOfFameScore: number;
+  hallOfFameInducted: boolean;
+  hallOfFameYear?: number;
+}
+
+export interface PlayerAchievement {
+  date: string;
+  achievement: string;
+  opponent: string;
+  opponentId: string;
+  result: string;
+  gameId: string;
+}
+
+export interface SeasonHistoryEntry {
+  year: number;
+  teamId: string;
+  teamName: string;
+  position: string;
+  gamesPlayed: number;
+  avg: number;
+  hr: number;
+  rbi: number;
+  wins?: number;
+  losses?: number;
+  era?: number;
 }
 
 export type Position = 

@@ -2,6 +2,10 @@ import React from 'react';
 import './PlayersPage.css';
 import { Player } from '../types';
 
+interface PlayersPageProps {
+  onPlayerClick?: (player: Player) => void;
+}
+
 // Mock player data
 const mockPlayers: Player[] = [
   {
@@ -15,6 +19,81 @@ const mockPlayers: Player[] = [
     stats: { gamesPlayed: 58, atBats: 230, hits: 82, homeRuns: 18, rbi: 52, battingAvg: 0.357, ops: 1.042, stolenBases: 24 },
     contract: { status: 'signed', teamId: 't1', teamName: 'Solana Sluggers', salary: 15000, duration: 3, seasonsRemaining: 2 },
     upcomingGames: [],
+    // Extended data
+    experience: 8,
+    debutDate: '2018-04-03',
+    salary: 2500000,
+    acquired: 'Free Agent, 2022',
+    throwingHand: 'R',
+    battingHand: 'R',
+    height: 72,
+    weight: 195,
+    age: 31,
+    ratings: { discipline: 82, contact: 95, power: 88, speed: 90, runAccuracy: 78, glove: 85, arm: 78, endurance: 82 },
+    potential: { discipline: 85, contact: 98, power: 92, speed: 92, runAccuracy: 82, glove: 88, arm: 82, endurance: 85 },
+    seasonBatting: {
+      year: 2026,
+      teamId: 't1',
+      teamName: 'Solana Sluggers',
+      gamesPlayed: 145,
+      pa: 612,
+      ab: 538,
+      runs: 98,
+      hits: 172,
+      doubles: 32,
+      triples: 8,
+      homeRuns: 28,
+      rbi: 95,
+      walks: 62,
+      strikeouts: 95,
+      stolenBases: 24,
+      caughtStealing: 6,
+      avg: 0.320,
+      obp: 0.385,
+      slg: 0.545,
+      ops: 0.930,
+      tb: 293,
+      gbFb: 1.15,
+      sf: 12,
+      hbp: 8,
+      gdp: 12,
+      roe: 5,
+      xb: 68,
+      bro: 0.742,
+      sa: 0.185,
+      rc: 112.5,
+      lWts: 42.18,
+      abHr: 19.2,
+      tbpa: 0.479
+    },
+    careerBatting: {
+      gamesPlayed: 1245,
+      pa: 5180,
+      ab: 4520,
+      runs: 825,
+      hits: 1420,
+      doubles: 285,
+      triples: 45,
+      homeRuns: 245,
+      rbi: 890,
+      walks: 580,
+      strikeouts: 820,
+      stolenBases: 145,
+      caughtStealing: 38,
+      avg: 0.314,
+      obp: 0.378,
+      slg: 0.518,
+      ops: 0.896
+    },
+    fieldingStats: [
+      { position: 'CF', gamesPlayed: 138, po: 285, a: 12, e: 3, tc: 300, dp: 8, sb: 0, cs: 0, csPct: 0, pct: 0.990, rng: 2.15 }
+    ],
+    awards: { mvp: 1, allStar: 4, goldGlove: 2, silverSlugger: 3, cyYoung: 0, roty: 0, playerOfGame: 45, worldSeriesRings: 1, hallOfFameScore: 0, hallOfFameInducted: false },
+    seasonHistory: [
+      { year: 2026, teamId: 't1', teamName: 'Solana Sluggers', position: 'CF', gamesPlayed: 145, avg: 0.320, hr: 28, rbi: 95 },
+      { year: 2025, teamId: 't1', teamName: 'Solana Sluggers', position: 'CF', gamesPlayed: 158, avg: 0.312, hr: 32, rbi: 102 },
+      { year: 2024, teamId: 't1', teamName: 'Solana Sluggers', position: 'CF', gamesPlayed: 155, avg: 0.298, hr: 25, rbi: 88 },
+    ]
   },
   {
     id: 'p2',
@@ -27,6 +106,61 @@ const mockPlayers: Player[] = [
     stats: { gamesPlayed: 22, atBats: 10, hits: 2, homeRuns: 0, rbi: 1, battingAvg: 0.200, ops: 0.450, stolenBases: 0, wins: 14, losses: 3, era: 2.45, strikeouts: 198, innings: 158 },
     contract: { status: 'signed', teamId: 't1', teamName: 'Solana Sluggers', salary: 18000, duration: 4, seasonsRemaining: 3 },
     upcomingGames: [],
+    // Extended pitcher data
+    experience: 6,
+    debutDate: '2020-04-15',
+    salary: 3200000,
+    acquired: 'Draft, 2018 Round 2',
+    draftYear: 2018,
+    draftRound: 2,
+    draftPick: 45,
+    draftedBy: 'Solana Sluggers',
+    throwingHand: 'R',
+    battingHand: 'R',
+    height: 76,
+    weight: 225,
+    age: 28,
+    ratings: { discipline: 70, contact: 45, power: 50, speed: 40, runAccuracy: 55, glove: 60, arm: 95, endurance: 85 },
+    potential: { discipline: 78, contact: 50, power: 55, speed: 45, runAccuracy: 60, glove: 65, arm: 98, endurance: 90 },
+    seasonPitching: {
+      year: 2026,
+      teamId: 't1',
+      teamName: 'Solana Sluggers',
+      gamesPlayed: 28,
+      gamesStarted: 28,
+      wins: 16,
+      losses: 8,
+      era: 3.12,
+      innings: 195.2,
+      hits: 175,
+      runs: 72,
+      earnedRuns: 68,
+      walks: 55,
+      strikeouts: 205,
+      hr: 18,
+      so9: 9.4,
+      bb9: 2.5,
+      soBb: 3.73,
+      go: 145,
+      fo: 168,
+      ffo: 22,
+      ir: 18,
+      irs: 8,
+      oavg: 0.238,
+      oobp: 0.312,
+      oslg: 0.385,
+      oops: 0.697,
+      lWts: 45.2,
+      babip: 0.285
+    },
+    fieldingStats: [
+      { position: 'P', gamesPlayed: 28, po: 12, a: 18, e: 1, tc: 31, dp: 2, sb: 0, cs: 0, csPct: 0, pct: 0.968, rng: 1.07 }
+    ],
+    awards: { mvp: 0, allStar: 2, goldGlove: 0, silverSlugger: 0, cyYoung: 1, roty: 0, playerOfGame: 12, worldSeriesRings: 1, hallOfFameScore: 0, hallOfFameInducted: false },
+    seasonHistory: [
+      { year: 2026, teamId: 't1', teamName: 'Solana Sluggers', position: 'P', gamesPlayed: 28, avg: 0, hr: 0, rbi: 0, wins: 16, losses: 8, era: 3.12 },
+      { year: 2025, teamId: 't1', teamName: 'Solana Sluggers', position: 'P', gamesPlayed: 30, avg: 0, hr: 0, rbi: 0, wins: 18, losses: 6, era: 2.85 },
+    ]
   },
   {
     id: 'p3',
@@ -60,8 +194,15 @@ const getOverallColor = (overall: number): string => {
   return '#94a3b8';
 };
 
-const PlayersPage: React.FC = () => {
+const PlayersPage: React.FC<PlayersPageProps> = ({ onPlayerClick }) => {
   const [selectedPlayer, setSelectedPlayer] = React.useState<Player | null>(null);
+
+  const handleCardClick = (player: Player) => {
+    setSelectedPlayer(player);
+    if (onPlayerClick) {
+      onPlayerClick(player);
+    }
+  };
 
   return (
     <div className="players-page">
@@ -80,7 +221,7 @@ const PlayersPage: React.FC = () => {
           <div
             key={player.id}
             className={`baseball-card ${selectedPlayer?.id === player.id ? 'selected' : ''}`}
-            onClick={() => setSelectedPlayer(player)}
+            onClick={() => handleCardClick(player)}
           >
             <div className="card-top" style={{ borderColor: getOverallColor(player.overall) }}>
               <div className="card-overall" style={{ background: getOverallColor(player.overall) }}>

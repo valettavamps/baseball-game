@@ -4,10 +4,12 @@ import Sidebar from './components/Sidebar';
 import MobileMenu from './components/MobileMenu';
 import HomePage from './pages/HomePage';
 import PlayersPage from './pages/PlayersPage';
+import PlayerProfilePage from './pages/PlayerProfilePage';
 import MultiLeagueSeasonPage from './pages/MultiLeagueSeasonPage';
 import SeasonSimulatorPage from './pages/SeasonSimulatorPage';
 import CreatePlayerPage from './pages/CreatePlayerPage';
 import MyOffersPage from './pages/MyOffersPage';
+import TeamsPage from './pages/TeamsPage';
 import AuthPage from './pages/AuthPage';
 import './styles/globals.css';
 import './App.css';
@@ -18,6 +20,7 @@ const App: React.FC = () => {
   const [userData, setUserData] = useState<any>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [selectedPlayer, setSelectedPlayer] = useState<any>(null);
 
   const handleAuthSuccess = (user: any) => {
     setIsSignedIn(true);
@@ -34,6 +37,16 @@ const App: React.FC = () => {
 
   const handleSignInClick = () => {
     setShowAuthModal(true);
+  };
+
+  const handlePlayerClick = (player: any) => {
+    setSelectedPlayer(player);
+    setActivePage('player-profile');
+  };
+
+  const handleBackFromProfile = () => {
+    setSelectedPlayer(null);
+    setActivePage('players');
   };
 
   const renderPage = () => {
@@ -66,9 +79,15 @@ const App: React.FC = () => {
       case 'simulator':
         return <SeasonSimulatorPage />;
       case 'players':
-        return <PlayersPage />;
+        return <PlayersPage onPlayerClick={handlePlayerClick} />;
+      case 'player-profile':
+        return selectedPlayer ? (
+          <PlayerProfilePage player={selectedPlayer} onBack={handleBackFromProfile} />
+        ) : (
+          <PlayersPage onPlayerClick={handlePlayerClick} />
+        );
       case 'team':
-        return <div className="placeholder-page"><h2>🏟️ Team</h2><p>Team management coming soon...</p></div>;
+        return <TeamsPage />;
       case 'marketplace':
         return <div className="placeholder-page"><h2>🏪 Marketplace</h2><p>Player marketplace coming soon...</p></div>;
       default:

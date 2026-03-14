@@ -299,6 +299,234 @@ export interface StoredPlayer {
     signedAt: number;
   };
   createdAt: number;
+  
+  // Extended player data (from BaseHit)
+  experience?: number;
+  debutDate?: string;
+  lastGameDate?: string;
+  salary?: number;
+  acquired?: string;
+  draftYear?: number;
+  draftRound?: number;
+  draftPick?: number;
+  draftedBy?: string;
+  
+  // Current ratings (1-100 scale)
+  ratings?: PlayerRatings;
+  
+  // Potential ratings (1-100 scale)
+  potential?: PlayerRatings;
+  
+  // Season batting stats (extended)
+  seasonBatting?: SeasonBattingStats;
+  
+  // Career batting totals
+  careerBatting?: CareerBattingStats;
+  
+  // Fielding stats
+  fieldingStats?: FieldingStats;
+  
+  // Pitching stats (extended)
+  seasonPitching?: SeasonPitchingStats;
+  careerPitching?: CareerPitchingStats;
+  
+  // Awards and achievements
+  awards?: PlayerAwards;
+  
+  // Achievement history
+  achievements?: PlayerAchievement[];
+  
+  // Season history (year-by-year)
+  seasonHistory?: SeasonHistoryEntry[];
+}
+
+// Current/Potential ratings (both hitting and fielding)
+export interface PlayerRatings {
+  // Hitting
+  discipline: number;   // DI
+  contact: number;      // CN
+  power: number;        // BA
+  speed: number;        // SP
+  runAccuracy: number;   // RA
+  // Fielding
+  glove: number;        // GL
+  arm: number;          // AR
+  endurance: number;    // EN
+}
+
+// Extended batting stats per season
+export interface SeasonBattingStats {
+  year: number;
+  teamId: string;
+  teamName: string;
+  gamesPlayed: number;
+  pa: number;
+  ab: number;
+  runs: number;
+  hits: number;
+  doubles: number;      // 2B
+  triples: number;      // 3B
+  homeRuns: number;    // HR
+  rbi: number;
+  walks: number;        // BB
+  strikeouts: number;   // SO
+  stolenBases: number;  // SB
+  caughtStealing: number; // CS
+  avg: number;
+  obp: number;
+  slg: number;
+  ops: number;
+  // Extended
+  tb: number;           // Total Bases
+  gbFb: number;         // GB/FB ratio
+  sf: number;           // Sacrifice Flies
+  hbp: number;          // Hit by Pitch
+  gdp: number;          // Ground into Double Play
+  roe: number;          // Reached on Error
+  xb: number;           // Extra Base Hits
+  bro: number;          // Balls in Play
+  sa: number;           // Speed Average
+  rc: number;           // Runs Created
+  lWts: number;         // Linear Weights
+  abHr: number;         // AB per HR
+  tbpa: number;         // Total Bases per PA
+}
+
+// Career batting totals
+export interface CareerBattingStats {
+  gamesPlayed: number;
+  pa: number;
+  ab: number;
+  runs: number;
+  hits: number;
+  doubles: number;
+  triples: number;
+  homeRuns: number;
+  rbi: number;
+  walks: number;
+  strikeouts: number;
+  stolenBases: number;
+  caughtStealing: number;
+  avg: number;
+  obp: number;
+  slg: number;
+  ops: number;
+}
+
+// Fielding stats per position
+export interface FieldingStats {
+  position: string;
+  gamesPlayed: number;
+  po: number;            // Putouts
+  a: number;             // Assists
+  e: number;             // Errors
+  tc: number;            // Total Chances
+  dp: number;            // Double Plays
+  sb: number;            // Stolen Bases allowed (catchers)
+  cs: number;            // Caught Stealing
+  csPct: number;         // Caught Stealing %
+  pct: number;           // Fielding %
+  rng: number;           // Range Factor
+}
+
+// Extended pitching stats per season
+export interface SeasonPitchingStats {
+  year: number;
+  teamId: string;
+  teamName: string;
+  gamesPlayed: number;
+  gamesStarted: number;
+  wins: number;
+  losses: number;
+  era: number;
+  innings: number;
+  hits: number;
+  runs: number;
+  earnedRuns: number;
+  walks: number;
+  strikeouts: number;
+  hr: number;
+  // Extended
+  so9: number;           // K/9
+  bb9: number;           // BB/9
+  soBb: number;          // K/BB ratio
+  go: number;            // Ground Outs
+  fo: number;            // Fly Outs
+  ffo: number;           // Force Fly Outs
+  ir: number;            // Inherited Runners
+  irs: number;           // Inherited Runs Scored
+  oavg: number;          // Opponent AVG
+  oobp: number;          // Opponent OBP
+  oslg: number;          // Opponent SLG
+  oops: number;          // Opponent OPS
+  lWts: number;          // Linear Weights
+  babip: number;         // BABIP
+}
+
+// Career pitching totals
+export interface CareerPitchingStats {
+  gamesPlayed: number;
+  gamesStarted: number;
+  wins: number;
+  losses: number;
+  era: number;
+  innings: number;
+  hits: number;
+  runs: number;
+  earnedRuns: number;
+  walks: number;
+  strikeouts: number;
+  homeRuns: number;
+  // Extended
+  so9: number;
+  bb9: number;
+  soBb: number;
+  go: number;
+  fo: number;
+  oavg: number;
+  oobp: number;
+  oslg: number;
+  oops: number;
+}
+
+// Player awards (counts)
+export interface PlayerAwards {
+  mvp: number;
+  allStar: number;
+  goldGlove: number;
+  silverSlugger: number;
+  cyYoung: number;
+  roty: number;
+  playerOfGame: number;
+  worldSeriesRings: number;
+  hallOfFameScore: number;
+  hallOfFameInducted: boolean;
+  hallOfFameYear?: number;
+}
+
+// Single achievement entry
+export interface PlayerAchievement {
+  date: string;
+  achievement: string;
+  opponent: string;
+  opponentId: string;
+  result: string;
+  gameId: string;
+}
+
+// Season history entry (for career view)
+export interface SeasonHistoryEntry {
+  year: number;
+  teamId: string;
+  teamName: string;
+  position: string;
+  gamesPlayed: number;
+  avg: number;
+  hr: number;
+  rbi: number;
+  wins?: number;
+  losses?: number;
+  era?: number;
 }
 
 export function createPlayer(player: Omit<StoredPlayer, 'id' | 'createdAt'>): StoredPlayer {

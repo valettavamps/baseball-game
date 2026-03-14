@@ -256,3 +256,106 @@ export async function updateOfferStatus(offerId: string, status: string): Promis
   const updated = allOffers.map(o => o.id === offerId ? { ...o, status: status as any } : o);
   setItem('contractOffers', updated);
 }
+
+// ============ TEAMS ============
+
+export async function getAllTeamsFromDb(): Promise<StoredTeam[]> {
+  if (isSupabaseConfigured() && supabase) {
+    const { data, error } = await supabase
+      .from('teams')
+      .select('*')
+      .order('tier', { ascending: true })
+      .order('rating', { ascending: false });
+    
+    if (!error && data && data.length > 0) {
+      return data.map(t => ({
+        id: t.id,
+        name: t.name,
+        city: t.city,
+        abbreviation: t.abbreviation,
+        tier: t.tier,
+        tierName: t.tier_name,
+        rating: t.rating,
+        wins: t.wins,
+        losses: t.losses,
+        runsScored: t.runs_scored,
+        runsAllowed: t.runs_allowed,
+        streak: t.streak || '',
+        streakCount: t.streak_count || 0,
+        revenue: t.revenue || 0,
+        attendance: t.attendance || 0,
+        ownerId: t.owner_id,
+        stakers: t.stakers || []
+      }));
+    }
+  }
+
+  // Fallback to localStorage
+  const localTeams = getItem<StoredTeam[]>('teams');
+  if (localTeams && localTeams.length > 0) return localTeams;
+  
+  // Generate teams if none exist
+  const { generateAllTeams } = await import('./localStorage');
+  return generateAllTeams();
+}
+
+export async function getTeamByIdDb(teamId: string): Promise<StoredTeam | null> {
+  if (isSupabaseConfigured() && supabase) {
+    const { data, error } = await supabase
+      .from('teams')
+      .select('*')
+      .eq('id', teamId)
+      .single();
+    
+    if (!error && data) {
+      return {
+        id: data.id,
+        name: data.name,
+        city: data.city,
+        abbreviation: data.abbreviation,
+        tier: data.tier,
+        tierName: data.tier_name,
+        rating: data.rating,
+        wins: data.wins,
+        losses: data.losses,
+        runsScored: data.runs_scored,
+        runsAllowed: data.runs_allowed,
+        streak: data.streak || '',
+        streakCount: data.streak_count || 0,
+        revenue: data.revenue || 0,
+        attendance: data.attendance || 0,
+        ownerId: data.owner_id,
+        stakers: data.stakers || []
+      };
+    }
+  }
+
+  const teams = getItem<StoredTeam[]>('teams') || [];
+  return teams.find(t => t.id === teamId) || null;
+}
+
+export async function updateTeamDb(teamId: string, updates: Partial<StoredTeam>): Promise<StoredTeam | null> {
+  if (isSupabaseConfigured() && supabase) {
+    const dbUpdates: Record<string, any> = {};
+    if (updates.wins !== undefined) dbUpdates.wins = updates.wins;
+    if (updates.losses !== undefined) dbUpdates.losses = updates.losses;
+    if (updates.runsScored !== undefined) dbUpdates.runs_scored = updates.runsScored;
+    if (updates.runsAllowed !== undefined) dbUpdates.runs_allowed = updates.runsAllowed;
+    if (updates.rating !== undefined) dbUpdates.rating = updates.rating;
+    if (updates.revenue !== undefined) dbUpdates.revenue = updates.revenue;
+    if (updates.attendance !== undefined) dbUpdates.attendance = updates.attendance;
+    if (updates.streak !== undefined) dbUpdates.streak = updates.streak;
+    if (updates.streakCount !== undefined) dbUpdates.streak_count = updates.streakCount;
+    if (updates.ownerId !== undefined) dbUpdates.owner_id = updates.ownerId;
+    
+    await supabase.from('teams').update(dbUpdates).eq('id', teamId);
+  }
+
+  // Also update localStorage
+  const teams = getItem<StoredTeam[]>('teams') || [];
+  const index = teams.findIndex(t => t.id === teamId);
+  if (index === -1) return null;
+  teams[index] = { ...teams[index], ...updates };
+  setItem('teams', teams);
+  return teams[index];
+}
