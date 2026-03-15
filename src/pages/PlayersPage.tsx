@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './PlayersPage.css';
 import { Player } from '../types';
+import { getPlayersByUser } from '../services/db';
 
 // Convert number to letter grade
 function numberToGrade(value: number): string {
@@ -235,9 +236,37 @@ const PlayersPage: React.FC<PlayersPageProps> = ({ onPlayerClick }) => {
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [activeTab, setActiveTab] = useState<'players' | 'finances'>('players');
   const [searchTerm, setSearchTerm] = useState('');
+  const [userPlayers, setUserPlayers] = useState<Player[]>([]);
+
+  // Load user's players from Supabase on mount
+  useEffect(() => {
+    const loadPlayers = async () => {
+      const userId = localStorage.getItem('userId');
+      if (userId) {
+        const players = await getPlayersByUser(userId);
+        // Convert StoredPlayer to Player format
+        const formattedPlayers: Player[] = players.map(p => ({
+          id: p.id,
+          name: `${p.firstName} ${p.lastName}`,
+          firstName: p.firstName,
+          lastName: p.lastName,
+          position: p.position,
+          teamId: p.userId,
+          overall: p.overall,
+          attributes: p.attributes,
+          stats: { gamesPlayed: 0, atBats: 0, hits: 0, homeRuns: 0, rbi: 0, battingAvg: 0, ops: 0, stolenBases: 0 },
+          contract: { status: 'signed', teamId: p.userId, salary: 0, duration: 0, seasonsRemaining: 0 },
+          upcomingGames: []
+        }));
+        setUserPlayers(formattedPlayers);
+      }
+    };
+    loadPlayers();
+  }, []);
 
   // Filter players based on search
-  const filteredPlayers = mockPlayers.filter(player =>
+  const playersToShow = userPlayers.length > 0 ? userPlayers : mockPlayers;
+  const filteredPlayers = playersToShow.filter(player =>
     player.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     player.position.toLowerCase().includes(searchTerm.toLowerCase())
   );
