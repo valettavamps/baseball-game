@@ -282,11 +282,13 @@ export interface AttributePotential {
   fielding: number;
   arm: number;
   discipline: number;
-  endurance: number;
-  velocity: number;
-  control: number;
-  movement: number;
-  stamina: number;
+  // Hitter-specific
+  endurance?: number;
+  // Pitcher-specific
+  velocity?: number;
+  control?: number;
+  movement?: number;
+  stamina?: number;
 }
 
 export interface PlayerAttributes {
@@ -296,9 +298,10 @@ export interface PlayerAttributes {
   fielding: number;    // 1-100
   arm: number;         // 1-100
   discipline: number;  // 1-100
-  endurance: number;   // Hitters only - 1-100
-  stamina: number;     // Pitchers only - 1-100
-  // Pitching (if applicable)
+  // Hitter-specific
+  endurance?: number;   // Hitters only - 1-100
+  // Pitcher-specific
+  stamina?: number;    // Pitchers only - 1-100
   velocity?: number;
   control?: number;
   movement?: number;
