@@ -8,6 +8,33 @@
 
 ---
 
+## ✅ ACCOMPLISHED (2026-03-15)
+
+### Player Creation System (2026-03-15)
+- Created `src/engine/PlayerCreator.ts` - Full player creation system
+- **Rarity system:** Epic (~1%), Rare (~5%), Common (~94%)
+- **Rarity bonuses:** Epic (+30 pts hitters, +15 pts pitchers), Rare (+15/+8 pts)
+- **Attributes:** Single "endurance" for both hitters and pitchers (BaseHit-style)
+- **Hitters:** 7 attrs (power, contact, speed, fielding, arm, discipline, endurance), 280 pts
+- **Pitchers:** 4 attrs (velocity, control, movement, endurance), 160 pts
+- **Hidden attributes:** clutch, durability, consistency, workEthic, leadership, intelligence
+- **Potential:** 10-40 pts growth per attribute
+- **Letter grades:** A+, A, A-, B+, B, B-, C+, C, C-, D+, D, D-, F
+
+### My Players Integration (2026-03-15)
+- Connected PlayersPage to Supabase (create & load players)
+- Added retire functionality with Active/Retired tabs
+- Player detail shows: age, height, weight, throws, bats
+- Added `retirePlayer()` and `getRetiredPlayers()` to `db.ts`
+- Added retired field to StoredPlayer in `localStorage.ts`
+
+### TypeScript Fixes (2026-03-15)
+- Fixed endurance vs stamina - unified to single endurance attribute
+- Fixed PlayerAttributes type errors
+- Added numberToGrade utility for letter grade display
+
+---
+
 ## ✅ ACCOMPLISHED (2026-03-14)
 
 ### Teams Page (2026-03-14)
