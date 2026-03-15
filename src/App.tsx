@@ -10,6 +10,10 @@ import SeasonSimulatorPage from './pages/SeasonSimulatorPage';
 import CreatePlayerPage from './pages/CreatePlayerPage';
 import MyOffersPage from './pages/MyOffersPage';
 import TeamsPage from './pages/TeamsPage';
+import MyTeamsPage from './pages/MyTeamsPage';
+import LeaguesPage from './pages/LeaguesPage';
+import StandingsPage from './pages/StandingsPage';
+import GamesPage from './pages/GamesPage';
 import AuthPage from './pages/AuthPage';
 import './styles/globals.css';
 import './App.css';
@@ -87,7 +91,13 @@ const App: React.FC = () => {
           <PlayersPage onPlayerClick={handlePlayerClick} />
         );
       case 'team':
-        return <TeamsPage />;
+        return <MyTeamsPage />;
+      case 'leagues':
+        return <LeaguesPage />;
+      case 'standings':
+        return <StandingsPage />;
+      case 'games':
+        return <GamesPage />;
       case 'marketplace':
         return <div className="placeholder-page"><h2>🏪 Marketplace</h2><p>Player marketplace coming soon...</p></div>;
       default:

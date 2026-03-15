@@ -10,6 +10,9 @@ export interface Player {
   overall: number;
   avatar?: string;
   
+  // Rarity
+  rarity?: PlayerRarity;
+  
   // Physical
   throwingHand?: string;
   battingHand?: string;
@@ -19,6 +22,12 @@ export interface Player {
   
   // Attributes
   attributes: PlayerAttributes;
+  
+  // Hidden attributes (randomized after creation)
+  hiddenAttributes?: HiddenAttributes;
+  
+  // Potential (growth ceiling per attribute)
+  growthPotential?: AttributePotential;
   
   // Stats
   stats: PlayerStats;
@@ -252,6 +261,34 @@ export type Position =
   | 'P' | 'C' | '1B' | '2B' | '3B' | 'SS' 
   | 'LF' | 'CF' | 'RF' | 'DH';
 
+// Player rarity tiers
+export type PlayerRarity = 'common' | 'rare' | 'epic';
+
+// Hidden attributes (randomized after creation)
+export interface HiddenAttributes {
+  clutch: number;        // Performance in high-pressure situations
+  durability: number;     // Resistance to injury
+  consistency: number;    // Performance variance game-to-game
+  workEthic: number;      // Development speed
+  leadership: number;      // Team morale boost
+  intelligence: number;   // Game awareness
+}
+
+// Potential per attribute (growth ceiling)
+export interface AttributePotential {
+  power: number;
+  contact: number;
+  speed: number;
+  fielding: number;
+  arm: number;
+  discipline: number;
+  endurance: number;
+  velocity: number;
+  control: number;
+  movement: number;
+  stamina: number;
+}
+
 export interface PlayerAttributes {
   power: number;       // 1-100
   contact: number;     // 1-100
@@ -259,7 +296,8 @@ export interface PlayerAttributes {
   fielding: number;    // 1-100
   arm: number;         // 1-100
   discipline: number;  // 1-100
-  stamina: number;     // 1-100
+  endurance: number;   // Hitters only - 1-100
+  stamina: number;     // Pitchers only - 1-100
   // Pitching (if applicable)
   velocity?: number;
   control?: number;

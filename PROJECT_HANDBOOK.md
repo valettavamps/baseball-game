@@ -8,6 +8,31 @@
 
 ---
 
+## ✅ ACCOMPLISHED (2026-03-14)
+
+### Teams Page (2026-03-14)
+- Created `src/pages/TeamsPage.tsx` - Full teams browser
+- Created `src/pages/TeamsPage.css` - Styling
+- **Features:**
+  - Standings tab with full league standings sorted by wins
+  - All Teams tab with teams grouped by tier (Diamond/Platinum/Gold/Silver/Bronze)
+  - Tier filtering - click to filter by specific tier
+  - Team detail view with stats, record, run differential, streak
+  - 100 teams across 5 tiers (10 Diamond, 16 Platinum, 20 Gold, 24 Silver, 30 Bronze)
+- Added to App.tsx navigation (`team` page)
+- Connected to Supabase via `db.ts` functions:
+  - `getAllTeamsFromDb()` - Loads/generates teams
+  - `getTeamByIdDb()` - Get single team
+  - `updateTeamDb()` - Update team stats
+
+### TypeScript Fixes (2026-03-14)
+- Fixed Player type in `src/types/index.ts` - Added missing fields:
+  - throwingHand, battingHand, height, weight, age
+  - draftYear, draftRound, draftPick, draftedBy
+- Fixed JSX syntax errors in `PlayerProfilePage.tsx` - Adjacent elements wrapped in fragments
+
+---
+
 ## ✅ ACCOMPLISHED (2026-03-13)
 
 ### Season Simulator Page (2026-03-13)
@@ -96,18 +121,19 @@ Created `docs/BASEBALL-RESARCH.md` with:
 ### What's Working
 - ✅ User signup/login → saves to Supabase
 - ✅ Player creation → saves to Supabase  
+- ✅ Teams page with standings & details
 - ✅ Live game visualizer on homepage
 - ✅ Sample game displays with mock rosters
 - ✅ Season Simulator page - runs 160 games, shows schedule/stats
 
-### Known Issues (2026-03-13)
+### Known Issues (2026-03-14)
 - Stats may still be inflated (need validation against MLB)
 - Box score modal may not display properly on mobile
 - Sortable columns (click to sort) not implemented yet
 - Pitching stats calculation needs improvement
 
 ### What's Not Connected Yet
-- ❌ Game engine not connected to live visualizer (but Season Simulator now works!)
+- ❌ Game engine not connected to live visualizer (but Season Simulator works!)
 - ❌ No commissioner control center UI
 - ❌ No team owner sliders
 - ❌ No consumables implemented
@@ -127,6 +153,19 @@ Created `docs/BASEBALL-RESARCH.md` with:
 2. ~~Run full 9-inning simulations~~ - Done via Season Simulator page
 3. **Create real team/league data** - Generate teams with player rosters in Supabase
 4. **Game scheduling system** - Set up games between teams, track schedule
+5. **Player Rarity System** - Add epic/rare/common tiers to player generation:
+   - Epic (~1%): 95-99 overall, special hidden attributes
+   - Rare (~5%): 80-90 overall
+   - Common (~94%): based on team tier
+6. **Full Player Creation System** - Implement John's detailed creation mechanics:
+   - Free first player, then 500 BALLS per player
+   - Hitters: 7 attrs (power, contact, speed, fielding, arm, discipline, endurance), 280 pts
+   - Pitchers: 4 attrs (velocity, control, movement, stamina), 160 pts
+   - Random distribution: low 10, high 70 per attr
+   - Rarity bonuses: Rare (+15/8 pts), Epic (+30/15 pts)
+   - Paid creation: +30 extra distributable points
+   - Hidden attrs + Potential (10-40 pts growth per attr)
+   - Display as letter grades (A+, A, A-, B+, etc.)
 
 ### Phase 2: User Features
 5. **Commissioner Control Center UI** - Page to adjust league settings (HR rate, K rate, etc.)
@@ -155,12 +194,14 @@ Created `docs/BASEBALL-RESARCH.md` with:
 - `src/engine/types/PlayerTypes.ts` - Player attributes & fatigue
 
 ### Pages
-- `src/pages/SeasonSimulatorPage.tsx` - **NEW!** Full season sim with stats & box scores
+- `src/pages/TeamsPage.tsx` - **NEW!** Teams browser with standings & details
+- `src/pages/SeasonSimulatorPage.tsx` - Full season sim with stats & box scores
 - `src/pages/HomePage.tsx` - Homepage with visualizer
 - `src/pages/LiveGamePage.tsx` - Standalone game page (demo)
 
 ### Data
 - `src/services/db.ts` - Database operations (Supabase + localStorage fallback)
+- `src/types/index.ts` - TypeScript types (Player, Team, etc.)
 
 ---
 
@@ -199,15 +240,16 @@ Includes:
 ## 🤖 FOR NEW AI MODEL
 
 When resuming work:
-1. Read this file first
+1. Read this file (PROJECT_HANDBOOK.md) and MEMORY.md first
 2. Check Supabase is still connected (tables exist)
-3. Run `npm install` if needed
-4. Build with `npm run build`
-5. Deploy happens automatically via Netlify/GitHub
+3. Make changes locally, test with `npm run build` if possible
+4. Push to GitHub - Netlify auto-deploys
 
-**Key insight:** The simulation engine exists but isn't connected to the visualizer yet. Next step is wiring them together.
+**Build Issues?** Check `src/types/index.ts` for Player type fields - they must match what's used in components.
+
+**Key insight:** The simulation engine works via Season Simulator. Teams page now shows standings.
 
 ---
 
-*Last updated: 2026-03-12*
+*Last updated: 2026-03-14*
 *Maintainer: valettavamps*

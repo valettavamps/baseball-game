@@ -22,8 +22,11 @@ const menuItems: MenuItem[] = [
   { id: 'my-offers', label: 'My Offers', icon: '📬' },
   { id: 'season', label: 'Season', icon: '📅' },
   { id: 'simulator', label: 'Simulator', icon: '🎮' },
-  { id: 'players', label: 'Players', icon: '⚾' },
-  { id: 'team', label: 'My Team', icon: '🏟️' },
+  { id: 'players', label: 'My Players', icon: '⚾' },
+  { id: 'team', label: 'My Teams', icon: '🏟️' },
+  { id: 'leagues', label: 'Leagues', icon: '🏆' },
+  { id: 'standings', label: 'Standings', icon: '📊' },
+  { id: 'games', label: 'Games', icon: '🎯' },
   { id: 'marketplace', label: 'Marketplace', icon: '🏪' },
 ];
 

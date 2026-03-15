@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './PlayersPage.css';
 import { Player } from '../types';
 
@@ -6,7 +6,26 @@ interface PlayersPageProps {
   onPlayerClick?: (player: Player) => void;
 }
 
-// Mock player data
+// Mock transaction data
+interface Transaction {
+  id: string;
+  date: string;
+  type: 'buy' | 'sell' | 'deposit' | 'withdraw' | 'salary' | 'bonus' | 'signing' | 'trade';
+  amount: number;
+  description: string;
+}
+
+const mockTransactions: Transaction[] = [
+  { id: 't1', date: '2026-03-14', type: 'deposit', amount: 50000, description: 'BALLS Token Deposit' },
+  { id: 't2', date: '2026-03-12', type: 'salary', amount: 15000, description: 'Marcus Johnson Salary' },
+  { id: 't3', date: '2026-03-10', type: 'bonus', amount: 5000, description: 'Performance Bonus' },
+  { id: 't4', date: '2026-03-08', type: 'buy', amount: -25000, description: 'Bought BALLS' },
+  { id: 't5', date: '2026-03-05', type: 'signing', amount: -10000, description: 'Signing Bonus Paid' },
+  { id: 't6', date: '2026-03-01', type: 'deposit', amount: 100000, description: 'BALLS Token Deposit' },
+  { id: 't7', date: '2026-02-28', type: 'salary', amount: 18000, description: 'Diego Ramirez Salary' },
+  { id: 't8', date: '2026-02-25', type: 'withdraw', amount: -10000, description: 'Withdrew to Wallet' },
+];
+
 const mockPlayers: Player[] = [
   {
     id: 'p1',
@@ -195,7 +214,11 @@ const getOverallColor = (overall: number): string => {
 };
 
 const PlayersPage: React.FC<PlayersPageProps> = ({ onPlayerClick }) => {
-  const [selectedPlayer, setSelectedPlayer] = React.useState<Player | null>(null);
+  const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
+  const [activeTab, setActiveTab] = useState<'players' | 'finances'>('players');
+
+  // Calculate BALLS balance
+  const ballsBalance = mockTransactions.reduce((sum, t) => sum + t.amount, 0);
 
   const handleCardClick = (player: Player) => {
     setSelectedPlayer(player);
@@ -204,69 +227,60 @@ const PlayersPage: React.FC<PlayersPageProps> = ({ onPlayerClick }) => {
     }
   };
 
+  const renderFinancesTab = () => (
+    <div className="finances-tab">
+      <div className="finances-header">
+        <div className="balance-section">
+          <span className="balance-label">BALLS Balance</span>
+          <span className="balance-amount">{ballsBalance.toLocaleString()}</span>
+        </div>
+        <div className="balance-actions">
+          <button className="buy-balls-btn">Buy BALLS</button>
+          <button className="withdraw-btn">Withdraw</button>
+        </div>
+      </div>
+
+      <div className="transactions-section">
+        <h2>Transaction History</h2>
+        <div className="transactions-list">
+          {mockTransactions.map((tx) => (
+            <div key={tx.id} className="transaction-row">
+              <div className="tx-info">
+                <span className="tx-date">{tx.date}</span>
+                <span className="tx-desc">{tx.description}</span>
+              </div>
+              <span className={`tx-amount ${tx.amount >= 0 ? 'positive' : 'negative'}`}>
+                {tx.amount >= 0 ? '+' : ''}{tx.amount.toLocaleString()}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="players-page">
-      <div className="players-header">
-        <div>
-          <h1>My Players</h1>
-          <p className="players-subtitle">Your stable of {mockPlayers.length} players</p>
-        </div>
-        <button className="create-player-btn">
-          <span>+</span> Create Player
+      {/* Tabs */}
+      <div className="page-tabs">
+        <button 
+          className={`page-tab ${activeTab === 'players' ? 'active' : ''}`}
+          onClick={() => setActiveTab('players')}
+        >
+          Players
+        </button>
+        <button 
+          className={`page-tab ${activeTab === 'finances' ? 'active' : ''}`}
+          onClick={() => setActiveTab('finances')}
+        >
+          Finances
         </button>
       </div>
 
-      <div className="players-grid">
-        {mockPlayers.map((player) => (
-          <div
-            key={player.id}
-            className={`baseball-card ${selectedPlayer?.id === player.id ? 'selected' : ''}`}
-            onClick={() => handleCardClick(player)}
-          >
-            <div className="card-top" style={{ borderColor: getOverallColor(player.overall) }}>
-              <div className="card-overall" style={{ background: getOverallColor(player.overall) }}>
-                {player.overall}
-              </div>
-              <div className="card-position">{player.position}</div>
-            </div>
-            <div className="card-avatar">
-              <div className="avatar-placeholder">
-                {player.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
-              </div>
-            </div>
-            <div className="card-info">
-              <h3 className="card-name">{player.name}</h3>
-              <span className={`card-team ${!player.team ? 'free-agent' : ''}`}>
-                {player.team || 'Free Agent'}
-              </span>
-            </div>
-            <div className="card-quick-stats">
-              <div className="quick-stat">
-                <span className="qs-value">{player.stats.battingAvg.toFixed(3)}</span>
-                <span className="qs-label">AVG</span>
-              </div>
-              <div className="quick-stat">
-                <span className="qs-value">{player.stats.homeRuns}</span>
-                <span className="qs-label">HR</span>
-              </div>
-              <div className="quick-stat">
-                <span className="qs-value">{player.stats.rbi}</span>
-                <span className="qs-label">RBI</span>
-              </div>
-            </div>
-            <div className="card-contract-badge">
-              <span className={`contract-status ${player.contract.status}`}>
-                {player.contract.status === 'signed' 
-                  ? `${player.contract.seasonsRemaining}yr left` 
-                  : 'Free Agent'}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
+      {activeTab === 'players' ? renderPlayersTab() : renderFinancesTab()}
 
       {/* Player Detail Panel */}
-      {selectedPlayer && (
+      {selectedPlayer && activeTab === 'players' && (
         <div className="player-detail-overlay" onClick={() => setSelectedPlayer(null)}>
           <div className="player-detail" onClick={(e) => e.stopPropagation()}>
             <button className="close-detail" onClick={() => setSelectedPlayer(null)}>✕</button>
