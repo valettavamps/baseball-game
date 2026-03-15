@@ -250,7 +250,7 @@ const PlayersPage: React.FC<PlayersPageProps> = ({ onPlayerClick }) => {
           name: `${p.firstName} ${p.lastName}`,
           firstName: p.firstName,
           lastName: p.lastName,
-          position: p.position,
+          position: p.position as Player['position'],
           teamId: p.userId,
           overall: p.overall,
           attributes: p.attributes,
