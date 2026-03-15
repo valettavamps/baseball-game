@@ -216,6 +216,13 @@ const getOverallColor = (overall: number): string => {
 const PlayersPage: React.FC<PlayersPageProps> = ({ onPlayerClick }) => {
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [activeTab, setActiveTab] = useState<'players' | 'finances'>('players');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Filter players based on search
+  const filteredPlayers = mockPlayers.filter(player =>
+    player.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    player.position.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // Calculate BALLS balance
   const ballsBalance = mockTransactions.reduce((sum, t) => sum + t.amount, 0);
