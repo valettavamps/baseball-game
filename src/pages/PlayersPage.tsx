@@ -227,6 +227,36 @@ const PlayersPage: React.FC<PlayersPageProps> = ({ onPlayerClick }) => {
     }
   };
 
+  const renderPlayersTab = () => (
+    <div className="players-tab">
+      <div className="players-header">
+        <input
+          type="text"
+          placeholder="Search players..."
+          className="player-search"
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+      <div className="players-list">
+        {filteredPlayers.map((player) => (
+          <div
+            key={player.id}
+            className="player-card"
+            onClick={() => handlePlayerClick(player)}
+          >
+            <div className="player-info">
+              <span className="player-name">{player.name}</span>
+              <span className="player-position">{player.position}</span>
+            </div>
+            <div className="player-rating">
+              <span className="rating-value">{player.overall}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
   const renderFinancesTab = () => (
     <div className="finances-tab">
       <div className="finances-header">
