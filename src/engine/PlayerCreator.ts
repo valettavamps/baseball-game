@@ -238,10 +238,11 @@ export class PlayerCreator {
   private static generatePotential(attributes: PlayerAttributes, isPitcher: boolean): AttributePotential {
     const potential: Partial<AttributePotential> = {};
     const attrs = isPitcher 
-      ? ['velocity', 'control', 'movement', 'stamina'] as const
+      ? ['velocity', 'control', 'movement', 'endurance'] as const
       : ['power', 'contact', 'speed', 'fielding', 'arm', 'discipline', 'endurance'] as const;
     
-    attrs.forEach(attr => {
+    const attrsArray = [...attrs];
+    attrsArray.forEach(attr => {
       const currentValue = attributes[attr] || 0;
       const gain = this.randomInt(POTENTIAL_MIN_GAIN, POTENTIAL_MAX_GAIN);
       potential[attr] = Math.min(100, currentValue + gain);
