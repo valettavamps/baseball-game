@@ -180,9 +180,10 @@ export class PlayerCreator {
       });
       
       // Fill remaining attributes with random values
-      const usedPoints = attrs.reduce((sum, attr) => sum + (result[attr] || 0), 0);
+      const attrsArray = [...attrs];
+      const usedPoints = attrsArray.reduce((sum, attr) => sum + (result[attr] || 0), 0);
       const remainingPoints = totalPoints - usedPoints;
-      const remainingAttrs = attrs.filter(attr => result[attr] === undefined);
+      const remainingAttrs = attrsArray.filter(attr => result[attr] === undefined);
       
       if (remainingPoints > 0 && remainingAttrs.length > 0) {
         const pointsPerAttr = Math.floor(remainingPoints / remainingAttrs.length);
@@ -194,16 +195,17 @@ export class PlayerCreator {
       // Random distribution respecting constraints
       const minAttr = 10;
       let remaining = totalPoints;
+      const attrsArray = [...attrs];
       
       // First pass: ensure minimums
-      attrs.forEach(attr => {
+      attrsArray.forEach(attr => {
         result[attr] = minAttr;
         remaining -= minAttr;
       });
       
       // Second pass: distribute remaining randomly
       while (remaining > 0) {
-        const attr = this.randomChoice(attrs);
+        const attr = this.randomChoice(attrsArray);
         if (result[attr]! < maxPerAttr) {
           result[attr] = (result[attr] || minAttr) + 1;
           remaining--;
