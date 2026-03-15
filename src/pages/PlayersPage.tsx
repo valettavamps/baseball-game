@@ -253,7 +253,7 @@ const PlayersPage: React.FC<PlayersPageProps> = ({ onPlayerClick }) => {
           position: p.position as Player['position'],
           teamId: p.userId,
           overall: p.overall,
-          attributes: p.attributes as PlayerAttributes,
+          attributes: p.attributes as unknown as PlayerAttributes,
           stats: { gamesPlayed: 0, atBats: 0, hits: 0, homeRuns: 0, rbi: 0, battingAvg: 0, ops: 0, stolenBases: 0 },
           contract: { status: 'signed', teamId: p.userId, salary: 0, duration: 0, seasonsRemaining: 0 },
           upcomingGames: []
