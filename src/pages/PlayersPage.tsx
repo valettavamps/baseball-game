@@ -2,6 +2,23 @@ import React, { useState } from 'react';
 import './PlayersPage.css';
 import { Player } from '../types';
 
+// Convert number to letter grade
+function numberToGrade(value: number): string {
+  if (value >= 97) return 'A+';
+  if (value >= 93) return 'A';
+  if (value >= 90) return 'A-';
+  if (value >= 87) return 'B+';
+  if (value >= 83) return 'B';
+  if (value >= 80) return 'B-';
+  if (value >= 77) return 'C+';
+  if (value >= 73) return 'C';
+  if (value >= 70) return 'C-';
+  if (value >= 67) return 'D+';
+  if (value >= 63) return 'D';
+  if (value >= 60) return 'D-';
+  return 'F';
+}
+
 interface PlayersPageProps {
   onPlayerClick?: (player: Player) => void;
 }
@@ -26,6 +43,7 @@ const mockTransactions: Transaction[] = [
   { id: 't8', date: '2026-02-25', type: 'withdraw', amount: -10000, description: 'Withdrew to Wallet' },
 ];
 
+// TODO: Replace with Supabase query - get players for current user
 const mockPlayers: Player[] = [
   {
     id: 'p1',
@@ -256,7 +274,7 @@ const PlayersPage: React.FC<PlayersPageProps> = ({ onPlayerClick }) => {
               <span className="player-position">{player.position}</span>
             </div>
             <div className="player-rating">
-              <span className="rating-value">{player.overall}</span>
+              <span className="rating-value">{numberToGrade(player.overall)}</span>
             </div>
           </div>
         ))}
@@ -349,7 +367,7 @@ const PlayersPage: React.FC<PlayersPageProps> = ({ onPlayerClick }) => {
                       <div className="attr-track">
                         <div className="attr-fill" style={{ width: `${value}%`, background: getOverallColor(value) }} />
                       </div>
-                      <span className="attr-value">{value}</span>
+                      <span className="attr-value">{numberToGrade(value)}</span>
                     </div>
                   ))}
                 </div>

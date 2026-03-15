@@ -306,7 +306,7 @@ const CreatePlayerPage: React.FC<CreatePlayerPageProps> = ({ onNavigate }) => {
           { key: 'velocity', label: 'Velocity', description: 'Fastball speed' },
           { key: 'control', label: 'Control', description: 'Command & accuracy' },
           { key: 'movement', label: 'Movement', description: 'Pitch break & deception' },
-          { key: 'endurance', label: 'Endurance', description: 'Endurance & recovery' }
+          { key: 'endurance', label: 'Endurance', description: 'How long can play' }
         ]
       : [
           { key: 'power', label: 'Power', description: 'Hit for distance' },
@@ -314,7 +314,8 @@ const CreatePlayerPage: React.FC<CreatePlayerPageProps> = ({ onNavigate }) => {
           { key: 'speed', label: 'Speed', description: 'Running & stealing' },
           { key: 'fielding', label: 'Fielding', description: 'Defensive range' },
           { key: 'arm', label: 'Arm', description: 'Throw strength' },
-          { key: 'discipline', label: 'Discipline', description: 'Plate patience' }
+          { key: 'discipline', label: 'Discipline', description: 'Plate patience' },
+          { key: 'endurance', label: 'Endurance', description: 'Stamina & recovery' }
         ];
 
     return (
