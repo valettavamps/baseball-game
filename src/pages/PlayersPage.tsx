@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './PlayersPage.css';
-import { Player } from '../types';
+import { Player, PlayerAttributes } from '../types';
 import { getPlayersByUser } from '../services/db';
 
 // Convert number to letter grade
@@ -253,7 +253,7 @@ const PlayersPage: React.FC<PlayersPageProps> = ({ onPlayerClick }) => {
           position: p.position as Player['position'],
           teamId: p.userId,
           overall: p.overall,
-          attributes: p.attributes,
+          attributes: p.attributes as PlayerAttributes,
           stats: { gamesPlayed: 0, atBats: 0, hits: 0, homeRuns: 0, rbi: 0, battingAvg: 0, ops: 0, stolenBases: 0 },
           contract: { status: 'signed', teamId: p.userId, salary: 0, duration: 0, seasonsRemaining: 0 },
           upcomingGames: []
