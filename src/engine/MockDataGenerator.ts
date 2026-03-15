@@ -207,7 +207,7 @@ export class MockDataGenerator {
         fielding: this.randomStat(50 + statAdjust, 80 + statAdjust),
         arm: this.randomStat(60 + statAdjust, 95 + statAdjust),
         discipline: this.randomStat(40 + statAdjust, 70 + statAdjust),
-        stamina: this.randomStat(60 + statAdjust, 95 + statAdjust),
+        endurance: this.randomStat(60 + statAdjust, 95 + statAdjust),
         velocity: this.randomStat(65 + statAdjust, 100), // Pitcher-specific
         control: this.randomStat(55 + statAdjust, 95 + statAdjust),   // Pitcher-specific
         movement: this.randomStat(50 + statAdjust, 90 + statAdjust)   // Pitcher-specific
@@ -221,7 +221,7 @@ export class MockDataGenerator {
         fielding: this.randomStat(45 + statAdjust, 90 + statAdjust),
         arm: this.randomStat(40 + statAdjust, 85 + statAdjust),
         discipline: this.randomStat(40 + statAdjust, 85 + statAdjust),
-        stamina: this.randomStat(60 + statAdjust, 90 + statAdjust)
+        endurance: this.randomStat(60 + statAdjust, 90 + statAdjust)
       };
 
       // Position-specific adjustments
@@ -267,13 +267,13 @@ export class MockDataGenerator {
       const velocity = attributes.velocity || 0;
       const control = attributes.control || 0;
       const movement = attributes.movement || 0;
-      const stamina = attributes.stamina || 0;
-      return Math.floor((velocity * 0.35 + control * 0.30 + movement * 0.20 + stamina * 0.15));
+      const endurance = attributes.endurance || 0;
+      return Math.floor((velocity * 0.35 + control * 0.30 + movement * 0.20 + endurance * 0.15));
     } else {
       // Position player overall
-      const { power, contact, speed, fielding, arm, discipline } = attributes;
+      const { power, contact, speed, fielding, arm, discipline, endurance } = attributes;
       return Math.floor(
-        (contact * 0.25 + power * 0.25 + speed * 0.15 + fielding * 0.15 + arm * 0.10 + discipline * 0.10)
+        (contact * 0.22 + power * 0.22 + speed * 0.14 + fielding * 0.14 + arm * 0.10 + discipline * 0.10 + endurance * 0.08)
       );
     }
   }

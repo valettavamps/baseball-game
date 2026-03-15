@@ -25,7 +25,7 @@ import {
 
 // Configuration constants
 const HITTER_ATTRS = ['power', 'contact', 'speed', 'fielding', 'arm', 'discipline', 'endurance'] as const;
-const PITCHER_ATTRS = ['velocity', 'control', 'movement', 'stamina'] as const;
+const PITCHER_ATTRS = ['velocity', 'control', 'movement', 'endurance'] as const;
 
 const BASE_HITTER_POINTS = 280;
 const BASE_PITCHER_POINTS = 160;
@@ -255,8 +255,8 @@ export class PlayerCreator {
       const velocity = attributes.velocity || 0;
       const control = attributes.control || 0;
       const movement = attributes.movement || 0;
-      const stamina = attributes.stamina || 0;
-      return Math.floor(velocity * 0.35 + control * 0.30 + movement * 0.20 + stamina * 0.15);
+      const endurance = attributes.endurance || 0;
+      return Math.floor(velocity * 0.35 + control * 0.30 + movement * 0.20 + endurance * 0.15);
     } else {
       const { power, contact, speed, fielding, arm, discipline, endurance } = attributes;
       return Math.floor(
