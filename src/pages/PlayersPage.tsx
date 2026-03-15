@@ -249,7 +249,7 @@ const PlayersPage: React.FC<PlayersPageProps> = ({ onPlayerClick }) => {
           <div
             key={player.id}
             className="player-card"
-            onClick={() => handlePlayerClick(player)}
+            onClick={() => onPlayerClick(player)}
           >
             <div className="player-info">
               <span className="player-name">{player.name}</span>
