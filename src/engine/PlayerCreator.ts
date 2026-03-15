@@ -5,7 +5,7 @@
  * Rules:
  * - 1 free player per human, then 500 BALLS per additional
  * - Hitters: 7 attrs (power, contact, speed, fielding, arm, discipline, endurance), 280 pts base
- * - Pitchers: 4 attrs (velocity, control, movement, stamina), 160 pts base
+ * - Pitchers: 4 attrs (velocity, control, movement, endurance), 160 pts base
  * - Random distribution: low 10, high 70 per attr
  * - Rarity: Common (~94%), Rare (~5%), Epic (~1%)
  * - Rarity bonuses: Rare (+15/8 pts), Epic (+30/15 pts)

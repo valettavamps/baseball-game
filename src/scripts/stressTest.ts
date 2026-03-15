@@ -44,7 +44,7 @@ function generateTeam(teamId: string, teamName: string, seed: number): Team {
       discipline: 50 + Math.floor(Math.random() * 40),
       fielding: 50 + Math.floor(Math.random() * 40),
       arm: 50 + Math.floor(Math.random() * 40),
-      stamina: 70 + Math.floor(Math.random() * 30),
+      endurance: 70 + Math.floor(Math.random() * 30),
       velocity: isPowerHitter ? 50 + Math.floor(Math.random() * 30) : 30 + Math.floor(Math.random() * 20),
       control: 50 + Math.floor(Math.random() * 30),
       movement: 40 + Math.floor(Math.random() * 40)
@@ -106,7 +106,7 @@ function generatePitcher(id: string, name: string, velocity: number, control: nu
     discipline: 40 + Math.floor(Math.random() * 40),
     fielding: 40 + Math.floor(Math.random() * 40),
     arm: 50 + Math.floor(Math.random() * 40),
-    stamina: 60 + Math.floor(Math.random() * 40),
+    endurance: 60 + Math.floor(Math.random() * 40),
     velocity,
     control,
     movement: 40 + Math.floor(Math.random() * 40)

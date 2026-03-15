@@ -95,7 +95,7 @@ export interface PlayerCreationData {
     fielding: number;
     arm: number;
     discipline: number;
-    stamina: number;
+    endurance: number;
     // Pitcher specific
     velocity?: number;
     control?: number;

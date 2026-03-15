@@ -47,7 +47,7 @@ const generateAttributes = (position: string) => {
         power: randomStat(20, 40), contact: randomStat(20, 40),
         speed: randomStat(30, 55), fielding: randomStat(40, 60),
         arm: randomStat(55, 75), discipline: randomStat(35, 55),
-        stamina: randomStat(55, 75),
+        endurance: randomStat(55, 75),
         velocity: randomStat(55, 75), control: randomStat(45, 65), movement: randomStat(45, 65)
       };
     case 'C':
@@ -55,49 +55,49 @@ const generateAttributes = (position: string) => {
         power: randomStat(35, 55), contact: randomStat(40, 60),
         speed: randomStat(25, 45), fielding: randomStat(50, 70),
         arm: randomStat(55, 75), discipline: randomStat(40, 60),
-        stamina: randomStat(50, 70)
+        endurance: randomStat(50, 70)
       };
     case '1B': case 'DH':
       return {
         power: randomStat(55, 75), contact: randomStat(45, 65),
         speed: randomStat(25, 45), fielding: randomStat(35, 55),
         arm: randomStat(30, 50), discipline: randomStat(40, 60),
-        stamina: randomStat(45, 65)
+        endurance: randomStat(45, 65)
       };
     case '2B': case 'SS':
       return {
         power: randomStat(30, 50), contact: randomStat(50, 70),
         speed: randomStat(50, 70), fielding: randomStat(55, 75),
         arm: randomStat(40, 60), discipline: randomStat(45, 65),
-        stamina: randomStat(50, 70)
+        endurance: randomStat(50, 70)
       };
     case '3B':
       return {
         power: randomStat(50, 70), contact: randomStat(40, 60),
         speed: randomStat(30, 50), fielding: randomStat(45, 65),
         arm: randomStat(50, 70), discipline: randomStat(40, 60),
-        stamina: randomStat(45, 65)
+        endurance: randomStat(45, 65)
       };
     case 'CF':
       return {
         power: randomStat(35, 55), contact: randomStat(45, 65),
         speed: randomStat(60, 80), fielding: randomStat(55, 75),
         arm: randomStat(40, 60), discipline: randomStat(40, 60),
-        stamina: randomStat(55, 75)
+        endurance: randomStat(55, 75)
       };
     case 'LF': case 'RF':
       return {
         power: randomStat(45, 65), contact: randomStat(40, 60),
         speed: randomStat(40, 60), fielding: randomStat(40, 60),
         arm: randomStat(45, 65), discipline: randomStat(40, 60),
-        stamina: randomStat(45, 65)
+        endurance: randomStat(45, 65)
       };
     default:
       return {
         power: randomStat(35, 55), contact: randomStat(35, 55),
         speed: randomStat(35, 55), fielding: randomStat(35, 55),
         arm: randomStat(35, 55), discipline: randomStat(35, 55),
-        stamina: randomStat(35, 55)
+        endurance: randomStat(35, 55)
       };
   }
 };
@@ -120,7 +120,7 @@ const CreatePlayerPage: React.FC<CreatePlayerPageProps> = ({ onNavigate }) => {
       fielding: 45,
       arm: 45,
       discipline: 45,
-      stamina: 45
+      endurance: 45
     }
   });
 
@@ -204,7 +204,7 @@ const CreatePlayerPage: React.FC<CreatePlayerPageProps> = ({ onNavigate }) => {
         ((attrs.velocity || 0) * 0.35 + 
          (attrs.control || 0) * 0.30 + 
          (attrs.movement || 0) * 0.20 + 
-         attrs.stamina * 0.15)
+         attrs.endurance * 0.15)
       );
     } else {
       return Math.round(
@@ -306,7 +306,7 @@ const CreatePlayerPage: React.FC<CreatePlayerPageProps> = ({ onNavigate }) => {
           { key: 'velocity', label: 'Velocity', description: 'Fastball speed' },
           { key: 'control', label: 'Control', description: 'Command & accuracy' },
           { key: 'movement', label: 'Movement', description: 'Pitch break & deception' },
-          { key: 'stamina', label: 'Stamina', description: 'Endurance & recovery' }
+          { key: 'endurance', label: 'Endurance', description: 'Endurance & recovery' }
         ]
       : [
           { key: 'power', label: 'Power', description: 'Hit for distance' },
@@ -627,7 +627,7 @@ const CreatePlayerPage: React.FC<CreatePlayerPageProps> = ({ onNavigate }) => {
                 fielding: 45,
                 arm: 45,
                 discipline: 45,
-                stamina: 45
+                endurance: 45
               }
             });
             setAttributePoints(30);

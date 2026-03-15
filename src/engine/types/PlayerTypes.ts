@@ -21,9 +21,8 @@ export interface EnhancedPlayerAttributes {
   glove?: number;      // 1-100: Error probability
   arm?: number;        // 1-100: Throw strength
   
-  // Stamina/Endurance
-  stamina: number;     // 1-100: How deep can play
-  endurance: number;    // 1-100: Fatigue resistance
+  // Endurance
+  endurance: number;    // 1-100: How long can play
 }
 
 export interface HiddenAttributes {

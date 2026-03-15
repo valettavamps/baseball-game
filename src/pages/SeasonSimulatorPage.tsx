@@ -105,7 +105,7 @@ const SeasonSimulatorPage: React.FC = () => {
           discipline: 40 + Math.floor(Math.random() * 40),
           fielding: 40 + Math.floor(Math.random() * 40),
           arm: 50 + Math.floor(Math.random() * 40),
-          stamina: 60 + Math.floor(Math.random() * 40),
+          endurance: 60 + Math.floor(Math.random() * 40),
           velocity,
           control,
           movement: 40 + Math.floor(Math.random() * 40)
@@ -134,7 +134,7 @@ const SeasonSimulatorPage: React.FC = () => {
           discipline: 55 + Math.floor(Math.random() * 40), // 55-95
           fielding: 50 + Math.floor(Math.random() * 45), // 50-95
           arm: 50 + Math.floor(Math.random() * 45), // 50-95
-          stamina: 70 + Math.floor(Math.random() * 30),
+          endurance: 70 + Math.floor(Math.random() * 30),
           velocity: 30 + Math.floor(Math.random() * 30),
           control: 40 + Math.floor(Math.random() * 30),
           movement: 30 + Math.floor(Math.random() * 40)
