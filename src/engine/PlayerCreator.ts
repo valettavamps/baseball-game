@@ -173,8 +173,9 @@ export class PlayerCreator {
     // Handle paid creation with custom distribution
     if (customDistribution) {
       attrs.forEach(attr => {
-        if (customDistribution[attr] !== undefined) {
-          result[attr] = Math.max(10, Math.min(maxPerAttr, customDistribution[attr]));
+        const value = customDistribution[attr];
+        if (value !== undefined) {
+          result[attr] = Math.max(10, Math.min(maxPerAttr, value));
         }
       });
       
