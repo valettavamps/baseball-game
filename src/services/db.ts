@@ -183,6 +183,26 @@ export async function getPlayerById(playerId: string): Promise<StoredPlayer | nu
   return players.find(p => p.id === playerId) || null;
 }
 
+export async function retirePlayer(playerId: string): Promise<void> {
+  if (isSupabaseConfigured() && supabase) {
+    await supabase.from('players').update({ retired: true, retired_at: Date.now() }).eq('id', playerId);
+  }
+  
+  // Also update localStorage
+  const players = getItem<StoredPlayer[]>('players') || [];
+  const idx = players.findIndex(p => p.id === playerId);
+  if (idx >= 0) {
+    players[idx].retired = true;
+    players[idx].retiredAt = Date.now();
+    setItem('players', players);
+  }
+}
+
+export async function getRetiredPlayers(userId: string): Promise<StoredPlayer[]> {
+  const players = getItem<StoredPlayer[]>('players') || [];
+  return players.filter(p => p.userId === userId && p.retired);
+}
+
 // ============ CONTRACT OFFERS ============
 
 const TIER_NAMES = ['', 'Diamond', 'Platinum', 'Gold', 'Silver', 'Bronze'];

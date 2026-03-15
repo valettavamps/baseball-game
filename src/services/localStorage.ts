@@ -289,6 +289,8 @@ export interface StoredPlayer {
   weight: number;
   age: number;
   overall: number;
+  retired?: boolean;
+  retiredAt?: number;
   teamId?: string;
   contract?: {
     teamId: string;

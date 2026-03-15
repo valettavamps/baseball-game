@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './PlayersPage.css';
 import { Player, PlayerAttributes } from '../types';
-import { getPlayersByUser } from '../services/db';
+import { getPlayersByUser, getRetiredPlayers, retirePlayer } from '../services/db';
 
 // Convert number to letter grade
 function numberToGrade(value: number): string {
@@ -237,6 +237,8 @@ const PlayersPage: React.FC<PlayersPageProps> = ({ onPlayerClick }) => {
   const [activeTab, setActiveTab] = useState<'players' | 'finances'>('players');
   const [searchTerm, setSearchTerm] = useState('');
   const [userPlayers, setUserPlayers] = useState<Player[]>([]);
+  const [retiredPlayers, setRetiredPlayers] = useState<Player[]>([]);
+  const [showRetired, setShowRetired] = useState(false);
 
   // Load user's players from Supabase on mount
   useEffect(() => {
@@ -244,6 +246,7 @@ const PlayersPage: React.FC<PlayersPageProps> = ({ onPlayerClick }) => {
       const userId = localStorage.getItem('userId');
       if (userId) {
         const players = await getPlayersByUser(userId);
+        const retired = await getRetiredPlayers(userId);
         // Convert StoredPlayer to Player format
         const formattedPlayers: Player[] = players.map(p => ({
           id: p.id,
@@ -259,13 +262,40 @@ const PlayersPage: React.FC<PlayersPageProps> = ({ onPlayerClick }) => {
           upcomingGames: []
         }));
         setUserPlayers(formattedPlayers);
+        
+        // Also load retired players
+        const formattedRetired: Player[] = retired.map(p => ({
+          id: p.id,
+          name: `${p.firstName} ${p.lastName}`,
+          firstName: p.firstName,
+          lastName: p.lastName,
+          position: p.position as Player['position'],
+          teamId: p.userId,
+          overall: p.overall,
+          attributes: p.attributes as unknown as PlayerAttributes,
+          stats: { gamesPlayed: 0, atBats: 0, hits: 0, homeRuns: 0, rbi: 0, battingAvg: 0, ops: 0, stolenBases: 0 },
+          contract: { status: 'signed', teamId: p.userId, salary: 0, duration: 0, seasonsRemaining: 0 },
+          upcomingGames: []
+        }));
+        setRetiredPlayers(formattedRetired);
       }
     };
     loadPlayers();
   }, []);
 
+  const handleRetirePlayer = async () => {
+    if (selectedPlayer) {
+      await retirePlayer(selectedPlayer.id);
+      // Move from active to retired
+      setUserPlayers(userPlayers.filter(p => p.id !== selectedPlayer.id));
+      setRetiredPlayers([...retiredPlayers, selectedPlayer]);
+      setSelectedPlayer(null);
+    }
+  };
+
   // Filter players based on search
-  const playersToShow = userPlayers.length > 0 ? userPlayers : mockPlayers;
+  const activePlayers = userPlayers.length > 0 ? userPlayers : (showRetired ? [] : mockPlayers);
+  const playersToShow = showRetired ? retiredPlayers : activePlayers;
   const filteredPlayers = playersToShow.filter(player =>
     player.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     player.position.toLowerCase().includes(searchTerm.toLowerCase())
@@ -361,13 +391,36 @@ const PlayersPage: React.FC<PlayersPageProps> = ({ onPlayerClick }) => {
         </button>
       </div>
 
-      {activeTab === 'players' ? renderPlayersTab() : renderFinancesTab()}
+      {activeTab === 'players' && (
+        <>
+          <div className="players-subtabs">
+            <button 
+              className={`sub-tab ${!showRetired ? 'active' : ''}`}
+              onClick={() => setShowRetired(false)}
+            >
+              Active ({userPlayers.length})
+            </button>
+            <button 
+              className={`sub-tab ${showRetired ? 'active' : ''}`}
+              onClick={() => setShowRetired(true)}
+            >
+              Retired ({retiredPlayers.length})
+            </button>
+          </div>
+          {renderPlayersTab()}
+        </>
+      )}
+
+      {activeTab === 'finances' && renderFinancesTab()}
 
       {/* Player Detail Panel */}
       {selectedPlayer && activeTab === 'players' && (
         <div className="player-detail-overlay" onClick={() => setSelectedPlayer(null)}>
           <div className="player-detail" onClick={(e) => e.stopPropagation()}>
             <button className="close-detail" onClick={() => setSelectedPlayer(null)}>✕</button>
+            {!showRetired && (
+              <button className="retire-btn" onClick={handleRetirePlayer}>🏃 Retire Player</button>
+            )}
             <div className="detail-header">
               <div className="detail-avatar">
                 {selectedPlayer.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
@@ -377,11 +430,18 @@ const PlayersPage: React.FC<PlayersPageProps> = ({ onPlayerClick }) => {
                 <div className="detail-meta">
                   <span className="detail-position">{selectedPlayer.position}</span>
                   <span className="detail-overall" style={{ color: getOverallColor(selectedPlayer.overall) }}>
-                    {selectedPlayer.overall} OVR
+                    {numberToGrade(selectedPlayer.overall)} ({selectedPlayer.overall})
                   </span>
                   <span className={`detail-team ${!selectedPlayer.team ? 'free-agent' : ''}`}>
                     {selectedPlayer.team || 'Free Agent'}
                   </span>
+                </div>
+                <div className="detail-physical">
+                  <span>Age: {selectedPlayer.age || 'N/A'}</span>
+                  <span>Height: {selectedPlayer.height ? Math.floor(selectedPlayer.height / 12) + "'" + (selectedPlayer.height % 12) + '"' : 'N/A'}</span>
+                  <span>Weight: {selectedPlayer.weight || 'N/A'} lbs</span>
+                  <span>Throws: {selectedPlayer.throwingHand || 'R'}</span>
+                  <span>Bats: {selectedPlayer.battingHand || 'R'}</span>
                 </div>
               </div>
             </div>
